@@ -1,0 +1,26 @@
+{
+  "id": "/s/lumi-nail-studio/",
+  "name": "LUMI NAIL STUDIO",
+  "short_name": "LUMI NAIL ST",
+  "description": "Премиальная эстетика, безупречный маникюр и забота о деталях",
+  "start_url": "/s/lumi-nail-studio/",
+  "scope": "/s/lumi-nail-studio/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D0D11",
+  "theme_color": "#E0A96D",
+  "icons": [
+    {
+      "src": "/tenants/lumi-nail-studio/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/tenants/lumi-nail-studio/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}

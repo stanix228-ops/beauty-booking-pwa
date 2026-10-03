@@ -1,0 +1,163 @@
+{
+  "id": "22222222-2222-4222-8222-222222222222",
+  "slug": "aura-nail-bar",
+  "name": "AURA NAIL BAR",
+  "tagline": "Экспресс-студия маникюра и концептуальный нейл-бар",
+  "phone": "+7 (812) 330-99-44",
+  "address": "Невский проспект, 78",
+  "city": "Санкт-Петербург",
+  "timezone": "Europe/Moscow",
+  "currency": "RUB",
+  "minBookingNoticeMin": 45,
+  "maxBookingHorizonDays": 21,
+  "cancellationDeadlineHours": 3,
+  "instructions": "Студия расположена на 2 этаже арт-пространства. Быстрая запись, высокоскоростной Wi-Fi, напитки to-go.",
+  "theme": {
+    "accentColor": "#2DD4BF",
+    "bgColor": "#0F172A",
+    "cardBgColor": "#1E293B",
+    "textColor": "#F8FAFC",
+    "mutedColor": "#94A3B8",
+    "fontHeading": "Inter, sans-serif",
+    "fontBody": "Inter, sans-serif"
+  },
+  "businessHours": [
+    { "dayOfWeek": 0, "openTime": "11:00", "closeTime": "21:00", "isClosed": false },
+    { "dayOfWeek": 1, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
+    { "dayOfWeek": 2, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
+    { "dayOfWeek": 3, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
+    { "dayOfWeek": 4, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
+    { "dayOfWeek": 5, "openTime": "09:00", "closeTime": "23:00", "isClosed": false },
+    { "dayOfWeek": 6, "openTime": "10:00", "closeTime": "22:00", "isClosed": false }
+  ],
+  "workplaces": [
+    { "id": "20000000-0000-4000-8000-000000000001", "name": "Барная стойка Aura 1", "type": "MANICURE_DESK", "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000002", "name": "Барная стойка Aura 2", "type": "MANICURE_DESK", "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000003", "name": "Педикюрная капсула Podology", "type": "PEDICURE_CHAIR", "isActive": true }
+  ],
+  "categories": [
+    { "id": "20000000-0000-4000-8000-000000000010", "name": "Экспресс-маникюр", "displayOrder": 1, "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000020", "name": "Покрытие & Дизайн", "displayOrder": 2, "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000030", "name": "Подология & Педикюр", "displayOrder": 3, "isActive": true }
+  ],
+  "services": [
+    {
+      "id": "20000000-0000-4000-8000-000000000101",
+      "categoryId": "20000000-0000-4000-8000-000000000010",
+      "name": "Скоростной экспресс-маникюр",
+      "description": "Чистая аппаратная обработка за 40 минут. Идеально для занятых девушек в обеденный перерыв.",
+      "price": 1800,
+      "durationMin": 40,
+      "bufferAfterMin": 10,
+      "requiredWorkplaceType": "MANICURE_DESK",
+      "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
+      "displayOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000102",
+      "categoryId": "20000000-0000-4000-8000-000000000020",
+      "name": "Маникюр с сияющим покрытием Flash Gel",
+      "description": "Комби-обработка, светоотражающие трендовые базы Flash Disco с глубоким переливом.",
+      "price": 2600,
+      "durationMin": 70,
+      "bufferAfterMin": 15,
+      "requiredWorkplaceType": "MANICURE_DESK",
+      "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
+      "displayOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000103",
+      "categoryId": "20000000-0000-4000-8000-000000000030",
+      "name": "Кислотный экспресс-педикюр KART",
+      "description": "Фруктово-ферментативная обработка сложных стоп и натоптышей без лезвий и трещин.",
+      "price": 3500,
+      "durationMin": 75,
+      "bufferAfterMin": 15,
+      "requiredWorkplaceType": "PEDICURE_CHAIR",
+      "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+      "displayOrder": 3,
+      "isActive": true
+    }
+  ],
+  "options": [
+    {
+      "id": "20000000-0000-4000-8000-000000000201",
+      "name": "Снятие гель-лака",
+      "description": "Быстрое снятие твердосплавной фрезой",
+      "price": 350,
+      "durationMin": 15,
+      "bufferAfterMin": 0,
+      "displayOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000202",
+      "name": "Глянцевый топ анти-царапины",
+      "description": "Сверхстойкий финиш с зеркальным блеском до 5 недель",
+      "price": 300,
+      "durationMin": 10,
+      "bufferAfterMin": 0,
+      "displayOrder": 2,
+      "isActive": true
+    }
+  ],
+  "masters": [
+    {
+      "id": "20000000-0000-4000-8000-000000000301",
+      "name": "Диана Романова",
+      "title": "Мастер-эксперт Aura Bar",
+      "bio": "Опыт 4 года. Специалист по скоростному комбо-маникюру и ультра-глянцевому покрытию.",
+      "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+      "rating": 4.96,
+      "reviewsCount": 112,
+      "serviceIds": [
+        "20000000-0000-4000-8000-000000000101",
+        "20000000-0000-4000-8000-000000000102"
+      ],
+      "schedule": [
+        { "dayOfWeek": 0, "startTime": "11:00", "endTime": "21:00", "isDayOff": false },
+        { "dayOfWeek": 1, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
+        { "dayOfWeek": 2, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
+        { "dayOfWeek": 3, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
+        { "dayOfWeek": 4, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
+        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "22:00", "isDayOff": true },
+        { "dayOfWeek": 6, "startTime": "10:00", "endTime": "22:00", "isDayOff": true }
+      ],
+      "displayOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000302",
+      "name": "Мария Лазарева",
+      "title": "Подолог-эстетист",
+      "bio": "Опыт 8 лет. Сложный медицинский педикюр, обработка стопы KART, установка коррекционных систем.",
+      "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
+      "rating": 4.99,
+      "reviewsCount": 184,
+      "serviceIds": [
+        "20000000-0000-4000-8000-000000000101",
+        "20000000-0000-4000-8000-000000000103"
+      ],
+      "schedule": [
+        { "dayOfWeek": 0, "startTime": "11:00", "endTime": "21:00", "isDayOff": true },
+        { "dayOfWeek": 1, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
+        { "dayOfWeek": 2, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
+        { "dayOfWeek": 3, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
+        { "dayOfWeek": 4, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
+        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "23:00", "isDayOff": false },
+        { "dayOfWeek": 6, "startTime": "10:00", "endTime": "22:00", "isDayOff": false }
+      ],
+      "displayOrder": 2,
+      "isActive": true
+    }
+  ],
+  "assets": {
+    "logo": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=150&q=80",
+    "hero": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+    ]
+  }
+}

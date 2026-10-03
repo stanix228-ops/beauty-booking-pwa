@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "@astryxdesign/theme-neutral/theme.css";
+
+@layer base {
+  :root {
+    --tenant-accent: #E0A96D;
+    --tenant-accent-rgb: 224, 169, 109;
+    --tenant-bg: #0D0D11;
+    --tenant-card: #15151E;
+    --tenant-text: #F3F4F6;
+    --tenant-muted: #9CA3AF;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  body {
+    background-color: var(--tenant-bg);
+    color: var(--tenant-text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Safe area padding utilities */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
