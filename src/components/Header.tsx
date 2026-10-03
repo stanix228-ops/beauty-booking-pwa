@@ -1,5 +1,5 @@
 import { useTenant } from '../context/TenantContext';
-import { MapPin, Phone, Clock, Star, Sparkles, ShieldCheck } from 'lucide-react';
+import { MapPin, Phone, Clock, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Header() {
@@ -34,43 +34,34 @@ export function Header() {
       </div>
 
       {/* Studio Info Card */}
-      <div className="relative px-4 pb-5 -mt-14 max-w-lg mx-auto">
-        <div className="flex items-end gap-3.5 mb-3">
-          {/* Logo / Badge */}
+      <div className="relative px-4 pb-5 -mt-12 max-w-lg mx-auto text-center">
+        <div className="mb-2">
           <div
-            className="w-20 h-20 rounded-2xl p-0.5 shadow-xl flex-shrink-0 bg-neutral-900 border border-neutral-700/80 overflow-hidden relative group"
-            style={{ borderColor: 'var(--tenant-accent)' }}
+            className="inline-block text-xs font-bold tracking-[0.25em] uppercase px-3.5 py-1 rounded-full mb-2.5 border shadow-sm backdrop-blur-md"
+            style={{
+              backgroundColor: 'rgba(212, 175, 55, 0.12)',
+              borderColor: 'rgba(212, 175, 55, 0.35)',
+              color: 'var(--tenant-accent, #D4AF37)',
+            }}
           >
-            {tenant.assets.logo ? (
-              <img src={tenant.assets.logo} alt="Logo" className="w-full h-full object-cover rounded-xl" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-neutral-900">
-                <Sparkles className="w-8 h-8" style={{ color: 'var(--tenant-accent)' }} />
-              </div>
-            )}
+            DEMO BEAUTY
           </div>
-
-          <div className="flex-1 min-w-0 pb-1">
-            <div className="flex items-center gap-1.5 mb-1">
-              <span className="flex items-center text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                <Star className="w-3 h-3 fill-amber-400 mr-1" />
-                4.98 (380+ отзывов)
-              </span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold font-heading text-neutral-100 truncate tracking-tight">
-              {tenant.name}
-            </h1>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-bold font-heading text-neutral-100 truncate tracking-tight text-center">
+            {tenant.name}
+          </h1>
         </div>
 
         {tenant.tagline && (
-          <p className="text-xs text-neutral-400 leading-relaxed mb-3">
+          <p className="text-xs text-neutral-400 leading-relaxed mb-3 max-w-md mx-auto text-center">
             {tenant.tagline}
           </p>
         )}
 
         {/* Location & Contacts */}
-        <div className="flex flex-wrap items-center gap-y-1.5 gap-x-4 text-xs text-neutral-400 pt-2 border-t border-neutral-800/80">
+        <div
+          className="flex flex-wrap items-center justify-center gap-y-1.5 gap-x-4 text-xs text-neutral-400 pt-2 border-t"
+          style={{ borderColor: 'var(--tenant-card-border, rgba(212, 175, 55, 0.15))' }}
+        >
           <div className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-neutral-500" />
             <span>{tenant.address}</span>
