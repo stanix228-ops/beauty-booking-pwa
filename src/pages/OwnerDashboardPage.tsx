@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTenant } from '../context/TenantContext';
 import { BookingEngine, type BookingDetails } from '../lib/booking-store';
@@ -8,20 +8,29 @@ import { Badge } from '../components/ui/Badge';
 import { Input } from '../components/ui/Input';
 import { BottomSheet } from '../components/ui/BottomSheet';
 import {
-  Clock,
-  LogOut,
-  Ban,
-  Search,
-  CheckCircle,
-  TrendingUp,
-} from 'lucide-react';
+  SignOut,
+  Prohibit,
+  Plus,
+  Robot,
+  PaperPlaneRight,
+} from '@phosphor-icons/react';
+import type { GalleryItem } from '../../scripts/schema';
 
-type Tab = 'today' | 'bookings' | 'calendar' | 'stats' | 'masters' | 'services' | 'settings';
+type Tab = 'today' | 'bookings' | 'calendar' | 'stats' | 'gallery' | 'masters' | 'services' | 'settings';
 
 export function OwnerDashboardPage() {
   const { slug } = useParams<{ slug: string }>();
   const { tenant } = useTenant();
   const navigate = useNavigate();
+
+  // Strict Auth Guard
+  useEffect(() => {
+    if (!slug) return;
+    const session = localStorage.getItem(`owner_session_${slug}`);
+    if (!session) {
+      navigate(`/s/${slug}/owner/login`, { replace: true });
+    }
+  }, [slug, navigate]);
 
   const [activeTab, setActiveTab] = useState<Tab>('today');
   const [bookings, setBookings] = useState<BookingDetails[]>([]);
@@ -40,10 +49,39 @@ export function OwnerDashboardPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const [isManualBookingOpen, setIsManualBookingOpen] = useState(false);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
+
+  // Manual booking fields
+  const [manualClientName, setManualClientName] = useState('');
+  const [manualClientPhone, setManualClientPhone] = useState('+7 ');
+  const [manualServiceId, setManualServiceId] = useState('');
+  const [manualMasterId, setManualMasterId] = useState('');
+  const [manualDate, setManualDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [manualTime, setManualTime] = useState('12:00');
+
+  // Block master fields
   const [blockMasterId, setBlockMasterId] = useState<string>('');
   const [blockStartTime, setBlockStartTime] = useState('14:00');
   const [blockEndTime, setBlockEndTime] = useState('15:00');
   const [blockReason, setBlockReason] = useState<'BREAK' | 'VACATION' | 'MAINTENANCE'>('BREAK');
+
+  // Gallery management state
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => {
+    return tenant?.assets?.galleryItems || [
+      { id: '1', imageUrl: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80', caption: 'Французский маникюр', displayOrder: 1 },
+      { id: '2', imageUrl: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80', caption: 'Японский эко-уход', displayOrder: 2 },
+      { id: '3', imageUrl: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80', caption: 'Авторский дизайн', displayOrder: 3 },
+    ];
+  });
+  const [newWorkUrl, setNewWorkUrl] = useState('');
+  const [newWorkCaption, setNewWorkCaption] = useState('');
+
+  // Owner Assistant state
+  const [assistantMessages, setAssistantMessages] = useState<Array<{ id: string; sender: 'user' | 'assistant'; text: string }>>([
+    { id: 'w', sender: 'assistant', text: 'Здравствуйте! Я ваш бизнес-ассистент студии. Могу рассчитать выручку за неделю, показать расписание на завтра или проверить статистику по мастерам.' }
+  ]);
+  const [assistantInput, setAssistantInput] = useState('');
 
   const loadData = async () => {
     if (!slug || !tenant) return;
@@ -95,6 +133,124 @@ export function OwnerDashboardPage() {
     }
   };
 
+  const handleManualBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tenant || !manualServiceId) return;
+
+    try {
+      const startAt = `${manualDate}T${manualTime}:00.000Z`;
+      await BookingEngine.createBooking({
+        tenantSlug: tenant.slug,
+        serviceId: manualServiceId,
+        optionIds: [],
+        masterId: manualMasterId || null,
+        startAt,
+        clientName: manualClientName.trim() || 'Клиент (звонок)',
+        clientPhone: manualClientPhone.trim(),
+        notes: 'Создано вручную администратором',
+      });
+
+      alert('Запись успешно создана в базе студии!');
+      setIsManualBookingOpen(false);
+      loadData();
+    } catch (err) {
+      alert((err as Error).message || 'Ошибка создания записи');
+    }
+  };
+
+  const handleAddGalleryCard = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newWorkUrl.trim() || !newWorkCaption.trim()) return;
+    const newItem: GalleryItem = {
+      id: `work-${Date.now()}`,
+      imageUrl: newWorkUrl.trim(),
+      caption: newWorkCaption.trim(),
+      displayOrder: galleryItems.length + 1,
+    };
+    setGalleryItems((prev) => [...prev, newItem]);
+    setNewWorkUrl('');
+    setNewWorkCaption('');
+    alert('Новая работа добавлена! Остальные фото сохранены.');
+  };
+
+  const handleUpdateGalleryCaption = (id: string, newCaption: string) => {
+    setGalleryItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, caption: newCaption } : item))
+    );
+  };
+
+  const handleUpdateGalleryPhoto = (id: string, newUrl: string) => {
+    setGalleryItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, imageUrl: newUrl } : item))
+    );
+  };
+
+  const handleAskOwnerAssistant = (query: string) => {
+    if (!query.trim() || !tenant) return;
+    const userMsg = { id: `u-${Date.now()}`, sender: 'user' as const, text: query.trim() };
+    setAssistantMessages((prev) => [...prev, userMsg]);
+    setAssistantInput('');
+
+    const lower = query.toLowerCase();
+    let answer = '';
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+    const todayList = bookings.filter((b) => b.start_at.startsWith(todayStr));
+    const tomorrowList = bookings.filter((b) => b.start_at.startsWith(tomorrowStr));
+
+    if (lower.includes('завтра')) {
+      if (tomorrowList.length > 0) {
+        const details = tomorrowList.map((b) => `• ${b.start_at.slice(11, 16)} — ${b.client.name} (${b.services[0]?.name}, мастер ${b.master.name})`).join('\n');
+        answer = `На завтра (${tomorrowStr}) запланировано ${tomorrowList.length} записей:\n${details}`;
+      } else {
+        answer = `На завтра пока нет активных записей. Все слоты свободны.`;
+      }
+    } else if (lower.includes('недел') || lower.includes('клиент')) {
+      const uniqueClients = new Set(bookings.map((b) => b.client.phone)).size;
+      answer = `За весь период зарегистрировано ${uniqueClients} уникальных клиентов. Всего создано ${bookings.length} записей.`;
+    } else if (lower.includes('процедур') || lower.includes('выполнен')) {
+      const completed = bookings.filter((b) => b.status === 'COMPLETED').length;
+      answer = `Успешно выполнено ${completed} процедур(ы).`;
+    } else if (lower.includes('денег') || lower.includes('выручк') || lower.includes('получен')) {
+      const completedRevenue = bookings
+        .filter((b) => b.status === 'COMPLETED')
+        .reduce((sum, b) => sum + b.total_price, 0);
+      const projectedRevenue = bookings
+        .filter((b) => b.status !== 'CANCELLED')
+        .reduce((sum, b) => sum + b.total_price, 0);
+      answer = `Фактически получено (завершенные процедуры): ${completedRevenue.toLocaleString('ru-RU')} ₽.\nОжидаемая выручка со всеми бронями: ${projectedRevenue.toLocaleString('ru-RU')} ₽.`;
+    } else if (lower.includes('чаще') || lower.includes('популярн')) {
+      const counts: Record<string, number> = {};
+      bookings.forEach((b) => {
+        b.services.forEach((s) => {
+          counts[s.name] = (counts[s.name] || 0) + 1;
+        });
+      });
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      if (sorted.length > 0) {
+        answer = `Самые популярные услуги в студии:\n` + sorted.map(([name, c]) => `• ${name} — ${c} раз(а)`).join('\n');
+      } else {
+        answer = `Пока недостаточно данных по популярности услуг.`;
+      }
+    } else if (lower.includes('мастера') || lower.includes('работают')) {
+      const activeMasters = tenant.masters.filter((m) => m.isActive).map((m) => `• ${m.name} (${m.title})`).join('\n');
+      answer = `В студии ведут прием мастера:\n${activeMasters}`;
+    } else {
+      answer = `На сегодня (${todayStr}) запланировано ${todayList.length} записей на общую сумму ${todayList.reduce((s, b) => s + b.total_price, 0).toLocaleString('ru-RU')} ₽.`;
+    }
+
+    setTimeout(() => {
+      setAssistantMessages((prev) => [
+        ...prev,
+        { id: `a-${Date.now()}`, sender: 'assistant', text: answer }
+      ]);
+    }, 400);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem(`owner_session_${slug}`);
     navigate(`/s/${slug}/owner/login`);
@@ -104,8 +260,8 @@ export function OwnerDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center p-4">
-        <div className="w-10 h-10 rounded-full border-2 border-neutral-700 border-t-amber-400 animate-spin mb-3" />
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
+        <div className="w-10 h-10 rounded-full border-2 border-neutral-700 border-t-blue-500 animate-spin mb-3" />
         <p className="text-xs text-neutral-400">Загрузка панели управления...</p>
       </div>
     );
@@ -123,49 +279,65 @@ export function OwnerDashboardPage() {
     return matchesSearch && matchesStatus;
   });
 
+  const totalClientsCount = new Set(bookings.map((b) => b.client.phone)).size;
+  const completedCount = bookings.filter((b) => b.status === 'COMPLETED').length;
+  const cancelledCount = bookings.filter((b) => b.status === 'CANCELLED').length;
+  const actualRevenue = stats?.actual_revenue ?? bookings
+    .filter((b) => b.status === 'COMPLETED')
+    .reduce((sum, b) => sum + b.total_price, 0);
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 pb-20 safe-top safe-bottom">
-      {/* Top Navigation */}
-      <header className="border-b border-neutral-800/80 bg-neutral-900/80 backdrop-blur-md sticky top-0 z-20 px-4 py-3">
+    <div className="min-h-screen bg-black text-white pb-20 safe-top safe-bottom">
+      {/* Top Header */}
+      <header className="border-b border-white/10 bg-neutral-900/80 backdrop-blur-md sticky top-0 z-20 px-4 py-3">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
               to={`/s/${slug}/`}
-              className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 transition-colors"
+              className="text-xs text-neutral-400 hover:text-white transition-colors"
             >
-              Сайт
+              ← Витрина
             </Link>
+            <div className="h-4 w-px bg-white/15" />
             <div>
-              <div className="text-sm font-bold text-neutral-100 flex items-center gap-2">
+              <h1 className="text-sm font-bold text-white flex items-center gap-1.5">
                 <span>{tenant.name}</span>
-                <span
-                  style={{ backgroundColor: 'var(--tenant-accent)' }}
-                  className="w-2 h-2 rounded-full inline-block"
-                />
-              </div>
-              <div className="text-[11px] text-neutral-400">Кабинет управления студией</div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                  CRM
+                </span>
+              </h1>
             </div>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="p-2 rounded-xl text-neutral-400 hover:text-red-400 hover:bg-neutral-800 transition-colors cursor-pointer"
-            title="Выйти"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsAssistantOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-white border border-white/15 transition-all cursor-pointer"
+            >
+              <Robot size={15} className="text-blue-400" />
+              <span>AI Помощник</span>
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-xl text-neutral-400 hover:text-red-400 hover:bg-neutral-800 transition-colors cursor-pointer"
+              title="Выйти"
+            >
+              <SignOut size={16} />
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Main Content Tabs Navigation */}
-      <div className="border-b border-neutral-800/80 bg-neutral-950/60 sticky top-14 z-10 px-4 py-2 overflow-x-auto no-scrollbar">
+      {/* Tabs Navigation */}
+      <div className="border-b border-white/10 bg-black/60 sticky top-14 z-10 px-4 py-2 overflow-x-auto no-scrollbar">
         <div className="max-w-4xl mx-auto flex items-center gap-2">
           {(
             [
               { id: 'today', label: 'Сегодня' },
-              { id: 'bookings', label: 'Записи' },
-              { id: 'calendar', label: 'Календарь' },
+              { id: 'bookings', label: 'Все записи' },
               { id: 'stats', label: 'Статистика' },
+              { id: 'gallery', label: 'Фото работ' },
               { id: 'masters', label: 'Мастера' },
               { id: 'services', label: 'Услуги' },
               { id: 'settings', label: 'Настройки' },
@@ -175,13 +347,13 @@ export function OwnerDashboardPage() {
               key={t.id}
               onClick={() => setActiveTab(t.id)}
               style={{
-                backgroundColor: activeTab === t.id ? 'var(--tenant-accent)' : undefined,
-                color: activeTab === t.id ? '#0D0D11' : undefined,
+                backgroundColor: activeTab === t.id ? 'var(--tenant-accent, #4690FF)' : undefined,
+                color: activeTab === t.id ? '#FFFFFF' : undefined,
               }}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === t.id
                   ? 'font-bold shadow-md'
-                  : 'bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800'
+                  : 'bg-neutral-900 text-neutral-400 hover:text-white border border-white/10'
               }`}
             >
               {t.label}
@@ -196,28 +368,28 @@ export function OwnerDashboardPage() {
           <div className="space-y-5">
             {/* KPI Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <Card className="p-3.5 space-y-1">
+              <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
                 <div className="text-[11px] text-neutral-400">Записей сегодня</div>
-                <div className="text-xl font-bold text-neutral-100">{todayBookings.length}</div>
+                <div className="text-xl font-bold text-white">{todayBookings.length}</div>
               </Card>
 
-              <Card className="p-3.5 space-y-1">
+              <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
                 <div className="text-[11px] text-neutral-400">Выполнено</div>
                 <div className="text-xl font-bold text-emerald-400">
                   {todayBookings.filter((b) => b.status === 'COMPLETED').length}
                 </div>
               </Card>
 
-              <Card className="p-3.5 space-y-1">
+              <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
                 <div className="text-[11px] text-neutral-400">Отменено</div>
                 <div className="text-xl font-bold text-red-400">
                   {todayBookings.filter((b) => b.status === 'CANCELLED').length}
                 </div>
               </Card>
 
-              <Card className="p-3.5 space-y-1">
+              <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
                 <div className="text-[11px] text-neutral-400">Выручка сегодня</div>
-                <div className="text-xl font-bold text-amber-400">
+                <div className="text-xl font-bold text-blue-400" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
                   {todayBookings
                     .filter((b) => b.status === 'COMPLETED')
                     .reduce((sum, b) => sum + b.total_price, 0)
@@ -228,14 +400,24 @@ export function OwnerDashboardPage() {
             </div>
 
             {/* Quick Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
               <Button
                 variant="primary"
                 size="sm"
-                className="flex items-center gap-1.5"
+                className="flex items-center gap-1.5 cursor-pointer"
+                onClick={() => setIsManualBookingOpen(true)}
+              >
+                <Plus size={15} />
+                <span>Добавить запись вручную</span>
+              </Button>
+
+              <Button
+                variant="secondary"
+                size="sm"
+                className="flex items-center gap-1.5 cursor-pointer"
                 onClick={() => setIsBlockModalOpen(true)}
               >
-                <Ban className="w-3.5 h-3.5" />
+                <Prohibit size={15} />
                 <span>Заблокировать время мастера</span>
               </Button>
             </div>
@@ -247,86 +429,64 @@ export function OwnerDashboardPage() {
               </h2>
 
               {todayBookings.length === 0 ? (
-                <div className="p-8 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-500 text-xs">
-                  На сегодня записей нет.
+                <div className="p-8 text-center rounded-2xl bg-neutral-900/40 border border-white/10 text-neutral-500 text-xs">
+                  На сегодня записей нет. Нажмите «Добавить запись вручную» или ждите бронирований с витрины.
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {todayBookings.map((b) => (
-                    <Card key={b.id} className="p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-neutral-400" />
-                          <span className="text-sm font-bold text-neutral-100">
-                            {new Date(b.start_at).toLocaleTimeString('ru-RU', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
-                          <span className="text-xs text-neutral-500 font-mono">
-                            {b.booking_number}
-                          </span>
-                        </div>
-                        <Badge
-                          variant={
-                            b.status === 'COMPLETED'
-                              ? 'success'
-                              : b.status === 'CANCELLED'
-                              ? 'destructive'
-                              : 'accent'
-                          }
-                        >
-                          {b.status}
-                        </Badge>
-                      </div>
-
-                      <div className="flex items-start justify-between gap-4">
+                    <Card key={b.id} className="p-4 space-y-3 border border-white/10 bg-neutral-900/60">
+                      <div className="flex items-start justify-between">
                         <div>
-                          <div className="text-sm font-semibold text-neutral-200">
-                            {b.client.name}
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-white">{b.start_at.slice(11, 16)}</span>
+                            <span className="text-xs text-neutral-400 font-mono">{b.booking_number}</span>
                           </div>
+                          <div className="text-sm font-semibold text-white mt-1">{b.client.name}</div>
                           <div className="text-xs text-neutral-400">{b.client.phone}</div>
-                          <div className="text-xs text-neutral-400 mt-1">
-                            {b.services.map((s) => s.name).join(', ')}
-                          </div>
                         </div>
 
                         <div className="text-right">
-                          <div className="text-sm font-bold text-neutral-100">
+                          <div className="text-sm font-bold text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
                             {b.total_price.toLocaleString('ru-RU')} ₽
                           </div>
-                          <div className="text-xs text-neutral-400">
-                            Мастер: {b.master.name}
-                          </div>
+                          <Badge
+                            variant={
+                              b.status === 'COMPLETED' ? 'success' : b.status === 'CANCELLED' ? 'destructive' : 'default'
+                            }
+                            className="mt-1"
+                          >
+                            {b.status}
+                          </Badge>
                         </div>
                       </div>
 
                       {/* Action buttons */}
-                      <div className="pt-2 border-t border-neutral-800 flex items-center gap-2 flex-wrap">
-                        {b.status !== 'COMPLETED' && (
-                          <button
-                            onClick={() => handleStatusChange(b.id, 'COMPLETED')}
-                            className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800/60 hover:bg-emerald-900 transition-colors cursor-pointer"
-                          >
-                            Завершить
-                          </button>
-                        )}
-                        {b.status !== 'CANCELLED' && (
-                          <button
-                            onClick={() => handleStatusChange(b.id, 'CANCELLED')}
-                            className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-red-950 text-red-300 border border-red-800/60 hover:bg-red-900 transition-colors cursor-pointer"
-                          >
-                            Отменить
-                          </button>
-                        )}
-                        {b.status !== 'NO_SHOW' && (
-                          <button
-                            onClick={() => handleStatusChange(b.id, 'NO_SHOW')}
-                            className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-neutral-800 text-neutral-400 hover:text-white transition-colors cursor-pointer"
-                          >
-                            Неявка
-                          </button>
-                        )}
+                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/10 text-xs">
+                        <button
+                          onClick={() => handleStatusChange(b.id, 'IN_PROGRESS')}
+                          className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-colors"
+                        >
+                          Пришёл
+                        </button>
+                        <button
+                          onClick={() => handleStatusChange(b.id, 'COMPLETED')}
+                          className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors"
+                        >
+                          Завершено
+                        </button>
+                        <button
+                          onClick={() => handleStatusChange(b.id, 'NO_SHOW')}
+                          className="px-2.5 py-1 rounded-lg bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30 transition-colors"
+                        >
+                          Неявка
+                        </button>
+                        <button
+                          onClick={() => handleStatusChange(b.id, 'CANCELLED')}
+                          className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors"
+                        >
+                          Отменить
+                        </button>
                       </div>
                     </Card>
                   ))}
@@ -339,74 +499,40 @@ export function OwnerDashboardPage() {
         {/* TAB 2: ALL BOOKINGS */}
         {activeTab === 'bookings' && (
           <div className="space-y-4">
-            {/* Search and Filters */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex gap-2">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 absolute left-3 top-3.5 text-neutral-500" />
                 <input
                   type="text"
-                  placeholder="Поиск по имени, телефону или номеру записи..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-11 pl-9 pr-3 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-amber-400/80"
+                  placeholder="Поиск по имени, телефону или номеру..."
+                  className="w-full h-10 px-3.5 rounded-xl bg-neutral-900 border border-white/10 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-400"
                 />
               </div>
-
-              <div className="flex items-center gap-1.5 overflow-x-auto">
-                {['ALL', 'CONFIRMED', 'COMPLETED', 'CANCELLED', 'NO_SHOW'].map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => setStatusFilter(st)}
-                    className={`px-3 py-2 rounded-xl text-xs font-medium cursor-pointer transition-colors ${
-                      statusFilter === st
-                        ? 'bg-neutral-800 text-white border border-neutral-700 font-semibold'
-                        : 'bg-neutral-900/60 text-neutral-400 hover:text-white border border-neutral-800'
-                    }`}
-                  >
-                    {st === 'ALL' ? 'Все' : st}
-                  </button>
-                ))}
-              </div>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="h-10 px-3 rounded-xl bg-neutral-900 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-400 cursor-pointer"
+              >
+                <option value="ALL">Все статусы</option>
+                <option value="CONFIRMED">Подтвержденные</option>
+                <option value="COMPLETED">Завершенные</option>
+                <option value="CANCELLED">Отмененные</option>
+              </select>
             </div>
 
-            {/* Bookings List */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               {filteredBookings.map((b) => (
-                <Card key={b.id} className="p-4 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-neutral-200">
-                      {new Date(b.start_at).toLocaleDateString('ru-RU', {
-                        day: 'numeric',
-                        month: 'short',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
-                    <Badge
-                      variant={
-                        b.status === 'COMPLETED'
-                          ? 'success'
-                          : b.status === 'CANCELLED'
-                          ? 'destructive'
-                          : 'accent'
-                      }
-                    >
-                      {b.status}
-                    </Badge>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs">
-                    <div>
-                      <span className="font-bold text-neutral-100">{b.client.name}</span>
-                      <span className="text-neutral-400 ml-2">{b.client.phone}</span>
+                <Card key={b.id} className="p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-semibold text-white">{b.client.name} · {b.client.phone}</div>
+                    <div className="text-[11px] text-neutral-400">
+                      {b.start_at.slice(0, 10)} в {b.start_at.slice(11, 16)} · Мастер: {b.master.name}
                     </div>
-                    <span className="font-bold text-neutral-100">
-                      {b.total_price.toLocaleString('ru-RU')} ₽
-                    </span>
                   </div>
-
-                  <div className="text-[11px] text-neutral-400">
-                    Мастер: {b.master.name} • {b.services.map((s) => s.name).join(', ')}
+                  <div className="text-right">
+                    <div className="text-xs font-bold text-white">{b.total_price} ₽</div>
+                    <span className="text-[10px] text-neutral-400 uppercase">{b.status}</span>
                   </div>
                 </Card>
               ))}
@@ -414,168 +540,131 @@ export function OwnerDashboardPage() {
           </div>
         )}
 
-        {/* TAB 3: CALENDAR */}
-        {activeTab === 'calendar' && (
+        {/* TAB 3: STATS */}
+        {activeTab === 'stats' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-neutral-200">
-                Сетка расписания мастеров
-              </h2>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setIsBlockModalOpen(true)}
-              >
-                <Ban className="w-3.5 h-3.5 mr-1" />
-                <span>Блок времени</span>
-              </Button>
-            </div>
+            <h2 className="text-sm font-semibold text-neutral-200">
+              Сводная бизнес-аналитика студии
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {tenant.masters.map((m) => {
-                const masterBookings = bookings.filter((b) => b.master.id === m.id);
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
+                <div className="text-xs text-neutral-400">Всего клиентов</div>
+                <div className="text-2xl font-bold text-white">{totalClientsCount}</div>
+              </Card>
 
-                return (
-                  <Card key={m.id} className="p-4 space-y-3">
-                    <div className="flex items-center gap-3 pb-3 border-b border-neutral-800">
-                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-neutral-800 flex-shrink-0">
-                        {m.avatarUrl ? (
-                          <img src={m.avatarUrl} alt={m.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center font-bold">
-                            {m.name[0]}
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold text-neutral-100">{m.name}</div>
-                        <div className="text-xs text-neutral-400">{m.title}</div>
-                      </div>
-                    </div>
+              <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
+                <div className="text-xs text-neutral-400">Всего записей</div>
+                <div className="text-2xl font-bold text-white">{bookings.length}</div>
+              </Card>
 
-                    <div className="space-y-2">
-                      <div className="text-xs text-neutral-400 font-medium">
-                        Активные записи мастера ({masterBookings.length}):
-                      </div>
-                      {masterBookings.length === 0 ? (
-                        <div className="text-xs text-neutral-500 italic py-2">
-                          Свободен на весь период
-                        </div>
-                      ) : (
-                        masterBookings.map((b) => (
-                          <div
-                            key={b.id}
-                            className="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-between text-xs"
-                          >
-                            <div>
-                              <span className="font-semibold text-neutral-200">
-                                {new Date(b.start_at).toLocaleTimeString('ru-RU', {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                })}
-                              </span>
-                              <span className="text-neutral-400 ml-2">{b.client.name}</span>
-                            </div>
-                            <Badge variant="accent">{b.status}</Badge>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </Card>
-                );
-              })}
+              <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
+                <div className="text-xs text-neutral-400">Завершено процедур</div>
+                <div className="text-2xl font-bold text-emerald-400">{completedCount}</div>
+              </Card>
+
+              <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
+                <div className="text-xs text-neutral-400">Отменено</div>
+                <div className="text-2xl font-bold text-red-400">{cancelledCount}</div>
+              </Card>
+
+              <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1 sm:col-span-2">
+                <div className="text-xs text-neutral-400">Реально полученные деньги (оплаты)</div>
+                <div className="text-2xl font-bold text-blue-400" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
+                  {actualRevenue.toLocaleString('ru-RU')} ₽
+                </div>
+              </Card>
             </div>
           </div>
         )}
 
-        {/* TAB 4: SQL STATS */}
-        {activeTab === 'stats' && (
+        {/* TAB 4: GALLERY MANAGEMENT */}
+        {activeTab === 'gallery' && (
           <div className="space-y-5">
-            <h2 className="text-sm font-semibold text-neutral-200 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-emerald-400" />
-              <span>SQL Аналитика показателей студии</span>
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-neutral-200">
+                Фотографии работ ({galleryItems.length})
+              </h2>
+            </div>
 
-            {stats && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Card className="p-4 space-y-2">
-                  <div className="text-xs text-neutral-400">Фактическая выручка (COMPLETED)</div>
-                  <div className="text-2xl font-bold text-emerald-400">
-                    {stats.actual_revenue.toLocaleString('ru-RU')} ₽
+            {/* 1. Add new card */}
+            <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-3">
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                1. Добавить новую карточку работы
+              </h3>
+              <form onSubmit={handleAddGalleryCard} className="space-y-3">
+                <Input
+                  value={newWorkUrl}
+                  onChange={(e) => setNewWorkUrl(e.target.value)}
+                  placeholder="URL фотографии (Supabase Storage / Unsplash)"
+                  required
+                />
+                <Input
+                  value={newWorkCaption}
+                  onChange={(e) => setNewWorkCaption(e.target.value)}
+                  placeholder="Подпись под фото (например, Градиент и френч)"
+                  required
+                />
+                <Button type="submit" variant="primary" size="sm" className="cursor-pointer">
+                  Добавить работу
+                </Button>
+              </form>
+            </Card>
+
+            {/* 2 & 3. Change photo or caption */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {galleryItems.map((item) => (
+                <Card key={item.id} className="p-3.5 border border-white/10 bg-neutral-900/60 space-y-2.5">
+                  <div className="h-36 rounded-xl overflow-hidden bg-neutral-950">
+                    <img src={item.imageUrl} alt={item.caption} className="w-full h-full object-cover" />
                   </div>
-                  <div className="text-[11px] text-neutral-500">
-                    Только реально оказанные и оплаченные услуги
+                  <div className="space-y-2">
+                    <div>
+                      <label className="text-[10px] text-neutral-400">Изменить подпись:</label>
+                      <input
+                        type="text"
+                        value={item.caption}
+                        onChange={(e) => handleUpdateGalleryCaption(item.id, e.target.value)}
+                        className="w-full h-8 px-2 rounded-lg bg-black border border-white/10 text-xs text-white mt-1"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-neutral-400">Заменить фото (URL):</label>
+                      <input
+                        type="text"
+                        value={item.imageUrl}
+                        onChange={(e) => handleUpdateGalleryPhoto(item.id, e.target.value)}
+                        className="w-full h-8 px-2 rounded-lg bg-black border border-white/10 text-xs text-white mt-1 font-mono text-[11px]"
+                      />
+                    </div>
                   </div>
                 </Card>
-
-                <Card className="p-4 space-y-2">
-                  <div className="text-xs text-neutral-400">Прогнозируемая стоимость броней</div>
-                  <div className="text-2xl font-bold text-neutral-100">
-                    {stats.projected_revenue.toLocaleString('ru-RU')} ₽
-                  </div>
-                  <div className="text-[11px] text-neutral-500">
-                    Включая подтвержденные и созданные записи
-                  </div>
-                </Card>
-
-                <Card className="p-4 space-y-2">
-                  <div className="text-xs text-neutral-400">Статусы записей</div>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-neutral-400">Подтверждено:</span>
-                      <span className="font-semibold">{stats.confirmed_count}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-neutral-400">Завершено:</span>
-                      <span className="font-semibold text-emerald-400">{stats.completed_count}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-neutral-400">Отменено:</span>
-                      <span className="font-semibold text-red-400">{stats.cancelled_count}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-neutral-400">Неявки:</span>
-                      <span className="font-semibold text-amber-400">{stats.noshow_count}</span>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-4 space-y-2">
-                  <div className="text-xs text-neutral-400">Изоляция тенанта</div>
-                  <div className="text-xs text-neutral-300">
-                    UUID студии: <span className="font-mono text-[11px] text-neutral-400">{tenant.id}</span>
-                  </div>
-                  <div className="text-[11px] text-emerald-400 flex items-center gap-1.5 mt-2">
-                    <CheckCircle className="w-3.5 h-3.5" />
-                    <span>RLS и EXCLUDE constraints активны</span>
-                  </div>
-                </Card>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         )}
 
         {/* TAB 5: MASTERS */}
         {activeTab === 'masters' && (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <h2 className="text-sm font-semibold text-neutral-200">
-              Мастера студии ({tenant.masters.length})
+              Команда мастеров ({tenant.masters.length})
             </h2>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {tenant.masters.map((m) => (
-                <Card key={m.id} className="p-4 space-y-2">
+                <Card key={m.id} className="p-4 border border-white/10 bg-neutral-900/60 space-y-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl overflow-hidden bg-neutral-800 flex-shrink-0">
-                      {m.avatarUrl && <img src={m.avatarUrl} alt={m.name} className="w-full h-full object-cover" />}
-                    </div>
+                    <img src={m.avatarUrl} alt={m.name} className="w-12 h-12 rounded-xl object-cover" />
                     <div>
-                      <div className="text-sm font-bold text-neutral-100">{m.name}</div>
-                      <div className="text-xs text-neutral-400">{m.title}</div>
-                      <div className="text-[11px] text-amber-400">Рейтинг: {m.rating} ★</div>
+                      <h4 className="text-sm font-bold text-white">{m.name}</h4>
+                      <p className="text-xs text-neutral-400">{m.title}</p>
                     </div>
                   </div>
-                  {m.bio && <p className="text-xs text-neutral-400 pt-1 leading-relaxed">{m.bio}</p>}
+                  <p className="text-xs text-neutral-300 leading-relaxed">{m.bio}</p>
+                  <div className="text-[11px] text-neutral-400 pt-2 border-t border-white/10 flex justify-between">
+                    <span>Рейтинг: {m.rating} ★</span>
+                    <span>Отзывов: {m.reviewsCount}</span>
+                  </div>
                 </Card>
               ))}
             </div>
@@ -584,19 +673,19 @@ export function OwnerDashboardPage() {
 
         {/* TAB 6: SERVICES */}
         {activeTab === 'services' && (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <h2 className="text-sm font-semibold text-neutral-200">
-              Каталог услуг ({tenant.services.length})
+              Услуги и прайс-лист ({tenant.services.length})
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {tenant.services.map((s) => (
-                <Card key={s.id} className="p-3.5 flex items-center justify-between">
+                <Card key={s.id} className="p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between">
                   <div>
-                    <div className="text-sm font-semibold text-neutral-200">{s.name}</div>
-                    <div className="text-xs text-neutral-400">{s.durationMin} мин</div>
+                    <h4 className="text-xs sm:text-sm font-bold text-white">{s.name}</h4>
+                    <p className="text-[11px] text-neutral-400">{s.durationMin} мин · Буфер {s.bufferAfterMin} мин</p>
                   </div>
-                  <div className="text-sm font-bold text-neutral-100">
-                    {s.price.toLocaleString('ru-RU')} ₽
+                  <div className="text-sm font-bold text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
+                    {s.price} ₽
                   </div>
                 </Card>
               ))}
@@ -606,44 +695,105 @@ export function OwnerDashboardPage() {
 
         {/* TAB 7: SETTINGS */}
         {activeTab === 'settings' && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <h2 className="text-sm font-semibold text-neutral-200">
               Параметры и брендинг студии
             </h2>
 
-            <Card className="p-4 space-y-3 text-xs text-neutral-300">
+            <Card className="p-4 space-y-3 text-xs text-neutral-300 border border-white/10 bg-neutral-900/60">
               <div>
-                <div className="text-neutral-500">Название:</div>
-                <div className="font-semibold text-neutral-100 text-sm">{tenant.name}</div>
-              </div>
-              <div>
-                <div className="text-neutral-500">Slug в URL:</div>
-                <div className="font-mono text-neutral-200">/s/{tenant.slug}/</div>
+                <div className="text-neutral-500">Название студии:</div>
+                <div className="font-semibold text-white text-sm">{tenant.name}</div>
               </div>
               <div>
                 <div className="text-neutral-500">Адрес и телефон:</div>
                 <div>{tenant.address} • {tenant.phone}</div>
               </div>
-              <div className="flex items-center gap-3 pt-2 border-t border-neutral-800">
-                <div className="flex items-center gap-1.5">
-                  <div
-                    className="w-4 h-4 rounded-full border border-white/20"
-                    style={{ backgroundColor: tenant.theme.accentColor }}
-                  />
-                  <span>Акцент: {tenant.theme.accentColor}</span>
+              <div>
+                <div className="text-neutral-500">Акцентный цвет:</div>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="w-5 h-5 rounded-full border border-white/20" style={{ backgroundColor: tenant.theme.accentColor }} />
+                  <span className="font-mono">{tenant.theme.accentColor}</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div
-                    className="w-4 h-4 rounded-full border border-white/20"
-                    style={{ backgroundColor: tenant.theme.bgColor }}
-                  />
-                  <span>Фон: {tenant.theme.bgColor}</span>
-                </div>
+              </div>
+            </Card>
+
+            {/* Info Cards Settings */}
+            <Card className="p-4 space-y-3 border border-white/10 bg-neutral-900/60">
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                Информационные карточки на главной
+              </h3>
+              <div className="space-y-2.5">
+                {(tenant.infoCards || []).map((c, i) => (
+                  <div key={c.id || i} className="p-3 rounded-xl bg-black border border-white/10 text-xs space-y-1">
+                    <div className="font-semibold text-white">Карточка {i + 1}: {c.title}</div>
+                    <div className="text-neutral-400">{c.description}</div>
+                  </div>
+                ))}
               </div>
             </Card>
           </div>
         )}
       </main>
+
+      {/* Manual Booking Modal */}
+      <BottomSheet
+        open={isManualBookingOpen}
+        onOpenChange={setIsManualBookingOpen}
+        title="Добавить запись вручную"
+        description="Внесите клиента, обратившегося по звонку или лично"
+      >
+        <form onSubmit={handleManualBookingSubmit} className="space-y-3 text-xs">
+          <div>
+            <label className="text-neutral-400 mb-1 block">Имя клиента</label>
+            <Input value={manualClientName} onChange={(e) => setManualClientName(e.target.value)} placeholder="Имя" required />
+          </div>
+          <div>
+            <label className="text-neutral-400 mb-1 block">Номер телефона</label>
+            <Input value={manualClientPhone} onChange={(e) => setManualClientPhone(e.target.value)} placeholder="+7 ..." required />
+          </div>
+          <div>
+            <label className="text-neutral-400 mb-1 block">Услуга</label>
+            <select
+              value={manualServiceId}
+              onChange={(e) => setManualServiceId(e.target.value)}
+              className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-white"
+              required
+            >
+              <option value="">-- Выберите услугу --</option>
+              {tenant.services.map((s) => (
+                <option key={s.id} value={s.id}>{s.name} ({s.price} ₽)</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-neutral-400 mb-1 block">Мастер</label>
+            <select
+              value={manualMasterId}
+              onChange={(e) => setManualMasterId(e.target.value)}
+              className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-white"
+            >
+              <option value="">Любой свободный мастер</option>
+              {tenant.masters.map((m) => (
+                <option key={m.id} value={m.id}>{m.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="text-neutral-400 mb-1 block">Дата</label>
+              <Input type="date" value={manualDate} onChange={(e) => setManualDate(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-neutral-400 mb-1 block">Время</label>
+              <Input type="time" value={manualTime} onChange={(e) => setManualTime(e.target.value)} required />
+            </div>
+          </div>
+          <Button type="submit" variant="primary" size="lg" className="w-full cursor-pointer mt-2">
+            Зафиксировать запись
+          </Button>
+        </form>
+      </BottomSheet>
 
       {/* Block Master Time Modal */}
       <BottomSheet
@@ -660,7 +810,7 @@ export function OwnerDashboardPage() {
             <select
               value={blockMasterId}
               onChange={(e) => setBlockMasterId(e.target.value)}
-              className="w-full h-11 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-neutral-100 focus:outline-none"
+              className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-xs text-white focus:outline-none"
               required
             >
               <option value="">-- Выберите мастера --</option>
@@ -696,7 +846,7 @@ export function OwnerDashboardPage() {
             <select
               value={blockReason}
               onChange={(e) => setBlockReason(e.target.value as any)}
-              className="w-full h-11 px-3 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-neutral-100 focus:outline-none"
+              className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-xs text-white focus:outline-none"
             >
               <option value="BREAK">Обеденный перерыв</option>
               <option value="VACATION">Отпуск / Отгул</option>
@@ -709,6 +859,55 @@ export function OwnerDashboardPage() {
           </Button>
         </form>
       </BottomSheet>
+
+      {/* Owner Assistant Modal */}
+      {isAssistantOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-neutral-950 border border-white/15 rounded-2xl max-w-md w-full p-4 flex flex-col h-[520px]">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <Robot size={20} className="text-blue-400" />
+                <h3 className="font-bold text-sm text-white">AI Помощник владельца</h3>
+              </div>
+              <button onClick={() => setIsAssistantOpen(false)} className="text-neutral-400 hover:text-white">✕</button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-2 space-y-2.5 text-xs">
+              {assistantMessages.map((m) => (
+                <div key={m.id} className={`p-2.5 rounded-xl max-w-[85%] whitespace-pre-line ${m.sender === 'user' ? 'bg-blue-600 ml-auto text-white' : 'bg-neutral-900 text-neutral-200 border border-white/10'}`}>
+                  {m.text}
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-2 border-t border-white/10 space-y-2">
+              <div className="flex gap-1 overflow-x-auto no-scrollbar pb-1 text-[11px]">
+                {['Что у меня завтра?', 'Сколько денег получено?', 'Сколько клиентов было на неделе?', 'Какие услуги чаще всего записывают?'].map((q, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleAskOwnerAssistant(q)}
+                    className="px-2.5 py-1 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 whitespace-nowrap border border-white/10"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+              <form onSubmit={(e) => { e.preventDefault(); handleAskOwnerAssistant(assistantInput); }} className="flex gap-1.5">
+                <input
+                  type="text"
+                  value={assistantInput}
+                  onChange={(e) => setAssistantInput(e.target.value)}
+                  placeholder="Задайте вопрос по студии..."
+                  className="flex-1 h-9 px-3 rounded-lg bg-neutral-900 border border-white/15 text-xs text-white focus:outline-none"
+                />
+                <button type="submit" className="px-3 h-9 rounded-lg bg-blue-600 text-white cursor-pointer">
+                  <PaperPlaneRight size={14} weight="bold" />
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

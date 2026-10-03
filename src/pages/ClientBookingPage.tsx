@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useTenant } from '../context/TenantContext';
 import { Header } from '../components/Header';
+import { InfoCards } from '../components/InfoCards';
+import { WorksGallery } from '../components/WorksGallery';
 import { CategoryFilter } from '../components/CategoryFilter';
 import { ServiceCard } from '../components/ServiceCard';
 import { MasterPicker } from '../components/MasterPicker';
@@ -8,13 +10,17 @@ import { ServiceOptionsModal } from '../components/ServiceOptionsModal';
 import { SlotPickerModal } from '../components/SlotPickerModal';
 import { BookingFormModal } from '../components/BookingFormModal';
 import { StickyBookingBar } from '../components/StickyBookingBar';
+import { BottomNavigation } from '../components/BottomNavigation';
 import { AIAssistantWidget } from '../components/AIAssistantWidget';
-import { Sparkles, Shield, Coffee, Wifi, Heart } from 'lucide-react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
+import { CalendarPlus, ShieldCheck, Heart, Coffee, WifiHigh } from '@phosphor-icons/react';
+import { useNavigate } from 'react-router-dom';
 import type { Service, ServiceOption } from '../../scripts/schema';
 import type { AvailableSlot } from '../lib/booking-store';
 
 export function ClientBookingPage() {
   const { tenant, isLoading, error } = useTenant();
+  const navigate = useNavigate();
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -25,14 +31,19 @@ export function ClientBookingPage() {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [isSlotPickerOpen, setIsSlotPickerOpen] = useState(false);
   const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
+  const [isLookupModalOpen, setIsLookupModalOpen] = useState(false);
+  const [lookupPhone, setLookupPhone] = useState('');
 
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
 
+  // Hook for accessible scroll reveal
+  useScrollReveal();
+
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center p-4">
-        <div className="w-12 h-12 rounded-full border-2 border-neutral-700 border-t-amber-400 animate-spin mb-4" />
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-full border-2 border-neutral-700 border-t-blue-500 animate-spin mb-4" />
         <p className="text-xs text-neutral-400 font-medium">Загрузка студии...</p>
       </div>
     );
@@ -40,11 +51,11 @@ export function ClientBookingPage() {
 
   if (error || !tenant) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center">
         <div className="p-4 rounded-full bg-red-950/40 border border-red-800 mb-3 text-red-400">
-          <Shield className="w-8 h-8" />
+          <ShieldCheck size={32} />
         </div>
-        <h2 className="text-lg font-bold text-neutral-100 mb-1">Студия не найдена</h2>
+        <h2 className="text-lg font-bold text-white mb-1">Студия не найдена</h2>
         <p className="text-xs text-neutral-400 max-w-xs mb-4">
           {error || 'Проверьте правильность адреса в строке браузера.'}
         </p>
@@ -63,12 +74,7 @@ export function ClientBookingPage() {
   );
 
   const handleSelectService = (service: Service) => {
-    if (selectedService?.id === service.id) {
-      // Toggle
-      return;
-    }
     setSelectedService(service);
-    // Reset options that are not applicable to the new service
     setSelectedOptions((prev) =>
       prev.filter((opt) => !opt.serviceId || opt.serviceId === service.id)
     );
@@ -90,37 +96,68 @@ export function ClientBookingPage() {
     setIsBookingFormOpen(true);
   };
 
+  const handleLookupBooking = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!lookupPhone.trim()) return;
+    // Find booking from local session
+    const lastToken = localStorage.getItem(`beauty_last_booking_token_${tenant.slug}`);
+    if (lastToken) {
+      setIsLookupModalOpen(false);
+      navigate(`/s/${tenant.slug}/b/${lastToken}`);
+    } else {
+      alert('Активных записей по указанным данным не найдено. Вы можете оформить новую запись ниже.');
+      setIsLookupModalOpen(false);
+    }
+  };
+
   return (
     <div
       style={{
-        backgroundColor: 'var(--tenant-bg, #0D0D11)',
-        color: 'var(--tenant-text, #FAF8F5)',
+        backgroundColor: 'var(--tenant-bg, #000000)',
+        color: 'var(--tenant-text, #FFFFFF)',
       }}
-      className="min-h-screen flex flex-col pb-28"
+      className="min-h-screen flex flex-col pb-24"
     >
-      {/* Header */}
-      <Header />
-
-      {/* Categories Bar */}
-      <CategoryFilter
-        selectedCategoryId={selectedCategoryId}
-        onSelectCategory={setSelectedCategoryId}
+      {/* 1. Header with large photo, title, contacts, and moving glass button */}
+      <Header
+        onBookClick={() => {
+          const el = document.getElementById('booking-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
       />
 
-      <main className="max-w-lg mx-auto w-full px-4 pt-5 space-y-7 flex-1">
-        {/* Services Section */}
-        <section className="space-y-3">
+      {/* 2. 3 Dynamic Info Cards (configured per studio, not hardcoded) */}
+      <InfoCards />
+
+      {/* 3. Portfolio Works Gallery */}
+      <WorksGallery />
+
+      <main className="max-w-lg mx-auto w-full px-4 pt-2 space-y-8 flex-1">
+        {/* 4. Booking Section with prominent title "Запись в студию" */}
+        <section id="booking-section" className="reveal-section space-y-4 pt-4 border-t border-white/10">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold font-heading text-neutral-100 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
-              <span>Услуги ногтевого сервиса</span>
-            </h2>
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
+                <CalendarPlus size={16} weight="duotone" />
+                <span>Онлайн-бронирование</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Запись в студию
+              </h2>
+            </div>
             <span className="text-xs text-neutral-400">
               {filteredServices.length} {filteredServices.length === 1 ? 'услуга' : 'услуг'}
             </span>
           </div>
 
-          <div className="space-y-3">
+          {/* Category Filter */}
+          <CategoryFilter
+            selectedCategoryId={selectedCategoryId}
+            onSelectCategory={setSelectedCategoryId}
+          />
+
+          {/* Services List */}
+          <div id="services-section" className="space-y-3">
             {filteredServices.map((service) => {
               const isSelected = selectedService?.id === service.id;
               const hasOptions = availableOptionsForCurrentService.length > 0;
@@ -143,8 +180,8 @@ export function ClientBookingPage() {
           </div>
         </section>
 
-        {/* Master Stylist Selection */}
-        <section className="pt-2 border-t border-neutral-900">
+        {/* 5. Master Stylists Section */}
+        <section className="reveal-section pt-4 border-t border-white/10">
           <MasterPicker
             masters={tenant.masters}
             selectedService={selectedService}
@@ -153,65 +190,45 @@ export function ClientBookingPage() {
           />
         </section>
 
-        {/* Gallery Preview */}
-        {tenant.assets.gallery && tenant.assets.gallery.length > 0 && (
-          <section className="pt-2 border-t border-neutral-900 space-y-3">
-            <h3 className="text-sm font-semibold text-neutral-200">
-              Галерея работ студии
-            </h3>
-            <div className="grid grid-cols-3 gap-2 rounded-2xl overflow-hidden">
-              {tenant.assets.gallery.slice(0, 3).map((imgUrl, idx) => (
-                <div key={idx} className="aspect-square bg-neutral-900 overflow-hidden relative group">
-                  <img
-                    src={imgUrl}
-                    alt={`Пример работы ${idx + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Studio Amenities */}
-        <section
-          style={{
-            backgroundColor: 'var(--tenant-card)',
-            borderColor: 'var(--tenant-card-border)',
-          }}
-          className="p-4 rounded-2xl border space-y-3"
-        >
-          <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--tenant-muted)' }}>
-            О сервисе и комфорте в студии
+        {/* 6. Studio Amenities & Atmosphere */}
+        <section className="reveal-section p-4 rounded-2xl border border-white/10 bg-neutral-900/40 backdrop-blur-md space-y-3">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+            О сервисе и комфорте студии
           </h3>
-          <div className="grid grid-cols-2 gap-3 text-xs" style={{ color: 'var(--tenant-text)' }}>
+          <div className="grid grid-cols-2 gap-3 text-xs text-neutral-200">
             <div className="flex items-center gap-2">
-              <Coffee className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
-              <span>Specialty кофе и матча</span>
+              <Coffee size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <span>Specialty кофе и чай</span>
             </div>
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
-              <span>Стерилизация по СанПиН</span>
+              <ShieldCheck size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <span>Стерилизация СанПиН</span>
             </div>
             <div className="flex items-center gap-2">
-              <Wifi className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
+              <WifiHigh size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
               <span>Быстрый Wi-Fi и зарядки</span>
             </div>
             <div className="flex items-center gap-2">
-              <Heart className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
-              <span>Одноразовые пилочки</span>
+              <Heart size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <span>Гарантия на покрытие 7 дней</span>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Sticky Bottom Booking Bar */}
+      {/* Sticky Bottom Booking Bar (when a service is selected) */}
       <StickyBookingBar
         selectedService={selectedService}
         selectedOptions={selectedOptions}
         onOpenSlotPicker={() => setIsSlotPickerOpen(true)}
       />
+
+      {/* Glass Bottom Navigation: Главная · Услуги · Моя запись */}
+      {!selectedService && (
+        <BottomNavigation
+          onOpenMyBooking={() => setIsLookupModalOpen(true)}
+        />
+      )}
 
       {/* AI Assistant Floating Widget */}
       <AIAssistantWidget />
@@ -224,6 +241,10 @@ export function ClientBookingPage() {
         availableOptions={availableOptionsForCurrentService}
         selectedOptions={selectedOptions}
         onToggleOption={handleToggleOption}
+        onConfirm={() => {
+          setIsOptionsOpen(false);
+          setIsSlotPickerOpen(true);
+        }}
       />
 
       <SlotPickerModal
@@ -244,6 +265,44 @@ export function ClientBookingPage() {
         slot={selectedSlot}
         dateStr={selectedDateStr}
       />
+
+      {/* "Моя запись" Quick Lookup Modal */}
+      {isLookupModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-neutral-900 border border-white/15 p-5 rounded-2xl max-w-sm w-full space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-base text-white">Моя запись</h3>
+              <button
+                type="button"
+                onClick={() => setIsLookupModalOpen(false)}
+                className="text-neutral-400 hover:text-white text-sm"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="text-xs text-neutral-400">
+              Введите номер телефона, указанный при бронировании, чтобы открыть детали вашей записи:
+            </p>
+            <form onSubmit={handleLookupBooking} className="space-y-3">
+              <input
+                type="tel"
+                value={lookupPhone}
+                onChange={(e) => setLookupPhone(e.target.value)}
+                placeholder="+7 (999) 000-00-00"
+                className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-white text-sm focus:outline-none focus:border-blue-400"
+                required
+              />
+              <button
+                type="submit"
+                className="w-full h-11 rounded-xl text-white font-semibold text-sm cursor-pointer"
+                style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
+              >
+                Найти запись
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

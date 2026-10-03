@@ -288,6 +288,7 @@ class MemoryBookingStore {
     clientPhone: string;
     tokenHash: string;
     notes?: string;
+    idempotencyKey?: string;
   }): Promise<{ success: boolean; bookingId: string; bookingNumber: string; token: string }> {
     const tenant = getTenantBySlug(params.tenantSlug);
     if (!tenant) throw new Error(`Tenant "${params.tenantSlug}" not found`);
@@ -595,6 +596,7 @@ export const BookingEngine = {
     clientName: string;
     clientPhone: string;
     notes?: string;
+    idempotencyKey?: string;
   }): Promise<{ bookingId: string; bookingNumber: string; accessToken: string }> {
     const rawToken = 'b_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
     const tokenHash = await hashTokenSha256(rawToken);

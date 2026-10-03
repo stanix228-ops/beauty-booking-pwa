@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTenant } from '../context/TenantContext';
 import { BookingEngine } from '../lib/booking-store';
-import { Sparkles, X, Send, Bot, User } from 'lucide-react';
+import { Sparkle, X, PaperPlaneRight, Robot, User } from '@phosphor-icons/react';
 import { Drawer } from 'vaul';
 
 interface Message {
@@ -11,14 +11,14 @@ interface Message {
   timestamp: Date;
 }
 
-export function AIAssistantWidget() {
+export const AIAssistantWidget: React.FC = () => {
   const { tenant } = useTenant();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       sender: 'assistant',
-      text: 'Здравствуйте! Я ваш бьюти-ассистент. Могу рассказать о наших процедурах маникюра, подобрать мастера или найти удобное свободное окошко. Чем могу помочь?',
+      text: 'Здравствуйте! Я онлайн-помощник студии. Подскажу стоимость услуг, помогу найти ближайшие свободные окна, расскажу о мастерах или адресе. Чем вам помочь?',
       timestamp: new Date(),
     },
   ]);
@@ -34,15 +34,23 @@ export function AIAssistantWidget() {
 
   if (!tenant) return null;
 
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isTyping) return;
+  const firstMasterName = tenant.masters[0]?.name?.split(' ')[0] || 'Анны';
 
-    const userText = inputValue.trim();
+  const quickPrompts = [
+    'Когда ближайшее окно?',
+    'Сколько стоит маникюр с покрытием?',
+    'Какие услуги есть?',
+    `Есть свободное время у мастера ${firstMasterName}?`,
+    'Как найти студию?',
+  ];
+
+  const handleSendMessage = async (text: string) => {
+    if (!text.trim() || isTyping) return;
+
     const userMsg: Message = {
       id: `u-${Date.now()}`,
       sender: 'user',
-      text: userText,
+      text: text.trim(),
       timestamp: new Date(),
     };
 
@@ -50,58 +58,89 @@ export function AIAssistantWidget() {
     setInputValue('');
     setIsTyping(true);
 
-    // Call AI service or execute tool loop fallback
     try {
-      const lower = userText.toLowerCase();
+      // 1. Try Vercel Function if available
       let reply = '';
-
-      // Local intelligent intent processing (Server tool execution simulation)
-      if (lower.includes('цен') || lower.includes('стоим') || lower.includes('сколько')) {
-        const serviceList = tenant.services
-          .map((s) => `• ${s.name}: ${s.price} ₽ (${s.durationMin} мин)`)
-          .join('\n');
-        reply = `Вот наш актуальный прайс на услуги:\n${serviceList}\n\nВы можете выбрать любую из них прямо на странице!`;
-      } else if (lower.includes('свободн') || lower.includes('окошк') || lower.includes('время') || lower.includes('запис')) {
-        const todayStr = new Date().toISOString().split('T')[0];
-        const s = tenant.services[0];
-        const slots = await BookingEngine.getAvailableSlots(tenant.slug, s.id, [], null, todayStr);
-        if (slots.length > 0) {
-          const sampleTimes = slots.slice(0, 4).map((sl) => sl.time).join(', ');
-          reply = `На сегодня на услугу «${s.name}» есть свободные окна: ${sampleTimes}. Нажмите «Выбрать время» на карточке услуги для брони!`;
-        } else {
-          reply = `На сегодня все окна заняты. Но вы можете выбрать завтрашний или последующие дни в календаре!`;
+      try {
+        const res = await fetch('/api/assistant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tenantSlug: tenant.slug,
+            message: text.trim(),
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.reply) reply = data.reply;
         }
-      } else if (lower.includes('мастер') || lower.includes('кто') || lower.includes('стилист')) {
-        const masterList = tenant.masters
-          .map((m) => `• ${m.name} — ${m.title} (рейтинг: ${m.rating} ★)`)
-          .join('\n');
-        reply = `В нашей студии работают первоклассные специалисты:\n${masterList}`;
-      } else if (lower.includes('подготов') || lower.includes('правил') || lower.includes('аллерг') || lower.includes('кофе')) {
-        reply = tenant.instructions || 'Пожалуйста, приходите за 5 минут до начала. Мы угостим вас натуральным кофе или чаем!';
-      } else {
-        reply = `Я могу подсказать цены на услуги, информацию о мастерах или помочь записаться на удобное время. Спросите, например: «Сколько стоит маникюр?» или «Есть ли свободные окошки сегодня?»`;
+      } catch {
+        // Fall through to deterministic real data lookup
       }
 
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `a-${Date.now()}`,
-            sender: 'assistant',
-            text: reply,
-            timestamp: new Date(),
-          },
-        ]);
-        setIsTyping(false);
-      }, 700);
+      // 2. Intelligent local data responder (strictly based on real tenant data)
+      if (!reply) {
+        const lower = text.toLowerCase();
+
+        if (lower.includes('окно') || lower.includes('окошк') || lower.includes('ближайш') || lower.includes('свободн')) {
+          const todayStr = new Date().toISOString().split('T')[0];
+          const service = tenant.services[0];
+          const slots = await BookingEngine.getAvailableSlots(tenant.slug, service.id, [], null, todayStr);
+          if (slots.length > 0) {
+            const times = slots.slice(0, 4).map((s) => s.time).join(', ');
+            reply = `На сегодня на процедуру «${service.name}» есть свободные окна: ${times}. Чтобы занять место, выберите время в блоке «Запись в студию» ниже.`;
+          } else {
+            reply = `На сегодня все слоты уже заняты. Рекомендую посмотреть завтрашний день в календаре записи — там есть свободные часы!`;
+          }
+        } else if (lower.includes('маникюр с покрытием') || lower.includes('сколько стоит') || lower.includes('цена') || lower.includes('стоим')) {
+          const matching = tenant.services.filter((s) => s.name.toLowerCase().includes('маникюр') || s.name.toLowerCase().includes('гель-лак'));
+          if (matching.length > 0) {
+            const list = matching.map((s) => `• ${s.name}: ${s.price} ₽ (${s.durationMin} мин)`).join('\n');
+            reply = `Вот цены на интересующие вас процедуры:\n${list}`;
+          } else {
+            const list = tenant.services.slice(0, 3).map((s) => `• ${s.name}: ${s.price} ₽`).join('\n');
+            reply = `Цены на наши основные услуги:\n${list}`;
+          }
+        } else if (lower.includes('какие услуги') || lower.includes('услуги')) {
+          const list = tenant.services.map((s) => `• ${s.name} — ${s.price} ₽`).join('\n');
+          reply = `В студии доступны следующие процедуры:\n${list}\n\nК любой из них можно добавить дополнительные опции (дизайн, снятие, укрепление).`;
+        } else if (lower.includes('мастер') || lower.includes(firstMasterName.toLowerCase())) {
+          const targetMaster = tenant.masters.find((m) => m.name.toLowerCase().includes(firstMasterName.toLowerCase())) || tenant.masters[0];
+          if (targetMaster) {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const slots = await BookingEngine.getAvailableSlots(tenant.slug, targetMaster.serviceIds[0], [], targetMaster.id, todayStr);
+            if (slots.length > 0) {
+              const times = slots.slice(0, 3).map((s) => s.time).join(', ');
+              reply = `У мастера ${targetMaster.name} (${targetMaster.title}) сегодня есть свободные окна: ${times}.`;
+            } else {
+              reply = `Мастер ${targetMaster.name} сегодня занят(а) или на выходном. Вы можете выбрать её на ближайшие даты в форме записи!`;
+            }
+          }
+        } else if (lower.includes('найти') || lower.includes('адрес') || lower.includes('где')) {
+          reply = `Студия находится по адресу: ${tenant.address}, г. ${tenant.city}.\nРежим работы: ежедневно с 10:00 до 22:00.\nТелефон для связи: ${tenant.phone}.`;
+        } else {
+          reply = `Уточните, пожалуйста, что именно вас интересует: стоимость конкретной процедуры, свободное время мастеров или схема проезда? Я с радостью подскажу!`;
+        }
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `a-${Date.now()}`,
+          sender: 'assistant',
+          text: reply,
+          timestamp: new Date(),
+        },
+      ]);
+      setIsTyping(false);
     } catch {
       setIsTyping(false);
       setMessages((prev) => [
         ...prev,
         {
-          id: `a-err-${Date.now()}`,
+          id: `err-${Date.now()}`,
           sender: 'assistant',
-          text: 'Извините, произошла временная ошибка связи с ассистентом. Вы можете выбрать услугу и записаться обычным способом на странице.',
+          text: 'Извините, произошла временная ошибка связи. Пожалуйста, воспользуйтесь формой онлайн-записи ниже.',
           timestamp: new Date(),
         },
       ]);
@@ -111,122 +150,127 @@ export function AIAssistantWidget() {
   return (
     <>
       {/* Floating Trigger Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        style={{
-          backgroundColor: 'var(--tenant-card)',
-          borderColor: 'var(--tenant-accent)',
-        }}
-        className="fixed bottom-20 right-4 z-40 p-3.5 rounded-full border shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2 group backdrop-blur-md"
-        aria-label="Открыть AI-ассистент"
-      >
-        <Sparkles className="w-5 h-5 animate-pulse" style={{ color: 'var(--tenant-accent)' }} />
-        <span className="text-xs font-semibold text-neutral-100 pr-1 hidden sm:inline">
-          AI Консьерж
-        </span>
-      </button>
+      <div className="fixed bottom-20 right-4 z-40">
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-white font-semibold text-xs shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 border border-white/20"
+          style={{
+            backgroundColor: 'var(--tenant-card, #121216)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+          }}
+        >
+          <Sparkle size={18} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+          <span>AI Ассистент</span>
+        </button>
+      </div>
 
-      {/* Assistant Drawer */}
+      {/* Drawer */}
       <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
         <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 transition-opacity" />
-          <Drawer.Content className="bg-neutral-900 border-t border-neutral-800 fixed bottom-0 left-0 right-0 max-h-[85vh] h-[550px] rounded-t-[28px] z-50 flex flex-col focus:outline-none">
+          <Drawer.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50" />
+          <Drawer.Content className="bg-neutral-950 border-t border-white/10 flex flex-col rounded-t-[28px] h-[85vh] max-h-[700px] fixed bottom-0 left-0 right-0 z-50 max-w-lg mx-auto outline-none">
             {/* Header */}
-            <div className="p-4 border-b border-neutral-800 flex items-center justify-between max-w-lg mx-auto w-full">
+            <div className="p-4 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div
-                  className="w-8 h-8 rounded-xl flex items-center justify-center border"
-                  style={{
-                    backgroundColor: 'var(--tenant-card)',
-                    borderColor: 'var(--tenant-accent)',
-                  }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center border border-white/15"
+                  style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
                 >
-                  <Bot className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
+                  <Robot size={18} weight="fill" className="text-white" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-neutral-100">
-                    AI-ассистент студии
-                  </div>
-                  <div className="text-[10px] text-emerald-400 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
-                    <span>Онлайн • ответит на любые вопросы</span>
-                  </div>
+                  <h3 className="text-sm font-bold text-white">Ассистент студии</h3>
+                  <p className="text-[11px] text-neutral-400">Отвечает только по реальным данным студии</p>
                 </div>
               </div>
-
               <button
+                type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
               >
-                <X className="w-4 h-4" />
+                <X size={16} />
               </button>
             </div>
 
-            {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 max-w-lg mx-auto w-full">
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3.5">
               {messages.map((m) => (
                 <div
                   key={m.id}
                   className={`flex gap-2.5 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {m.sender === 'assistant' && (
-                    <div className="w-6 h-6 rounded-lg bg-neutral-800 flex items-center justify-center flex-shrink-0 mt-0.5 border border-neutral-700">
-                      <Bot className="w-3.5 h-3.5 text-neutral-300" />
+                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-blue-400">
+                      <Robot size={15} weight="duotone" />
                     </div>
                   )}
-
                   <div
-                    style={{
-                      backgroundColor: m.sender === 'user' ? 'var(--tenant-accent)' : '#181822',
-                      color: m.sender === 'user' ? '#0D0D11' : '#F3F4F6',
-                    }}
-                    className={`p-3 rounded-2xl text-xs max-w-[80%] whitespace-pre-wrap leading-relaxed shadow-sm ${
-                      m.sender === 'user' ? 'font-medium rounded-tr-sm' : 'border border-neutral-800 rounded-tl-sm'
+                    className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm leading-relaxed whitespace-pre-line ${
+                      m.sender === 'user'
+                        ? 'bg-blue-600 text-white rounded-br-none'
+                        : 'bg-neutral-900 border border-white/10 text-neutral-200 rounded-bl-none'
                     }`}
+                    style={m.sender === 'user' ? { backgroundColor: 'var(--tenant-accent, #4690FF)' } : {}}
                   >
                     {m.text}
                   </div>
-
                   {m.sender === 'user' && (
-                    <div className="w-6 h-6 rounded-lg bg-neutral-800 flex items-center justify-center flex-shrink-0 mt-0.5 border border-neutral-700">
-                      <User className="w-3.5 h-3.5 text-neutral-300" />
+                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-neutral-300">
+                      <User size={15} />
                     </div>
                   )}
                 </div>
               ))}
 
               {isTyping && (
-                <div className="flex items-center gap-1.5 text-xs text-neutral-400 pl-8">
-                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-500 animate-bounce" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-500 animate-bounce [animation-delay:0.2s]" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-500 animate-bounce [animation-delay:0.4s]" />
+                <div className="flex items-center gap-2 text-xs text-neutral-400 pl-9">
+                  <div className="flex gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-bounce" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-bounce [animation-delay:0.2s]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-bounce [animation-delay:0.4s]" />
+                  </div>
+                  <span>Ассистент проверяет базу...</span>
                 </div>
               )}
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input bar */}
-            <form
-              onSubmit={handleSend}
-              className="p-3 border-t border-neutral-800 bg-neutral-950/80 safe-bottom max-w-lg mx-auto w-full flex items-center gap-2"
-            >
+            {/* Quick Prompt Buttons */}
+            <div className="px-4 py-2 border-t border-white/5 bg-neutral-950/80">
+              <p className="text-[10px] text-neutral-500 mb-1.5 font-medium uppercase tracking-wider">
+                Быстрые вопросы:
+              </p>
+              <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                {quickPrompts.map((q, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => handleSendMessage(q)}
+                    className="text-xs px-3 py-1.5 rounded-full border border-white/10 bg-neutral-900 hover:border-white/25 hover:bg-neutral-800 text-neutral-300 whitespace-nowrap transition-colors flex-shrink-0"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Input Bar */}
+            <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputValue); }} className="p-3 border-t border-white/10 flex items-center gap-2 bg-neutral-950">
               <input
                 type="text"
-                placeholder="Задайте вопрос о процедурах, ценах..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="flex-1 h-11 px-3.5 bg-neutral-900 border border-neutral-800 rounded-xl text-xs text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-amber-400/80"
+                placeholder="Задайте вопрос об услугах или записи..."
+                className="flex-1 h-11 px-4 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-xs sm:text-sm focus:outline-none focus:border-blue-400"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim() || isTyping}
-                style={{
-                  backgroundColor: 'var(--tenant-accent)',
-                  color: '#0D0D11',
-                }}
-                className="w-11 h-11 rounded-xl flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-md hover:brightness-105 active:scale-95 transition-all flex-shrink-0"
+                className="w-11 h-11 rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition-transform active:scale-95 cursor-pointer"
+                style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
               >
-                <Send className="w-4 h-4" />
+                <PaperPlaneRight size={18} weight="bold" />
               </button>
             </form>
           </Drawer.Content>
@@ -234,4 +278,4 @@ export function AIAssistantWidget() {
       </Drawer.Root>
     </>
   );
-}
+};

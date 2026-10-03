@@ -2,6 +2,7 @@
   "id": "11111111-1111-4111-8111-111111111111",
   "slug": "lumi-nail-studio",
   "name": "DEMO BEAUTY STUDIO",
+  "status": "published",
   "tagline": "Премиальная эстетика, безупречный маникюр и забота о деталях",
   "phone": "+7 (495) 780-11-22",
   "address": "ул. Большая Никитская, 14/2",
@@ -12,6 +13,26 @@
   "maxBookingHorizonDays": 30,
   "cancellationDeadlineHours": 4,
   "instructions": "В студии действует комплиментарный бар: specialty-кофе, матча и авторские лимонады. Пожалуйста, сообщите администратору о наличии аллергических реакций.",
+  "infoCards": [
+    {
+      "id": "card-1",
+      "title": "Работаем каждый день",
+      "description": "С 10:00 до 22:00 без выходных и перерывов",
+      "icon": "Clock"
+    },
+    {
+      "id": "card-2",
+      "title": "Опытные мастера",
+      "description": "Сертифицированные топ-мастера со стажем от 5 лет",
+      "icon": "Sparkle"
+    },
+    {
+      "id": "card-3",
+      "title": "Материалы премиум-класса",
+      "description": "Luxio, безопасные составы, 3-этапная стерилизация по СанПиН",
+      "icon": "ShieldCheck"
+    }
+  ],
   "theme": {
     "accentColor": "#D4AF37",
     "secondaryAccentColor": "#F5EBE0",
@@ -247,6 +268,26 @@
       "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+    ],
+    "galleryItems": [
+      {
+        "id": "work-1",
+        "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
+        "caption": "Французский маникюр с молочным камуфляжем",
+        "displayOrder": 1
+      },
+      {
+        "id": "work-2",
+        "imageUrl": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
+        "caption": "Японский эко-уход и сияние натуральных ногтей",
+        "displayOrder": 2
+      },
+      {
+        "id": "work-3",
+        "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
+        "caption": "Авторский nail-арт и золотые акценты",
+        "displayOrder": 3
+      }
     ]
   }
 }

@@ -1,12 +1,19 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BottomSheet } from './ui/BottomSheet';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
 import { useTenant } from '../context/TenantContext';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Clock, User, ShieldCheck } from 'lucide-react';
+import { Calendar, Clock, ShieldCheck } from '@phosphor-icons/react';
+import { z } from 'zod';
 import type { Service, ServiceOption, Master } from '../../scripts/schema';
+
+const ClientBookingInputSchema = z.object({
+  name: z.string().trim().min(2, 'Имя должно содержать минимум 2 буквы'),
+  phone: z.string().trim().regex(/^\+?[0-9\s\-()]{10,20}$/, 'Пожалуйста, введите корректный номер телефона'),
+  notes: z.string().max(500).optional(),
+});
 
 interface BookingFormModalProps {
   open: boolean;
@@ -18,7 +25,7 @@ interface BookingFormModalProps {
   dateStr: string | null;
 }
 
-export function BookingFormModal({
+export const BookingFormModal: React.FC<BookingFormModalProps> = ({
   open,
   onOpenChange,
   service,
@@ -26,7 +33,7 @@ export function BookingFormModal({
   master,
   slot,
   dateStr,
-}: BookingFormModalProps) {
+}) => {
   const { tenant } = useTenant();
   const navigate = useNavigate();
 
@@ -34,6 +41,7 @@ export function BookingFormModal({
   const [phone, setPhone] = useState('+7 ');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
   const [error, setError] = useState<string | null>(null);
 
   if (!service || !slot || !dateStr || !tenant) return null;
@@ -52,29 +60,52 @@ export function BookingFormModal({
   });
 
   const handlePhoneChange = (val: string) => {
-    // Keep +7 prefix
     if (!val.startsWith('+7')) {
       setPhone('+7 ');
       return;
     }
     setPhone(val);
+    if (fieldErrors.phone) {
+      setFieldErrors((prev) => ({ ...prev, phone: undefined }));
+    }
+  };
+
+  const handleNameChange = (val: string) => {
+    setName(val);
+    if (fieldErrors.name) {
+      setFieldErrors((prev) => ({ ...prev, name: undefined }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) {
-      setError('Пожалуйста, введите ваше имя');
-      return;
-    }
-    if (phone.trim().length < 11) {
-      setError('Пожалуйста, укажите полный номер телефона');
+    if (isSubmitting) return;
+
+    // Validate using Zod
+    const validationResult = ClientBookingInputSchema.safeParse({
+      name,
+      phone,
+      notes: notes || undefined,
+    });
+
+    if (!validationResult.success) {
+      const errMap: { name?: string; phone?: string } = {};
+      for (const issue of validationResult.error.issues) {
+        if (issue.path[0] === 'name') errMap.name = issue.message;
+        if (issue.path[0] === 'phone') errMap.phone = issue.message;
+      }
+      setFieldErrors(errMap);
       return;
     }
 
     setIsSubmitting(true);
     setError(null);
+    setFieldErrors({});
 
     try {
+      // Deterministic idempotency key to prevent double bookings
+      const idempotencyKey = `${tenant.slug}-${service.id}-${slot.datetime}-${phone.replace(/\D/g, '')}`;
+
       const res = await BookingEngine.createBooking({
         tenantSlug: tenant.slug,
         serviceId: service.id,
@@ -84,7 +115,11 @@ export function BookingFormModal({
         clientName: name.trim(),
         clientPhone: phone.trim(),
         notes: notes.trim() || undefined,
+        idempotencyKey,
       });
+
+      // Save token for "Моя запись" in bottom navigation
+      localStorage.setItem(`beauty_last_booking_token_${tenant.slug}`, res.accessToken);
 
       onOpenChange(false);
       // Navigate to direct booking status screen with crypto access token
@@ -100,130 +135,126 @@ export function BookingFormModal({
       open={open}
       onOpenChange={onOpenChange}
       title="Подтверждение записи"
-      description="Проверьте детали визита и контактные данные"
+      description="Проверьте детали визита и укажите ваши данные"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Booking Summary Box */}
-        <div
-          style={{
-            backgroundColor: 'var(--tenant-card)',
-            borderColor: 'var(--tenant-card-border)',
-          }}
-          className="p-4 rounded-2xl border space-y-3"
-        >
-          <div className="flex items-start justify-between gap-3">
+        {/* Appointment Summary Card */}
+        <div className="p-3.5 rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-md space-y-2.5">
+          <div className="flex items-start justify-between">
             <div>
-              <div className="text-xs" style={{ color: 'var(--tenant-muted)' }}>Услуга</div>
-              <div className="text-sm font-semibold" style={{ color: 'var(--tenant-text)' }}>{service.name}</div>
+              <h4 className="font-semibold text-sm text-white">{service.name}</h4>
+              <p className="text-xs text-neutral-400 mt-0.5">
+                {master ? `Мастер: ${master.name}` : 'Любой свободный мастер'}
+              </p>
             </div>
             <div className="text-right">
-              <div className="text-sm font-bold" style={{ color: 'var(--tenant-text)' }}>{totalPrice.toLocaleString('ru-RU')} ₽</div>
-              <div className="text-xs" style={{ color: 'var(--tenant-muted)' }}>{totalDuration} мин</div>
+              <span className="font-bold text-sm text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
+                {totalPrice.toLocaleString('ru-RU')} ₽
+              </span>
+              <p className="text-[11px] text-neutral-400 mt-0.5">{totalDuration} мин</p>
             </div>
           </div>
 
           {options.length > 0 && (
-            <div className="pt-2 border-t" style={{ borderColor: 'var(--tenant-card-border)' }}>
-              <div className="text-[11px] mb-1" style={{ color: 'var(--tenant-muted)' }}>Выбранные опции:</div>
-              <div className="space-y-0.5">
-                {options.map((opt) => (
-                  <div key={opt.id} className="flex justify-between text-xs" style={{ color: 'var(--tenant-text)' }}>
-                    <span>+ {opt.name}</span>
-                    <span style={{ color: 'var(--tenant-accent-secondary, #F5EBE0)' }}>+{opt.price} ₽</span>
-                  </div>
-                ))}
-              </div>
+            <div className="pt-2 border-t border-white/10 space-y-1">
+              <span className="text-[11px] text-neutral-400 font-medium">Дополнительно:</span>
+              {options.map((opt) => (
+                <div key={opt.id} className="flex justify-between text-xs text-neutral-300">
+                  <span>+ {opt.name}</span>
+                  <span>+{opt.price} ₽</span>
+                </div>
+              ))}
             </div>
           )}
 
-          <div className="pt-2 border-t flex items-center justify-between text-xs" style={{ borderColor: 'var(--tenant-card-border)' }}>
-            <div className="flex items-center gap-1.5" style={{ color: 'var(--tenant-muted)' }}>
-              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
-              <span className="capitalize" style={{ color: 'var(--tenant-text)' }}>{formattedDate}</span>
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-neutral-300">
+            <div className="flex items-center gap-1.5">
+              <Calendar size={14} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <span className="capitalize">{formattedDate}</span>
             </div>
-            <div className="flex items-center gap-1.5 font-semibold" style={{ color: 'var(--tenant-text)' }}>
-              <Clock className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
-              <span>{slot.time}</span>
+            <div className="flex items-center gap-1.5">
+              <Clock size={14} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <span className="font-semibold">{slot.time}</span>
             </div>
-          </div>
-
-          <div className="pt-2 border-t flex items-center justify-between text-xs" style={{ borderColor: 'var(--tenant-card-border)' }}>
-            <div className="flex items-center gap-1.5" style={{ color: 'var(--tenant-muted)' }}>
-              <User className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
-              <span>Специалист:</span>
-            </div>
-            <span className="font-medium" style={{ color: 'var(--tenant-text)' }}>
-              {master ? master.name : 'Любой свободный мастер'}
-            </span>
           </div>
         </div>
 
-        {/* Client Fields */}
-        <div className="space-y-3 pt-1">
-          <Input
-            label="Ваше имя"
-            placeholder="Как к вам обращаться"
-            value={name}
-            autoComplete="name"
-            autoCapitalize="words"
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+        {/* Input Fields */}
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs font-medium text-neutral-300 mb-1">
+              Ваше имя <span className="text-red-400">*</span>
+            </label>
+            <Input
+              value={name}
+              onChange={(e) => handleNameChange(e.target.value)}
+              placeholder="Как к вам обращаться"
+              required
+              autoComplete="name"
+              autoCapitalize="words"
+              className={fieldErrors.name ? 'border-red-500' : ''}
+            />
+            {fieldErrors.name && (
+              <p className="text-[11px] text-red-400 mt-1">{fieldErrors.name}</p>
+            )}
+          </div>
 
-          <Input
-            label="Телефон для связи"
-            placeholder="+7 (___) ___-__-__"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            value={phone}
-            onChange={(e) => handlePhoneChange(e.target.value)}
-            required
-          />
+          <div>
+            <label className="block text-xs font-medium text-neutral-300 mb-1">
+              Номер телефона <span className="text-red-400">*</span>
+            </label>
+            <Input
+              value={phone}
+              onChange={(e) => handlePhoneChange(e.target.value)}
+              placeholder="+7 (___) ___-__-__"
+              required
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              className={fieldErrors.phone ? 'border-red-500' : ''}
+            />
+            {fieldErrors.phone && (
+              <p className="text-[11px] text-red-400 mt-1">{fieldErrors.phone}</p>
+            )}
+            <p className="text-[11px] text-neutral-500 mt-1">
+              Без паролей и спама. На этот номер придет ссылка на управление записью.
+            </p>
+          </div>
 
-          <Input
-            label="Пожелания или комментарии (необязательно)"
-            placeholder="Например: тонкая кутикула, длина под ноль..."
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </div>
-
-        {/* Security badge */}
-        <div
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.03)',
-            borderColor: 'var(--tenant-card-border)',
-          }}
-          className="flex items-center gap-2 p-2.5 rounded-xl border text-[11px]"
-        >
-          <ShieldCheck className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--tenant-accent)' }} />
-          <span style={{ color: 'var(--tenant-muted)' }}>Без регистрации. Защищенный доступ по персональной ссылке.</span>
+          <div>
+            <label className="block text-xs font-medium text-neutral-300 mb-1">
+              Пожелания или комментарий к записи
+            </label>
+            <Input
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Например: желаемый дизайн, аллергия, снятие"
+            />
+          </div>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-red-950/50 border border-red-800 text-xs text-red-300">
+          <div className="p-3 rounded-xl bg-red-950/40 border border-red-800 text-xs text-red-300">
             {error}
           </div>
         )}
 
-        {/* Submit CTA */}
         <div className="pt-2">
           <Button
             type="submit"
-            variant="primary"
-            size="lg"
-            isLoading={isSubmitting}
-            style={{
-              backgroundColor: 'var(--tenant-accent)',
-              color: '#0D0D11',
-            }}
-            className="w-full text-base font-bold shadow-xl shadow-amber-500/20 cursor-pointer"
+            disabled={isSubmitting}
+            className="w-full h-12 text-sm font-semibold rounded-xl text-white cursor-pointer active:scale-98 transition-all"
+            style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
           >
-            Подтвердить запись
+            {isSubmitting ? 'Бронирование...' : `Подтвердить запись за ${totalPrice.toLocaleString('ru-RU')} ₽`}
           </Button>
+
+          <p className="text-[10px] text-neutral-400 text-center mt-2.5 flex items-center justify-center gap-1">
+            <ShieldCheck size={14} className="text-emerald-400" />
+            <span>Атомарная фиксация слота · Без двойных бронирований</span>
+          </p>
         </div>
       </form>
     </BottomSheet>
   );
-}
+};

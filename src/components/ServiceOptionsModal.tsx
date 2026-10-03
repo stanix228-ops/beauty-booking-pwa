@@ -10,6 +10,7 @@ interface ServiceOptionsModalProps {
   availableOptions: ServiceOption[];
   selectedOptions: ServiceOption[];
   onToggleOption: (option: ServiceOption) => void;
+  onConfirm?: () => void;
 }
 
 export function ServiceOptionsModal({
@@ -19,6 +20,7 @@ export function ServiceOptionsModal({
   availableOptions,
   selectedOptions,
   onToggleOption,
+  onConfirm,
 }: ServiceOptionsModalProps) {
   if (!service) return null;
 
@@ -95,7 +97,10 @@ export function ServiceOptionsModal({
             backgroundColor: 'var(--tenant-accent)',
             color: '#0D0D11',
           }}
-          onClick={() => onOpenChange(false)}
+          onClick={() => {
+            if (onConfirm) onConfirm();
+            else onOpenChange(false);
+          }}
         >
           Готово ({selectedOptions.length})
         </Button>

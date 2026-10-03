@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BottomSheet } from './ui/BottomSheet';
 import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
 import { useTenant } from '../context/TenantContext';
-import { Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { Calendar, Clock, LockKey } from '@phosphor-icons/react';
 import type { Service, ServiceOption } from '../../scripts/schema';
 
 interface SlotPickerModalProps {
@@ -14,24 +14,24 @@ interface SlotPickerModalProps {
   onSelectSlot: (slot: AvailableSlot, dateStr: string) => void;
 }
 
-export function SlotPickerModal({
+export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
   open,
   onOpenChange,
   service,
   options,
   masterId,
   onSelectSlot,
-}: SlotPickerModalProps) {
+}) => {
   const { tenant } = useTenant();
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const today = new Date();
     return today.toISOString().split('T')[0];
   });
-  const [slots, setSlots] = useState<AvailableSlot[]>([]);
+  const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate next 14 days
+  // Generate next 14 calendar days
   const dateOptions = Array.from({ length: 14 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() + i);
@@ -54,7 +54,7 @@ export function SlotPickerModal({
     BookingEngine.getAvailableSlots(tenant.slug, service.id, optionIds, masterId, selectedDate)
       .then((res) => {
         if (isSubscribed) {
-          setSlots(res);
+          setAvailableSlots(res);
           setIsLoading(false);
         }
       })
@@ -70,21 +70,48 @@ export function SlotPickerModal({
     };
   }, [open, tenant, service, options, masterId, selectedDate]);
 
-  if (!service) return null;
+  if (!service || !tenant) return null;
+
+  // Generate full daily schedule slots from open to close
+  const targetDate = new Date(`${selectedDate}T00:00:00`);
+  const dayOfWeek = targetDate.getDay();
+  const dayHours = tenant.businessHours.find((bh) => bh.dayOfWeek === dayOfWeek);
+
+  const allDaySlots: string[] = [];
+  if (dayHours && !dayHours.isClosed) {
+    const [openH, openM] = dayHours.openTime.split(':').map(Number);
+    const [closeH, closeM] = dayHours.closeTime.split(':').map(Number);
+    let curH = openH;
+    let curM = openM;
+    while (curH < closeH || (curH === closeH && curM + 30 <= closeM)) {
+      const timeStr = `${String(curH).padStart(2, '0')}:${String(curM).padStart(2, '0')}`;
+      allDaySlots.push(timeStr);
+      curM += 30;
+      if (curM >= 60) {
+        curH += Math.floor(curM / 60);
+        curM %= 60;
+      }
+    }
+  }
+
+  const availableMap = new Map<string, AvailableSlot>();
+  for (const s of availableSlots) {
+    availableMap.set(s.time, s);
+  }
 
   return (
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
       title="Выбор даты и времени"
-      description={`Услуга: ${service.name}`}
+      description={`Услуга: ${service.name} (${service.durationMin} мин)`}
     >
       <div className="space-y-5">
         {/* Date Selector */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
-              <CalendarIcon className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
+              <Calendar size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
               Дата записи
             </span>
           </div>
@@ -96,16 +123,17 @@ export function SlotPickerModal({
               return (
                 <button
                   key={item.dateStr}
+                  type="button"
                   onClick={() => setSelectedDate(item.dateStr)}
                   style={{
-                    backgroundColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card)',
-                    borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
-                    color: isSelected ? '#0D0D11' : 'var(--tenant-text)',
+                    backgroundColor: isSelected ? 'var(--tenant-accent, #4690FF)' : 'var(--tenant-card, #121216)',
+                    borderColor: isSelected ? 'var(--tenant-accent, #4690FF)' : 'rgba(255, 255, 255, 0.1)',
+                    color: isSelected ? '#FFFFFF' : 'var(--tenant-text, #FFFFFF)',
                   }}
                   className={`flex flex-col items-center justify-center min-w-[62px] h-[72px] rounded-2xl border transition-all cursor-pointer flex-shrink-0 ${
                     isSelected
-                      ? 'font-bold shadow-lg shadow-amber-500/20'
-                      : 'hover:border-amber-400/40'
+                      ? 'font-bold shadow-lg shadow-blue-500/20'
+                      : 'hover:border-white/30'
                   }`}
                 >
                   <span className="text-[11px] uppercase tracking-wider opacity-80">
@@ -127,11 +155,11 @@ export function SlotPickerModal({
         <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
-              Доступное время
+              <Clock size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              Расписание на день
             </span>
-            <span className="text-[11px] text-neutral-500">
-              Шаг 30 минут
+            <span className="text-[11px] text-neutral-400">
+              Шаг 30 минут · Занятое время заблокировано
             </span>
           </div>
 
@@ -145,44 +173,59 @@ export function SlotPickerModal({
             <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/50 text-xs text-red-300 text-center">
               {error}
             </div>
-          ) : slots.length === 0 ? (
-            <div
-              style={{
-                backgroundColor: 'var(--tenant-card)',
-                borderColor: 'var(--tenant-card-border)',
-              }}
-              className="py-8 text-center px-4 rounded-2xl border"
-            >
+          ) : allDaySlots.length === 0 ? (
+            <div className="py-8 text-center px-4 rounded-2xl border border-white/10 bg-neutral-900/40">
               <div className="text-sm font-medium text-neutral-300 mb-1">
-                Нет свободных окон на этот день
+                Студия закрыта в этот день
               </div>
-              <p className="text-xs text-neutral-500 mb-3">
-                Попробуйте выбрать другую дату или выберите опцию «Любой мастер».
+              <p className="text-xs text-neutral-500">
+                Пожалуйста, выберите другую дату.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5 max-h-60 overflow-y-auto pr-1">
-              {slots.map((slot) => (
-                <button
-                  key={slot.time}
-                  onClick={() => {
-                    onSelectSlot(slot, selectedDate);
-                    onOpenChange(false);
-                  }}
-                  style={{
-                    backgroundColor: 'var(--tenant-card)',
-                    borderColor: 'var(--tenant-card-border)',
-                    color: 'var(--tenant-text)',
-                  }}
-                  className="h-[46px] rounded-xl border hover:border-amber-400/50 hover:text-white font-semibold text-sm transition-all flex items-center justify-center cursor-pointer active:scale-[0.96] duration-150 shadow-sm"
-                >
-                  {slot.time}
-                </button>
-              ))}
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto pr-1">
+              {allDaySlots.map((timeStr) => {
+                const availableSlot = availableMap.get(timeStr);
+                const isAvailable = Boolean(availableSlot);
+
+                if (isAvailable && availableSlot) {
+                  return (
+                    <button
+                      key={timeStr}
+                      type="button"
+                      onClick={() => {
+                        onSelectSlot(availableSlot, selectedDate);
+                        onOpenChange(false);
+                      }}
+                      className="h-11 rounded-xl border border-white/15 bg-neutral-900/90 text-white hover:border-blue-400 hover:bg-white/10 font-semibold text-sm transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm"
+                      style={{
+                        borderColor: 'rgba(255, 255, 255, 0.15)',
+                      }}
+                    >
+                      {timeStr}
+                    </button>
+                  );
+                }
+
+                // Explicitly marked occupied / unavailable slot
+                return (
+                  <button
+                    key={timeStr}
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    title="Это время уже занято или недоступно"
+                    className="h-11 rounded-xl border border-white/5 bg-neutral-950/60 text-neutral-600 font-normal text-xs transition-none flex items-center justify-center gap-1 cursor-not-allowed line-through opacity-45"
+                  >
+                    <LockKey size={12} weight="fill" />
+                    <span>{timeStr}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
       </div>
     </BottomSheet>
   );
-}
+};

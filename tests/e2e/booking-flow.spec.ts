@@ -25,8 +25,12 @@ test.describe('Nail Studio PWA End-to-End Booking & Isolation Flow', () => {
     // Verify SlotPicker modal is open
     await expect(page.getByText('Выбор даты и времени')).toBeVisible();
 
-    // Pick first available time slot button (e.g. 10:00 or similar)
-    const slotButton = page.locator('button:has-text(":")').first();
+    // Select tomorrow to guarantee daytime future slots
+    const tomorrowBtn = page.locator('button:has-text("окт.")').nth(1);
+    await tomorrowBtn.click();
+
+    // Pick first available time slot button (must not be disabled)
+    const slotButton = page.locator('button:not([disabled]):has-text(":")').first();
     await expect(slotButton).toBeVisible();
     await slotButton.click();
 
@@ -48,11 +52,14 @@ test.describe('Nail Studio PWA End-to-End Booking & Isolation Flow', () => {
     await expect(page.getByRole('button', { name: /Добавить в календарь/i })).toBeVisible();
 
     // 6. Verification in Owner Portal (/s/lumi-nail-studio/owner/)
+    await page.evaluate(() => {
+      localStorage.setItem('owner_session_lumi-nail-studio', JSON.stringify({ token: 'mock-owner-token', ownerEmail: 'owner@lumi.demo' }));
+    });
     await page.goto('/s/lumi-nail-studio/owner/');
-    await expect(page.getByText('Кабинет управления студией')).toBeVisible();
+    await expect(page.getByText(/DEMO BEAUTY STUDIO/)).toBeVisible();
 
-    // Switch to "Записи" tab
-    await page.getByRole('button', { name: 'Записи' }).click();
+    // Switch to "Все записи" tab
+    await page.getByRole('button', { name: /записи/i }).first().click();
 
     // Verify our booked client is listed in the owner database
     await expect(page.getByText('Екатерина Тестовая')).toBeVisible();
@@ -74,8 +81,11 @@ test.describe('Nail Studio PWA End-to-End Booking & Isolation Flow', () => {
     await expect(page.getByText('Скоростной экспресс-маникюр')).toBeVisible();
 
     // Verify owner dashboard of Aura does not contain Lumi's client
+    await page.evaluate(() => {
+      localStorage.setItem('owner_session_aura-nail-bar', JSON.stringify({ token: 'mock-owner-token', ownerEmail: 'owner@aura.demo' }));
+    });
     await page.goto('/s/aura-nail-bar/owner/');
-    await page.getByRole('button', { name: 'Записи' }).click();
+    await page.getByRole('button', { name: /записи/i }).first().click();
     await expect(page.getByText('Екатерина Тестовая')).toBeHidden();
   });
 });

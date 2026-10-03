@@ -23,6 +23,9 @@ export default defineConfig({
       use: {
         ...devices['Pixel 5'],
         channel: 'msedge',
+        launchOptions: {
+          args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox'],
+        },
       },
     },
   ],

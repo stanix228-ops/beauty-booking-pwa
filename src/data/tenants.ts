@@ -6,6 +6,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "id": "22222222-2222-4222-8222-222222222222",
     "slug": "aura-nail-bar",
     "name": "AURA NAIL BAR",
+    "status": "sample",
     "tagline": "Экспресс-студия маникюра и концептуальный нейл-бар",
     "phone": "+7 (812) 330-99-44",
     "address": "Невский проспект, 78",
@@ -21,12 +22,32 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       "secondaryAccentColor": "#F5EBE0",
       "bgColor": "#0F172A",
       "cardBgColor": "#1E293B",
-      "borderColor": "rgba(212, 175, 55, 0.15)",
+      "borderColor": "rgba(255, 255, 255, 0.1)",
       "textColor": "#F8FAFC",
       "mutedColor": "#94A3B8",
       "fontHeading": "Inter, sans-serif",
       "fontBody": "Inter, sans-serif"
     },
+    "infoCards": [
+      {
+        "id": "card-1",
+        "title": "Работаем каждый день",
+        "description": "С 10:00 до 22:00 без выходных и перерывов",
+        "icon": "Clock"
+      },
+      {
+        "id": "card-2",
+        "title": "Опытные мастера",
+        "description": "Сертифицированные специалисты с опытом от 5 лет",
+        "icon": "Star"
+      },
+      {
+        "id": "card-3",
+        "title": "Материалы премиум-класса",
+        "description": "Безопасные составы, стерилизация по СанПиН в 3 этапа",
+        "icon": "ShieldCheck"
+      }
+    ],
     "businessHours": [
       {
         "dayOfWeek": 0,
@@ -192,45 +213,53 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
             "dayOfWeek": 0,
             "startTime": "11:00",
             "endTime": "21:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 1,
             "startTime": "09:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 2,
             "startTime": "09:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 3,
             "startTime": "09:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 4,
             "startTime": "09:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 5,
             "startTime": "09:00",
             "endTime": "22:00",
-            "isDayOff": true
+            "isDayOff": true,
+            "breaks": []
           },
           {
             "dayOfWeek": 6,
             "startTime": "10:00",
             "endTime": "22:00",
-            "isDayOff": true
+            "isDayOff": true,
+            "breaks": []
           }
         ],
+        "breaks": [],
         "displayOrder": 1,
         "isActive": true
       },
@@ -251,45 +280,53 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
             "dayOfWeek": 0,
             "startTime": "11:00",
             "endTime": "21:00",
-            "isDayOff": true
+            "isDayOff": true,
+            "breaks": []
           },
           {
             "dayOfWeek": 1,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 2,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 3,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 4,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 5,
             "startTime": "09:00",
             "endTime": "23:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 6,
             "startTime": "10:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           }
         ],
+        "breaks": [],
         "displayOrder": 2,
         "isActive": true
       }
@@ -299,13 +336,15 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       "hero": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=1200&q=80",
       "gallery": [
         "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
-      ]
+      ],
+      "galleryItems": []
     }
   },
   "lumi-nail-studio": {
     "id": "11111111-1111-4111-8111-111111111111",
     "slug": "lumi-nail-studio",
     "name": "DEMO BEAUTY STUDIO",
+    "status": "published",
     "tagline": "Премиальная эстетика, безупречный маникюр и забота о деталях",
     "phone": "+7 (495) 780-11-22",
     "address": "ул. Большая Никитская, 14/2",
@@ -327,6 +366,26 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       "fontHeading": "Playfair Display, serif",
       "fontBody": "Inter, sans-serif"
     },
+    "infoCards": [
+      {
+        "id": "card-1",
+        "title": "Работаем каждый день",
+        "description": "С 10:00 до 22:00 без выходных и перерывов",
+        "icon": "Clock"
+      },
+      {
+        "id": "card-2",
+        "title": "Опытные мастера",
+        "description": "Сертифицированные топ-мастера со стажем от 5 лет",
+        "icon": "Sparkle"
+      },
+      {
+        "id": "card-3",
+        "title": "Материалы премиум-класса",
+        "description": "Luxio, безопасные составы, 3-этапная стерилизация по СанПиН",
+        "icon": "ShieldCheck"
+      }
+    ],
     "businessHours": [
       {
         "dayOfWeek": 0,
@@ -556,45 +615,53 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
             "dayOfWeek": 0,
             "startTime": "10:00",
             "endTime": "21:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 1,
             "startTime": "10:00",
             "endTime": "21:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 2,
             "startTime": "10:00",
             "endTime": "21:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 3,
             "startTime": "10:00",
             "endTime": "21:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 4,
             "startTime": "10:00",
             "endTime": "21:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 5,
             "startTime": "10:00",
             "endTime": "21:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 6,
             "startTime": "10:00",
             "endTime": "21:00",
-            "isDayOff": true
+            "isDayOff": true,
+            "breaks": []
           }
         ],
+        "breaks": [],
         "displayOrder": 1,
         "isActive": true
       },
@@ -616,45 +683,53 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
             "dayOfWeek": 0,
             "startTime": "11:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 1,
             "startTime": "11:00",
             "endTime": "22:00",
-            "isDayOff": true
+            "isDayOff": true,
+            "breaks": []
           },
           {
             "dayOfWeek": 2,
             "startTime": "11:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 3,
             "startTime": "11:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 4,
             "startTime": "11:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 5,
             "startTime": "11:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 6,
             "startTime": "11:00",
             "endTime": "22:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           }
         ],
+        "breaks": [],
         "displayOrder": 2,
         "isActive": true
       },
@@ -676,45 +751,53 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
             "dayOfWeek": 0,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 1,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 2,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": true
+            "isDayOff": true,
+            "breaks": []
           },
           {
             "dayOfWeek": 3,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 4,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 5,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           },
           {
             "dayOfWeek": 6,
             "startTime": "10:00",
             "endTime": "20:00",
-            "isDayOff": false
+            "isDayOff": false,
+            "breaks": []
           }
         ],
+        "breaks": [],
         "displayOrder": 3,
         "isActive": true
       }
@@ -726,6 +809,26 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+      ],
+      "galleryItems": [
+        {
+          "id": "work-1",
+          "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
+          "caption": "Французский маникюр с молочным камуфляжем",
+          "displayOrder": 1
+        },
+        {
+          "id": "work-2",
+          "imageUrl": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
+          "caption": "Японский эко-уход и сияние натуральных ногтей",
+          "displayOrder": 2
+        },
+        {
+          "id": "work-3",
+          "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
+          "caption": "Авторский nail-арт и золотые акценты",
+          "displayOrder": 3
+        }
       ]
     }
   }

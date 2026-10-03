@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTenant } from '../context/TenantContext';
 import { isLiveSupabaseConfigured, supabase } from '../lib/supabase';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Card } from '../components/ui/Card';
-import { ShieldCheck, ArrowLeft, Lock } from 'lucide-react';
+import { LockKey, ArrowLeft, ShieldCheck } from '@phosphor-icons/react';
 
 export function OwnerLoginPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -44,6 +44,7 @@ export function OwnerLoginPage() {
           throw new Error('У вас нет прав доступа к этой студии.');
         }
 
+        localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email, role: membership.role }));
         navigate(`/s/${slug}/owner/`);
       } catch (err) {
         setError((err as Error).message || 'Ошибка авторизации');
@@ -53,7 +54,6 @@ export function OwnerLoginPage() {
     }
 
     // Demo / Local development mode fallback:
-    // If no live Supabase credentials configured, authorize with demo credentials
     setTimeout(() => {
       if (email.includes('@') && password.length >= 4) {
         localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email, role: 'owner' }));
@@ -62,32 +62,32 @@ export function OwnerLoginPage() {
         setError('Введите корректный email и пароль (минимум 4 символа).');
         setIsLoading(false);
       }
-    }, 600);
+    }, 500);
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex flex-col justify-center px-4 py-12 safe-top safe-bottom">
+    <div className="min-h-screen bg-black flex flex-col justify-center px-4 py-12 safe-top safe-bottom">
       <div className="max-w-md mx-auto w-full space-y-6">
         <Link
           to={`/s/${slug}/`}
           className="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Вернуться на сайт студии</span>
+          <ArrowLeft size={16} />
+          <span>Вернуться на витрину студии</span>
         </Link>
 
         <div className="text-center space-y-2">
           <div
             className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center border shadow-xl"
             style={{
-              backgroundColor: 'var(--tenant-card)',
-              borderColor: 'var(--tenant-accent)',
+              backgroundColor: 'var(--tenant-card, #121216)',
+              borderColor: 'var(--tenant-accent, #4690FF)',
             }}
           >
-            <Lock className="w-6 h-6" style={{ color: 'var(--tenant-accent)' }} />
+            <LockKey size={28} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
           </div>
 
-          <h1 className="text-2xl font-bold font-heading text-neutral-100">
+          <h1 className="text-2xl font-bold text-white">
             Вход для владельца
           </h1>
           <p className="text-xs text-neutral-400">
@@ -95,46 +95,57 @@ export function OwnerLoginPage() {
           </p>
         </div>
 
-        <Card className="space-y-4 p-6">
+        <Card className="space-y-4 p-6 border border-white/10 bg-neutral-900/60 backdrop-blur-md">
           <form onSubmit={handleLogin} className="space-y-4">
-            <Input
-              label="Email администратора"
-              type="email"
-              placeholder="owner@studionails.ru"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <div>
+              <label className="block text-xs font-medium text-neutral-300 mb-1">
+                Электронная почта
+              </label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="owner@beauty-studio.ru"
+                required
+                autoComplete="email"
+              />
+            </div>
 
-            <Input
-              label="Пароль"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div>
+              <label className="block text-xs font-medium text-neutral-300 mb-1">
+                Пароль
+              </label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                autoComplete="current-password"
+              />
+            </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-red-950/40 border border-red-800 text-xs text-red-300">
+              <div className="p-3 rounded-xl bg-red-950/40 border border-red-800/80 text-xs text-red-300">
                 {error}
               </div>
             )}
 
             <Button
               type="submit"
-              variant="primary"
-              size="lg"
-              isLoading={isLoading}
-              className="w-full text-base font-bold shadow-lg cursor-pointer"
+              disabled={isLoading}
+              className="w-full h-11 text-sm font-semibold rounded-xl text-white cursor-pointer"
+              style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
             >
-              Войти в кабинет
+              {isLoading ? 'Проверка прав...' : 'Войти в кабинет'}
             </Button>
           </form>
 
-          <div className="pt-3 border-t border-neutral-800 text-[11px] text-neutral-500 text-center flex items-center justify-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Доступ только для верифицированных сотрудников студии</span>
+          <div className="pt-2 border-t border-white/10 text-center">
+            <p className="text-[11px] text-neutral-500 flex items-center justify-center gap-1">
+              <ShieldCheck size={14} className="text-blue-400" />
+              <span>Доступ защищен Supabase RLS · Закрытая регистрация</span>
+            </p>
           </div>
         </Card>
       </div>
