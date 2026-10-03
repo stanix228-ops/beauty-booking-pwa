@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spinner } from '@astryxdesign/core/Spinner';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
@@ -49,10 +50,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading ? (
           <span className="flex items-center gap-2">
-            <svg className="animate-spin h-4 w-4 text-current" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-            </svg>
+            <Spinner size="sm" shade="inherit" />
             <span>Загрузка...</span>
           </span>
         ) : (

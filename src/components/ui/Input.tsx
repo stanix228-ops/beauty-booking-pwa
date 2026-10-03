@@ -24,7 +24,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             borderColor: 'var(--tenant-card-border, rgba(212, 175, 55, 0.15))',
             color: 'var(--tenant-text, #FAF8F5)',
           }}
-          className={`w-full h-11 px-3.5 border rounded-xl text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-amber-400/50 transition-colors ${
+          className={`w-full h-11 px-3.5 border rounded-xl text-base sm:text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-amber-400/50 transition-colors ${
             error ? '!border-red-500 !focus:border-red-500' : ''
           } ${className}`}
           {...props}

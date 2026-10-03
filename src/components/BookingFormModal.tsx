@@ -164,6 +164,8 @@ export function BookingFormModal({
             label="Ваше имя"
             placeholder="Как к вам обращаться"
             value={name}
+            autoComplete="name"
+            autoCapitalize="words"
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -172,6 +174,8 @@ export function BookingFormModal({
             label="Телефон для связи"
             placeholder="+7 (___) ___-__-__"
             type="tel"
+            inputMode="tel"
+            autoComplete="tel"
             value={phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
             required

@@ -174,7 +174,7 @@ export function SlotPickerModal({
                     borderColor: 'var(--tenant-card-border)',
                     color: 'var(--tenant-text)',
                   }}
-                  className="h-11 rounded-xl border hover:border-amber-400/50 hover:text-white font-medium text-sm transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm"
+                  className="h-[46px] rounded-xl border hover:border-amber-400/50 hover:text-white font-semibold text-sm transition-all flex items-center justify-center cursor-pointer active:scale-[0.96] duration-150 shadow-sm"
                 >
                   {slot.time}
                 </button>
