@@ -1,6 +1,6 @@
 -- ========================================================
 -- PUBLISH TENANT: LUMI NAIL STUDIO (lumi-nail-studio)
--- Generated automatically at: 2026-10-03T11:57:19.624Z
+-- Generated automatically at: 2026-10-03T12:39:26.793Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 

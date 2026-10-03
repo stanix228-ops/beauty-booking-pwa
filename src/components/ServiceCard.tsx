@@ -77,7 +77,7 @@ export function ServiceCard({
           <div className="pt-2 flex items-center justify-between border-t mt-auto" style={{ borderColor: 'var(--tenant-card-border)' }}>
             {/* Price & Duration */}
             <div>
-              <div className="text-base font-bold tracking-tight" style={{ color: 'var(--tenant-text)' }}>
+              <div className="text-lg font-extrabold tracking-tight" style={{ color: 'var(--tenant-accent)' }}>
                 {displayPrice.toLocaleString('ru-RU')} ₽
               </div>
               <div className="flex items-center gap-1 text-[11px]" style={{ color: 'var(--tenant-muted)' }}>
@@ -96,13 +96,13 @@ export function ServiceCard({
                     onOpenOptions(service);
                   }}
                   style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                    borderColor: 'var(--tenant-card-border)',
-                    color: 'var(--tenant-text)',
+                    backgroundColor: 'rgba(212, 175, 55, 0.05)',
+                    borderColor: 'rgba(212, 175, 55, 0.25)',
+                    color: 'var(--tenant-accent-secondary, #F5EBE0)',
                   }}
-                  className="px-2.5 py-1.5 rounded-lg text-xs font-medium hover:border-amber-400/30 border transition-colors flex items-center gap-1 cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-lg text-xs font-medium hover:border-amber-400/60 hover:bg-amber-500/10 border transition-all flex items-center gap-1 cursor-pointer active:scale-95"
                 >
-                  <Plus className="w-3 h-3" />
+                  <Plus className="w-3 h-3" style={{ color: 'var(--tenant-accent)' }} />
                   <span>Опции {selectedOptions.length > 0 && `(${selectedOptions.length})`}</span>
                 </button>
               )}
@@ -110,17 +110,17 @@ export function ServiceCard({
               <button
                 type="button"
                 style={{
-                  backgroundColor: isSelected ? 'var(--tenant-accent)' : 'rgba(255, 255, 255, 0.05)',
-                  borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
-                  color: isSelected ? '#0D0D11' : 'var(--tenant-text)',
+                  backgroundColor: isSelected ? 'var(--tenant-accent)' : 'rgba(212, 175, 55, 0.08)',
+                  borderColor: isSelected ? 'var(--tenant-accent)' : 'rgba(212, 175, 55, 0.3)',
+                  color: isSelected ? '#0D0D11' : '#FAF8F5',
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
                   isSelected
-                    ? 'shadow-md shadow-amber-500/20'
-                    : 'hover:border-amber-400/30'
+                    ? 'shadow-lg shadow-amber-500/25 ring-1 ring-amber-400/50 scale-[1.02]'
+                    : 'hover:border-amber-400 hover:bg-amber-500/15 active:scale-95'
                 }`}
               >
-                {isSelected ? 'Выбрано' : 'Выбрать'}
+                {isSelected ? '✓ Выбрано' : 'Выбрать'}
               </button>
             </div>
           </div>
