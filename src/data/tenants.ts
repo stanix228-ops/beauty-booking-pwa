@@ -356,34 +356,34 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "cancellationDeadlineHours": 4,
     "instructions": "В студии действует комплиментарный бар: specialty-кофе, матча и авторские лимонады. Пожалуйста, сообщите администратору о наличии аллергических реакций.",
     "theme": {
-      "accentColor": "#D4AF37",
-      "secondaryAccentColor": "#F5EBE0",
-      "bgColor": "#0D0D11",
-      "cardBgColor": "#16161C",
-      "borderColor": "rgba(212, 175, 55, 0.15)",
-      "textColor": "#FAF8F5",
+      "accentColor": "#FFFFFF",
+      "secondaryAccentColor": "#E2E2E8",
+      "bgColor": "#050507",
+      "cardBgColor": "#0D0D11",
+      "borderColor": "rgba(255, 255, 255, 0.12)",
+      "textColor": "#FFFFFF",
       "mutedColor": "#8E8E93",
-      "fontHeading": "Playfair Display, serif",
-      "fontBody": "Inter, sans-serif"
+      "fontHeading": "'Playfair Display', Georgia, serif",
+      "fontBody": "'Inter', -apple-system, sans-serif"
     },
     "infoCards": [
       {
         "id": "card-1",
-        "title": "Работаем каждый день",
-        "description": "С 10:00 до 22:00 без выходных и перерывов",
+        "title": "Студия сейчас открыта до 22:00",
+        "description": "Принимаем онлайн-записи на сегодня и завтра без выходных",
         "icon": "Clock"
       },
       {
         "id": "card-2",
-        "title": "Опытные мастера",
-        "description": "Сертифицированные топ-мастера со стажем от 5 лет",
-        "icon": "Sparkle"
+        "title": "100% Стерильно по СанПиН",
+        "description": "3-этапная стерилизация в сухожаре ГП-20, крафт-пакет вскрывается при вас",
+        "icon": "ShieldCheck"
       },
       {
         "id": "card-3",
-        "title": "Материалы премиум-класса",
-        "description": "Luxio, безопасные составы, 3-этапная стерилизация по СанПиН",
-        "icon": "ShieldCheck"
+        "title": "Гарантия 7 дней",
+        "description": "Бесплатная коррекция покрытия при любых сколах или отслойках",
+        "icon": "Diamond"
       }
     ],
     "businessHours": [

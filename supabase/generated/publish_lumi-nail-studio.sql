@@ -1,6 +1,6 @@
 -- ========================================================
 -- PUBLISH TENANT: DEMO BEAUTY STUDIO (lumi-nail-studio)
--- Generated automatically at: 2026-10-03T13:18:04.244Z
+-- Generated automatically at: 2026-10-03T21:06:48.441Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 
@@ -19,7 +19,7 @@ BEGIN
         '+7 (495) 780-11-22', 'ул. Большая Никитская, 14/2', 'Москва', 
         'Europe/Moscow', 'RUB', 
         60, 30, 4, 
-        '#D4AF37', '#0D0D11', 
+        '#FFFFFF', '#050507', 
         'В студии действует комплиментарный бар: specialty-кофе, матча и авторские лимонады. Пожалуйста, сообщите администратору о наличии аллергических реакций.', now()
     )
     ON CONFLICT (slug) DO UPDATE SET

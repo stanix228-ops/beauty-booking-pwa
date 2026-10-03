@@ -137,15 +137,15 @@ export function ClientBookingPage() {
         <section id="booking-section" className="reveal-section space-y-4 pt-4 border-t border-white/10">
           <div className="flex items-center justify-between">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                <CalendarPlus size={16} weight="duotone" />
+              <div className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] px-2.5 py-0.5 rounded-full border border-white/20 bg-white/5 text-neutral-200 mb-1.5">
+                <CalendarPlus size={14} weight="bold" className="text-white" />
                 <span>Онлайн-бронирование</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-bold font-serif text-white tracking-tight">
                 Запись в студию
               </h2>
             </div>
-            <span className="text-xs text-neutral-400">
+            <span className="text-xs text-[#8E8E93]">
               {filteredServices.length} {filteredServices.length === 1 ? 'услуга' : 'услуг'}
             </span>
           </div>
@@ -191,25 +191,25 @@ export function ClientBookingPage() {
         </section>
 
         {/* 6. Studio Amenities & Atmosphere */}
-        <section className="reveal-section p-4 rounded-2xl border border-white/10 bg-neutral-900/40 backdrop-blur-md space-y-3">
+        <section className="reveal-section p-4 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-3 shadow-lg">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
             О сервисе и комфорте студии
           </h3>
           <div className="grid grid-cols-2 gap-3 text-xs text-neutral-200">
             <div className="flex items-center gap-2">
-              <Coffee size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <Coffee size={16} weight="duotone" className="text-white" />
               <span>Specialty кофе и чай</span>
             </div>
             <div className="flex items-center gap-2">
-              <ShieldCheck size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <ShieldCheck size={16} weight="duotone" className="text-white" />
               <span>Стерилизация СанПиН</span>
             </div>
             <div className="flex items-center gap-2">
-              <WifiHigh size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <WifiHigh size={16} weight="duotone" className="text-white" />
               <span>Быстрый Wi-Fi и зарядки</span>
             </div>
             <div className="flex items-center gap-2">
-              <Heart size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <Heart size={16} weight="duotone" className="text-white" />
               <span>Гарантия на покрытие 7 дней</span>
             </div>
           </div>
@@ -268,19 +268,19 @@ export function ClientBookingPage() {
 
       {/* "Моя запись" Quick Lookup Modal */}
       {isLookupModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-white/15 p-5 rounded-2xl max-w-sm w-full space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#0D0D11] border border-white/15 p-6 rounded-3xl max-w-sm w-full space-y-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-base text-white">Моя запись</h3>
+              <h3 className="font-serif font-bold text-lg text-white">Моя запись</h3>
               <button
                 type="button"
                 onClick={() => setIsLookupModalOpen(false)}
-                className="text-neutral-400 hover:text-white text-sm"
+                className="text-neutral-400 hover:text-white text-sm cursor-pointer p-1"
               >
                 ✕
               </button>
             </div>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-[#8E8E93]">
               Введите номер телефона, указанный при бронировании, чтобы открыть детали вашей записи:
             </p>
             <form onSubmit={handleLookupBooking} className="space-y-3">
@@ -289,13 +289,12 @@ export function ClientBookingPage() {
                 value={lookupPhone}
                 onChange={(e) => setLookupPhone(e.target.value)}
                 placeholder="+7 (999) 000-00-00"
-                className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-white text-sm focus:outline-none focus:border-blue-400"
+                className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-white text-sm focus:outline-none focus:border-white transition-colors"
                 required
               />
               <button
                 type="submit"
-                className="w-full h-11 rounded-xl text-white font-semibold text-sm cursor-pointer"
-                style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
+                className="w-full h-11 rounded-xl bg-white text-black font-bold text-sm cursor-pointer hover:bg-neutral-100 shadow-[0_4px_20px_rgba(255,255,255,0.2)] transition-all"
               >
                 Найти запись
               </button>

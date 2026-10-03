@@ -139,25 +139,25 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Appointment Summary Card */}
-        <div className="p-3.5 rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-md space-y-2.5">
+        <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-2.5 shadow-lg">
           <div className="flex items-start justify-between">
             <div>
               <h4 className="font-semibold text-sm text-white">{service.name}</h4>
-              <p className="text-xs text-neutral-400 mt-0.5">
+              <p className="text-xs text-[#8E8E93] mt-0.5">
                 {master ? `Мастер: ${master.name}` : 'Любой свободный мастер'}
               </p>
             </div>
             <div className="text-right">
-              <span className="font-bold text-sm text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
+              <span className="font-bold text-sm text-white">
                 {totalPrice.toLocaleString('ru-RU')} ₽
               </span>
-              <p className="text-[11px] text-neutral-400 mt-0.5">{totalDuration} мин</p>
+              <p className="text-[11px] text-[#8E8E93] mt-0.5">{totalDuration} мин</p>
             </div>
           </div>
 
           {options.length > 0 && (
             <div className="pt-2 border-t border-white/10 space-y-1">
-              <span className="text-[11px] text-neutral-400 font-medium">Дополнительно:</span>
+              <span className="text-[11px] text-[#8E8E93] font-medium">Дополнительно:</span>
               {options.map((opt) => (
                 <div key={opt.id} className="flex justify-between text-xs text-neutral-300">
                   <span>+ {opt.name}</span>
@@ -169,11 +169,11 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
 
           <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-neutral-300">
             <div className="flex items-center gap-1.5">
-              <Calendar size={14} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <Calendar size={14} weight="bold" className="text-white" />
               <span className="capitalize">{formattedDate}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Clock size={14} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <Clock size={14} weight="bold" className="text-white" />
               <span className="font-semibold">{slot.time}</span>
             </div>
           </div>
@@ -243,14 +243,13 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-12 text-sm font-semibold rounded-xl text-white cursor-pointer active:scale-98 transition-all"
-            style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
+            className="w-full h-12 text-sm font-bold rounded-xl cursor-pointer active:scale-98 transition-all bg-white text-black hover:bg-neutral-100 shadow-[0_4px_25px_rgba(255,255,255,0.25)]"
           >
             {isSubmitting ? 'Бронирование...' : `Подтвердить запись за ${totalPrice.toLocaleString('ru-RU')} ₽`}
           </Button>
 
           <p className="text-[10px] text-neutral-400 text-center mt-2.5 flex items-center justify-center gap-1">
-            <ShieldCheck size={14} className="text-emerald-400" />
+            <ShieldCheck size={14} className="text-white" />
             <span>Атомарная фиксация слота · Без двойных бронирований</span>
           </p>
         </div>

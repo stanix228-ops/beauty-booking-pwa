@@ -154,13 +154,9 @@ export const AIAssistantWidget: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-white font-semibold text-xs shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 border border-white/20"
-          style={{
-            backgroundColor: 'var(--tenant-card, #121216)',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
-          }}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-white font-semibold text-xs shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 border border-white/20 bg-[#0D0D11]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.8)]"
         >
-          <Sparkle size={18} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+          <Sparkle size={16} weight="fill" className="text-white" />
           <span>AI Ассистент</span>
         </button>
       </div>
@@ -169,25 +165,22 @@ export const AIAssistantWidget: React.FC = () => {
       <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50" />
-          <Drawer.Content className="bg-neutral-950 border-t border-white/10 flex flex-col rounded-t-[28px] h-[85vh] max-h-[700px] fixed bottom-0 left-0 right-0 z-50 max-w-lg mx-auto outline-none">
+          <Drawer.Content className="bg-[#0D0D11] border-t border-white/10 flex flex-col rounded-t-[28px] h-[85vh] max-h-[700px] fixed bottom-0 left-0 right-0 z-50 max-w-lg mx-auto outline-none shadow-2xl">
             {/* Header */}
             <div className="p-4 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center border border-white/15"
-                  style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
-                >
-                  <Robot size={18} weight="fill" className="text-white" />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center border border-white/15 bg-white text-black">
+                  <Robot size={18} weight="fill" className="text-black" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white">Ассистент студии</h3>
-                  <p className="text-[11px] text-neutral-400">Отвечает только по реальным данным студии</p>
+                  <p className="text-[11px] text-[#8E8E93]">Отвечает только по реальным данным студии</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-neutral-400 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -201,17 +194,16 @@ export const AIAssistantWidget: React.FC = () => {
                   className={`flex gap-2.5 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {m.sender === 'assistant' && (
-                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-blue-400">
+                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-white">
                       <Robot size={15} weight="duotone" />
                     </div>
                   )}
                   <div
                     className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm leading-relaxed whitespace-pre-line ${
                       m.sender === 'user'
-                        ? 'bg-blue-600 text-white rounded-br-none'
-                        : 'bg-neutral-900 border border-white/10 text-neutral-200 rounded-bl-none'
+                        ? 'bg-white text-black font-medium rounded-br-none shadow-sm'
+                        : 'bg-neutral-900/80 border border-white/10 text-neutral-200 rounded-bl-none'
                     }`}
-                    style={m.sender === 'user' ? { backgroundColor: 'var(--tenant-accent, #4690FF)' } : {}}
                   >
                     {m.text}
                   </div>
@@ -237,7 +229,7 @@ export const AIAssistantWidget: React.FC = () => {
             </div>
 
             {/* Quick Prompt Buttons */}
-            <div className="px-4 py-2 border-t border-white/5 bg-neutral-950/80">
+            <div className="px-4 py-2 border-t border-white/5 bg-black/60">
               <p className="text-[10px] text-neutral-500 mb-1.5 font-medium uppercase tracking-wider">
                 Быстрые вопросы:
               </p>
@@ -247,7 +239,7 @@ export const AIAssistantWidget: React.FC = () => {
                     key={i}
                     type="button"
                     onClick={() => handleSendMessage(q)}
-                    className="text-xs px-3 py-1.5 rounded-full border border-white/10 bg-neutral-900 hover:border-white/25 hover:bg-neutral-800 text-neutral-300 whitespace-nowrap transition-colors flex-shrink-0"
+                    className="text-xs px-3 py-1.5 rounded-full border border-white/10 bg-neutral-900 hover:border-white/25 hover:bg-neutral-800 text-neutral-300 whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
                   >
                     {q}
                   </button>
@@ -256,19 +248,18 @@ export const AIAssistantWidget: React.FC = () => {
             </div>
 
             {/* Input Bar */}
-            <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputValue); }} className="p-3 border-t border-white/10 flex items-center gap-2 bg-neutral-950">
+            <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputValue); }} className="p-3 border-t border-white/10 flex items-center gap-2 bg-black/90">
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Задайте вопрос об услугах или записи..."
-                className="flex-1 h-11 px-4 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-xs sm:text-sm focus:outline-none focus:border-blue-400"
+                className="flex-1 h-11 px-4 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-xs sm:text-sm focus:outline-none focus:border-white transition-colors"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim() || isTyping}
-                className="w-11 h-11 rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition-transform active:scale-95 cursor-pointer"
-                style={{ backgroundColor: 'var(--tenant-accent, #4690FF)' }}
+                className="w-11 h-11 rounded-xl flex items-center justify-center bg-white text-black disabled:opacity-30 transition-transform active:scale-95 cursor-pointer shadow-md"
               >
                 <PaperPlaneRight size={18} weight="bold" />
               </button>

@@ -23,24 +23,20 @@ export function StickyBookingBar({
 
   return (
     <div
-      style={{
-        backgroundColor: 'rgba(13, 13, 17, 0.95)',
-        borderColor: 'var(--tenant-card-border)',
-      }}
-      className="fixed bottom-0 left-0 right-0 z-50 p-3 backdrop-blur-md border-t safe-bottom shadow-2xl"
+      className="fixed bottom-0 left-0 right-0 z-50 p-3 bg-[#0D0D11]/95 backdrop-blur-2xl border-t border-white/10 safe-bottom shadow-[0_-10px_35px_rgba(0,0,0,0.8)]"
     >
       <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
         {/* Info */}
         <div className="min-w-0 flex-1">
-          <div className="text-xs truncate" style={{ color: 'var(--tenant-muted)' }}>
+          <div className="text-xs text-[#8E8E93] truncate">
             {selectedService.name}
             {selectedOptions.length > 0 && ` (+${selectedOptions.length} опц.)`}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold tracking-tight" style={{ color: 'var(--tenant-text)' }}>
+            <span className="text-lg font-bold tracking-tight text-white">
               {totalPrice.toLocaleString('ru-RU')} ₽
             </span>
-            <span className="text-xs font-medium" style={{ color: 'var(--tenant-muted)' }}>
+            <span className="text-xs text-[#8E8E93] font-medium">
               ~{totalDuration} мин
             </span>
           </div>
@@ -49,14 +45,10 @@ export function StickyBookingBar({
         {/* Action CTA */}
         <button
           onClick={onOpenSlotPicker}
-          style={{
-            backgroundColor: 'var(--tenant-accent)',
-            color: '#0D0D11',
-          }}
-          className="h-12 px-5 rounded-2xl font-bold text-sm flex items-center gap-2 shadow-lg shadow-amber-500/20 hover:brightness-105 active:scale-95 transition-all cursor-pointer flex-shrink-0"
+          className="h-12 px-6 rounded-2xl font-bold text-sm flex items-center gap-2 bg-white text-black shadow-[0_4px_25px_rgba(255,255,255,0.25)] hover:bg-neutral-100 active:scale-95 transition-all cursor-pointer flex-shrink-0"
         >
           <span>Выбрать время</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-4 h-4 stroke-[2.5]" />
         </button>
       </div>
     </div>

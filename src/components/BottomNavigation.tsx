@@ -62,46 +62,46 @@ export const BottomNavigation: React.FC<BottomNavProps> = ({
       aria-label="Нижняя навигация"
       className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pb-[env(safe-area-inset-bottom,16px)] pt-2 pointer-events-none"
     >
-      <div className="glass-surface pointer-events-auto rounded-full px-3 py-1.5 flex items-center gap-1 sm:gap-3 shadow-2xl max-w-sm w-full justify-around border border-white/10 backdrop-blur-xl">
+      <div className="relative pointer-events-auto rounded-full p-1.5 flex items-center justify-between shadow-[0_12px_40px_rgba(0,0,0,0.85)] border border-white/15 bg-[#0D0D11]/90 backdrop-blur-2xl max-w-xs sm:max-w-sm w-full overflow-hidden">
+        {/* Top subtle specular highlight shimmer */}
+        <div className="absolute inset-x-6 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent pointer-events-none" />
+
         <button
           type="button"
           onClick={() => handleTabClick('home')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-medium transition-all ${
+          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-full text-xs transition-all cursor-pointer ${
             activeTab === 'home'
-              ? 'text-white bg-white/10 shadow-sm'
-              : 'text-neutral-400 hover:text-white hover:bg-white/5'
+              ? 'bg-white text-black font-semibold shadow-[0_2px_12px_rgba(255,255,255,0.25)]'
+              : 'text-[#8E8E93] hover:text-white hover:bg-white/5 font-medium'
           }`}
-          style={activeTab === 'home' ? { color: 'var(--tenant-accent, #4690FF)' } : {}}
         >
-          <House size={18} weight={activeTab === 'home' ? 'fill' : 'regular'} />
+          <House size={17} weight={activeTab === 'home' ? 'fill' : 'regular'} className={activeTab === 'home' ? 'text-black' : 'text-neutral-300'} />
           <span>Главная</span>
         </button>
 
         <button
           type="button"
           onClick={() => handleTabClick('services')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-medium transition-all ${
+          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-full text-xs transition-all cursor-pointer ${
             activeTab === 'services'
-              ? 'text-white bg-white/10 shadow-sm'
-              : 'text-neutral-400 hover:text-white hover:bg-white/5'
+              ? 'bg-white text-black font-semibold shadow-[0_2px_12px_rgba(255,255,255,0.25)]'
+              : 'text-[#8E8E93] hover:text-white hover:bg-white/5 font-medium'
           }`}
-          style={activeTab === 'services' ? { color: 'var(--tenant-accent, #4690FF)' } : {}}
         >
-          <Sparkle size={18} weight={activeTab === 'services' ? 'fill' : 'regular'} />
+          <Sparkle size={17} weight={activeTab === 'services' ? 'fill' : 'regular'} className={activeTab === 'services' ? 'text-black' : 'text-neutral-300'} />
           <span>Услуги</span>
         </button>
 
         <button
           type="button"
           onClick={() => handleTabClick('my-booking')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-medium transition-all ${
+          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-full text-xs transition-all cursor-pointer ${
             activeTab === 'my-booking'
-              ? 'text-white bg-white/10 shadow-sm'
-              : 'text-neutral-400 hover:text-white hover:bg-white/5'
+              ? 'bg-white text-black font-semibold shadow-[0_2px_12px_rgba(255,255,255,0.25)]'
+              : 'text-[#8E8E93] hover:text-white hover:bg-white/5 font-medium'
           }`}
-          style={activeTab === 'my-booking' ? { color: 'var(--tenant-accent, #4690FF)' } : {}}
         >
-          <CalendarCheck size={18} weight={activeTab === 'my-booking' ? 'fill' : 'regular'} />
+          <CalendarCheck size={17} weight={activeTab === 'my-booking' ? 'fill' : 'regular'} className={activeTab === 'my-booking' ? 'text-black' : 'text-neutral-300'} />
           <span>Моя запись</span>
         </button>
       </div>

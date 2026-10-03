@@ -22,15 +22,18 @@ export function MasterPicker({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-neutral-200">
-          Специалист
-        </h3>
+        <div>
+          <h3 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">
+            Специалист
+          </h3>
+          <p className="text-xs text-[#8E8E93]">Выберите мастера или доверьте подбор студии</p>
+        </div>
         {selectedMasterId && (
           <button
             onClick={() => onSelectMaster(null)}
-            className="text-xs text-neutral-400 hover:text-neutral-200 underline cursor-pointer"
+            className="text-xs text-neutral-400 hover:text-white underline cursor-pointer"
           >
-            Выбрать любого
+            Сбросить выбор
           </button>
         )}
       </div>
@@ -39,30 +42,20 @@ export function MasterPicker({
         {/* "Any master" card */}
         <div
           onClick={() => onSelectMaster(null)}
-          style={{
-            backgroundColor: 'var(--tenant-card)',
-            borderColor: selectedMasterId === null ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
-          }}
-          className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 ${
+          className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 bg-[#0D0D11] ${
             selectedMasterId === null
-              ? 'ring-1 ring-inset shadow-md shadow-amber-500/10'
-              : 'hover:border-amber-400/40'
+              ? 'border-white ring-1 ring-white/30 shadow-[0_0_20px_rgba(255,255,255,0.08)]'
+              : 'border-white/10 hover:border-white/25'
           }`}
         >
-          <div
-            style={{
-              backgroundColor: 'rgba(212, 175, 55, 0.08)',
-              borderColor: 'var(--tenant-card-border)',
-            }}
-            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 border"
-          >
-            <Sparkles className="w-6 h-6" style={{ color: 'var(--tenant-accent)' }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 border border-white/10 bg-white/5">
+            <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <div className="text-sm font-semibold" style={{ color: 'var(--tenant-text)' }}>
+            <div className="text-sm font-semibold text-white">
               Любой мастер
             </div>
-            <div className="text-xs" style={{ color: 'var(--tenant-muted)' }}>
+            <div className="text-xs text-[#8E8E93]">
               Сервер выберет ближайшее свободное окно
             </div>
           </div>
@@ -71,23 +64,20 @@ export function MasterPicker({
         {/* Master cards */}
         {eligibleMasters.map((master) => {
           const isSelected = selectedMasterId === master.id;
+          const isTopMaster = (master.rating || 0) >= 4.9;
 
           return (
             <div
               key={master.id}
               onClick={() => onSelectMaster(master.id)}
-              style={{
-                backgroundColor: 'var(--tenant-card)',
-                borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
-              }}
-              className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 ${
+              className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 bg-[#0D0D11] ${
                 isSelected
-                  ? 'ring-1 ring-inset shadow-md shadow-amber-500/10'
-                  : 'hover:border-amber-400/40'
+                  ? 'border-white ring-1 ring-white/30 shadow-[0_0_20px_rgba(255,255,255,0.08)]'
+                  : 'border-white/10 hover:border-white/25'
               }`}
             >
               {/* Avatar */}
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 bg-neutral-800 border border-neutral-700/60">
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 bg-neutral-900 border border-white/10">
                 {master.avatarUrl ? (
                   <img
                     src={master.avatarUrl}
@@ -95,7 +85,7 @@ export function MasterPicker({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-sm font-bold text-neutral-300">
+                  <div className="w-full h-full flex items-center justify-center text-sm font-bold text-white">
                     {master.name[0]}
                   </div>
                 )}
@@ -103,17 +93,24 @@ export function MasterPicker({
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-1">
-                  <h4 className="text-sm font-semibold text-neutral-100 truncate">
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <h4 className="text-sm font-semibold text-white truncate">
                     {master.name}
                   </h4>
-                  <div className="flex items-center text-[11px] font-semibold text-amber-400 flex-shrink-0">
-                    <Star className="w-3 h-3 fill-amber-400 mr-0.5" />
+                  {isTopMaster && (
+                    <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-white text-black flex-shrink-0">
+                      TOP MASTER
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center justify-between gap-2 text-xs">
+                  <span className="text-[#8E8E93] truncate">
+                    {master.title}
+                  </span>
+                  <div className="flex items-center text-[11px] font-semibold text-white flex-shrink-0">
+                    <Star className="w-3 h-3 fill-white text-white mr-1" />
                     <span>{master.rating}</span>
                   </div>
-                </div>
-                <div className="text-xs text-neutral-400 truncate">
-                  {master.title}
                 </div>
               </div>
             </div>

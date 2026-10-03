@@ -3,40 +3,40 @@
 
 @layer base {
   :root {
-    --tenant-accent: #4690FF;
-    --tenant-accent-rgb: 70, 144, 255;
-    --tenant-accent-secondary: #E0E7FF;
-    --tenant-bg: #000000;
-    --tenant-surface: #0A0A0C;
-    --tenant-card: #121216;
-    --tenant-card-border: rgba(255, 255, 255, 0.1);
+    --tenant-accent: #FFFFFF;
+    --tenant-accent-rgb: 255, 255, 255;
+    --tenant-accent-secondary: #E2E2E8;
+    --tenant-bg: #050507;
+    --tenant-surface: #0D0D11;
+    --tenant-card: #0D0D11;
+    --tenant-card-border: rgba(255, 255, 255, 0.12);
     --tenant-text: #FFFFFF;
-    --tenant-muted: #A1A1AA;
-    --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --tenant-muted: #8E8E93;
+    --font-heading: 'Playfair Display', Georgia, serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
     /* Astryx Theme Tokens Binding */
-    --color-accent: var(--tenant-accent, #4690FF);
-    --color-text-accent: var(--tenant-accent, #4690FF);
-    --color-icon-accent: var(--tenant-accent, #4690FF);
-    --color-background-body: var(--tenant-bg, #000000);
-    --color-background-surface: var(--tenant-surface, #0A0A0C);
-    --color-background-card: var(--tenant-card, #121216);
-    --color-background-popover: #18181D;
+    --color-accent: var(--tenant-accent, #FFFFFF);
+    --color-text-accent: var(--tenant-accent, #FFFFFF);
+    --color-icon-accent: var(--tenant-accent, #FFFFFF);
+    --color-background-body: var(--tenant-bg, #050507);
+    --color-background-surface: var(--tenant-surface, #0D0D11);
+    --color-background-card: var(--tenant-card, #0D0D11);
+    --color-background-popover: #141418;
     --color-text-primary: var(--tenant-text, #FFFFFF);
-    --color-text-secondary: var(--tenant-muted, #A1A1AA);
-    --color-border: var(--tenant-card-border, rgba(255, 255, 255, 0.1));
+    --color-text-secondary: var(--tenant-muted, #8E8E93);
+    --color-border: var(--tenant-card-border, rgba(255, 255, 255, 0.12));
   }
 
   [data-astryx-theme] {
-    --color-accent: var(--tenant-accent, #4690FF);
-    --color-text-accent: var(--tenant-accent, #4690FF);
-    --color-icon-accent: var(--tenant-accent, #4690FF);
-    --color-background-body: var(--tenant-bg, #000000);
-    --color-background-surface: var(--tenant-surface, #0A0A0C);
-    --color-background-card: var(--tenant-card, #121216);
+    --color-accent: var(--tenant-accent, #FFFFFF);
+    --color-text-accent: var(--tenant-accent, #FFFFFF);
+    --color-icon-accent: var(--tenant-accent, #FFFFFF);
+    --color-background-body: var(--tenant-bg, #050507);
+    --color-background-surface: var(--tenant-surface, #0D0D11);
+    --color-background-card: var(--tenant-card, #0D0D11);
     --color-text-primary: var(--tenant-text, #FFFFFF);
-    --color-text-secondary: var(--tenant-muted, #A1A1AA);
+    --color-text-secondary: var(--tenant-muted, #8E8E93);
   }
 
   html {
@@ -65,24 +65,36 @@
 
 /* Glass Surface Styling (True Glass & Fallback) */
 .glass-surface {
-  background: rgba(14, 14, 18, 0.65);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  background: rgba(13, 13, 17, 0.75);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .glass-btn {
-  background: rgba(22, 22, 28, 0.55);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.35);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  background: rgba(18, 18, 22, 0.6);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.45);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.glass-btn:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 .glass-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+}
+
+/* Chanel Noire Luxury Card */
+.chanel-card {
+  background-color: #0D0D11;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 12px 32px -8px rgba(0, 0, 0, 0.7);
 }
 
 /* Scroll reveal sections */

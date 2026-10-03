@@ -27,31 +27,24 @@ export function ServiceCard({
   return (
     <div
       onClick={() => onSelectService(service)}
-      style={{
-        backgroundColor: 'var(--tenant-card)',
-        borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
-      }}
-      className={`group relative overflow-hidden rounded-2xl border transition-all duration-200 cursor-pointer ${
+      className={`group relative overflow-hidden rounded-2xl border transition-all duration-200 cursor-pointer bg-[#0D0D11] ${
         isSelected
-          ? 'ring-2 shadow-lg shadow-black/40'
-          : 'hover:border-amber-400/40'
+          ? 'border-white ring-1 ring-white/40 shadow-[0_0_24px_rgba(255,255,255,0.12)]'
+          : 'border-white/12 hover:border-white/25 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.5)]'
       }`}
     >
-      <div className="flex p-4 gap-4">
-        {/* Service Image */}
+      <div className="flex p-3.5 sm:p-4 gap-3.5 sm:gap-4">
+        {/* Service Image (1:1 aspect ratio with rounded-2xl) */}
         {service.imageUrl && (
-          <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden flex-shrink-0 bg-neutral-800 border border-neutral-700/50">
+          <div className="relative aspect-square w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden flex-shrink-0 bg-neutral-900 border border-white/10">
             <img
               src={service.imageUrl}
               alt={service.name}
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
             />
             {isSelected && (
-              <div
-                style={{ backgroundColor: 'var(--tenant-accent)' }}
-                className="absolute top-1.5 right-1.5 p-1 rounded-full text-neutral-950 shadow-md"
-              >
+              <div className="absolute top-2 right-2 p-1 rounded-full bg-white text-black shadow-md">
                 <Check className="w-3.5 h-3.5 stroke-[3]" />
               </div>
             )}
@@ -62,32 +55,34 @@ export function ServiceCard({
         <div className="flex-1 min-w-0 flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between gap-2 mb-1">
-              <h3 className="text-sm font-semibold group-hover:text-white transition-colors leading-snug" style={{ color: 'var(--tenant-text)' }}>
+              <h3 className="text-sm sm:text-base font-semibold text-white group-hover:text-white transition-colors leading-snug">
                 {service.name}
               </h3>
             </div>
 
             {service.description && (
-              <p className="text-xs line-clamp-2 leading-relaxed mb-2" style={{ color: 'var(--tenant-muted)' }}>
+              <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed mb-2 font-light">
                 {service.description}
               </p>
             )}
+
+            {/* Duration badge */}
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider bg-white/5 text-neutral-300 border border-white/10">
+              <Clock className="w-3 h-3 text-neutral-400" />
+              <span>{displayDuration} мин</span>
+            </div>
           </div>
 
-          <div className="pt-2 flex items-center justify-between border-t mt-auto" style={{ borderColor: 'var(--tenant-card-border)' }}>
-            {/* Price & Duration */}
+          <div className="pt-2.5 flex items-center justify-between border-t border-white/10 mt-2">
+            {/* Price Typography */}
             <div>
-              <div className="text-lg font-extrabold tracking-tight" style={{ color: 'var(--tenant-accent)' }}>
+              <div className="text-lg sm:text-xl font-bold font-mono tracking-tight text-white">
                 {displayPrice.toLocaleString('ru-RU')} ₽
-              </div>
-              <div className="flex items-center gap-1 text-[11px]" style={{ color: 'var(--tenant-muted)' }}>
-                <Clock className="w-3 h-3" />
-                <span>{displayDuration} мин</span>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {hasOptions && (
                 <button
                   type="button"
@@ -95,29 +90,19 @@ export function ServiceCard({
                     e.stopPropagation();
                     onOpenOptions(service);
                   }}
-                  style={{
-                    backgroundColor: 'rgba(212, 175, 55, 0.05)',
-                    borderColor: 'rgba(212, 175, 55, 0.25)',
-                    color: 'var(--tenant-accent-secondary, #F5EBE0)',
-                  }}
-                  className="px-2.5 py-1.5 rounded-lg text-xs font-medium hover:border-amber-400/60 hover:bg-amber-500/10 border transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-white/5 hover:bg-white/10 text-neutral-200 border border-white/15 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
                 >
-                  <Plus className="w-3 h-3" style={{ color: 'var(--tenant-accent)' }} />
+                  <Plus className="w-3 h-3 text-white" />
                   <span>Опции {selectedOptions.length > 0 && `(${selectedOptions.length})`}</span>
                 </button>
               )}
 
               <button
                 type="button"
-                style={{
-                  backgroundColor: isSelected ? 'var(--tenant-accent)' : 'rgba(212, 175, 55, 0.08)',
-                  borderColor: isSelected ? 'var(--tenant-accent)' : 'rgba(212, 175, 55, 0.3)',
-                  color: isSelected ? '#0D0D11' : '#FAF8F5',
-                }}
-                className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
                   isSelected
-                    ? 'shadow-lg shadow-amber-500/25 ring-1 ring-amber-400/50 scale-[1.02]'
-                    : 'hover:border-amber-400 hover:bg-amber-500/15 active:scale-95'
+                    ? 'bg-white text-black border-white shadow-[0_2px_14px_rgba(255,255,255,0.25)] scale-[1.02]'
+                    : 'bg-white/10 hover:bg-white/20 text-white border-white/15 active:scale-95'
                 }`}
               >
                 {isSelected ? '✓ Выбрано' : 'Выбрать'}

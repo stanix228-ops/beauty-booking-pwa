@@ -1,5 +1,4 @@
 import { BottomSheet } from './ui/BottomSheet';
-import { Button } from './ui/Button';
 import { Check, Clock } from 'lucide-react';
 import type { Service, ServiceOption } from '../../scripts/schema';
 
@@ -41,32 +40,28 @@ export function ServiceOptionsModal({
             <div
               key={opt.id}
               onClick={() => onToggleOption(opt)}
-              style={{
-                backgroundColor: isSelected ? 'rgba(212, 175, 55, 0.08)' : 'var(--tenant-card)',
-                borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
-              }}
-              className={`flex items-center justify-between p-3.5 rounded-xl border transition-all cursor-pointer ${
+              className={`flex items-center justify-between p-3.5 rounded-xl border transition-all cursor-pointer bg-[#0D0D11] ${
                 isSelected
-                  ? 'shadow-sm ring-1 ring-amber-500/20'
-                  : 'hover:border-amber-400/40'
+                  ? 'border-white ring-1 ring-white/20 shadow-[0_0_15px_rgba(255,255,255,0.06)]'
+                  : 'border-white/10 hover:border-white/25'
               }`}
             >
               <div className="flex-1 min-w-0 pr-3">
-                <div className="text-sm font-medium mb-0.5" style={{ color: 'var(--tenant-text)' }}>
+                <div className="text-sm font-medium mb-0.5 text-white">
                   {opt.name}
                 </div>
                 {opt.description && (
-                  <div className="text-xs leading-tight mb-1" style={{ color: 'var(--tenant-muted)' }}>
+                  <div className="text-xs leading-tight mb-1 text-[#8E8E93]">
                     {opt.description}
                   </div>
                 )}
-                <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--tenant-muted)' }}>
-                  <span className="font-semibold" style={{ color: 'var(--tenant-accent-secondary, #F5EBE0)' }}>
+                <div className="flex items-center gap-3 text-xs text-[#8E8E93]">
+                  <span className="font-semibold text-white">
                     +{opt.price.toLocaleString('ru-RU')} ₽
                   </span>
                   {opt.durationMin > 0 && (
-                    <span className="flex items-center gap-1 text-[11px]">
-                      <Clock className="w-3 h-3" />
+                    <span className="flex items-center gap-1 text-[11px] text-[#8E8E93]">
+                      <Clock className="w-3 h-3 text-neutral-400" />
                       +{opt.durationMin} мин
                     </span>
                   )}
@@ -75,13 +70,13 @@ export function ServiceOptionsModal({
 
               {/* Checkbox indicator */}
               <div
-                style={{
-                  backgroundColor: isSelected ? 'var(--tenant-accent)' : 'transparent',
-                  borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
-                }}
-                className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors flex-shrink-0`}
+                className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors flex-shrink-0 ${
+                  isSelected
+                    ? 'bg-white border-white text-black'
+                    : 'border-white/20 bg-white/5'
+                }`}
               >
-                {isSelected && <Check className="w-4 h-4 text-neutral-950 stroke-[3]" />}
+                {isSelected && <Check className="w-4 h-4 text-black stroke-[3]" />}
               </div>
             </div>
           );
@@ -89,21 +84,16 @@ export function ServiceOptionsModal({
       </div>
 
       <div className="mt-6">
-        <Button
-          variant="primary"
-          size="lg"
-          className="w-full font-bold shadow-lg shadow-amber-500/20"
-          style={{
-            backgroundColor: 'var(--tenant-accent)',
-            color: '#0D0D11',
-          }}
+        <button
+          type="button"
+          className="w-full h-12 rounded-xl font-bold text-sm bg-white text-black hover:bg-neutral-100 shadow-[0_4px_25px_rgba(255,255,255,0.25)] transition-all cursor-pointer"
           onClick={() => {
             if (onConfirm) onConfirm();
             else onOpenChange(false);
           }}
         >
           Готово ({selectedOptions.length})
-        </Button>
+        </button>
       </div>
     </BottomSheet>
   );

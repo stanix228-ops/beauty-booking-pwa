@@ -8,7 +8,7 @@ test.describe('Nail Studio PWA End-to-End Booking & Isolation Flow', () => {
 
     // Verify studio header & address
     await expect(page.locator('h1')).toContainText('DEMO BEAUTY STUDIO');
-    await expect(page.getByText('ул. Большая Никитская, 14/2')).toBeVisible();
+    await expect(page.getByText('ул. Большая Никитская, 14/2').first()).toBeVisible();
 
     // 2. Click on primary service card
     const firstServiceCard = page.locator('text=Комплекс «Маникюр + гель-лак + выравнивание»').first();

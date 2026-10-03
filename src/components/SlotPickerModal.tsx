@@ -99,6 +99,25 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
     availableMap.set(s.time, s);
   }
 
+  const morningSlots = allDaySlots.filter((t) => {
+    const h = parseInt(t.split(':')[0], 10);
+    return h < 12;
+  });
+  const afternoonSlots = allDaySlots.filter((t) => {
+    const h = parseInt(t.split(':')[0], 10);
+    return h >= 12 && h < 17;
+  });
+  const eveningSlots = allDaySlots.filter((t) => {
+    const h = parseInt(t.split(':')[0], 10);
+    return h >= 17;
+  });
+
+  const slotGroups = [
+    { id: 'morning', label: 'Утро (10:00 – 12:00)', icon: '🌅', slots: morningSlots },
+    { id: 'afternoon', label: 'День (12:00 – 17:00)', icon: '☀️', slots: afternoonSlots },
+    { id: 'evening', label: 'Вечер (17:00 – 22:00)', icon: '🌙', slots: eveningSlots },
+  ].filter((g) => g.slots.length > 0);
+
   return (
     <BottomSheet
       open={open}
@@ -106,12 +125,12 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
       title="Выбор даты и времени"
       description={`Услуга: ${service.name} (${service.durationMin} мин)`}
     >
-      <div className="space-y-5">
+      <div className="space-y-6 pt-2 pb-6">
         {/* Date Selector */}
         <div>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2.5">
             <span className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
-              <Calendar size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <Calendar size={16} weight="duotone" className="text-white" />
               Дата записи
             </span>
           </div>
@@ -125,24 +144,19 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
                   key={item.dateStr}
                   type="button"
                   onClick={() => setSelectedDate(item.dateStr)}
-                  style={{
-                    backgroundColor: isSelected ? 'var(--tenant-accent, #4690FF)' : 'var(--tenant-card, #121216)',
-                    borderColor: isSelected ? 'var(--tenant-accent, #4690FF)' : 'rgba(255, 255, 255, 0.1)',
-                    color: isSelected ? '#FFFFFF' : 'var(--tenant-text, #FFFFFF)',
-                  }}
-                  className={`flex flex-col items-center justify-center min-w-[62px] h-[72px] rounded-2xl border transition-all cursor-pointer flex-shrink-0 ${
+                  className={`flex flex-col items-center justify-center min-w-[64px] h-[74px] rounded-2xl border transition-all cursor-pointer flex-shrink-0 ${
                     isSelected
-                      ? 'font-bold shadow-lg shadow-blue-500/20'
-                      : 'hover:border-white/30'
+                      ? 'bg-white text-black font-bold border-white shadow-[0_4px_16px_rgba(255,255,255,0.25)] scale-[1.02]'
+                      : 'bg-[#0D0D11] text-[#8E8E93] hover:text-white border-white/10 hover:border-white/25'
                   }`}
                 >
-                  <span className="text-[11px] uppercase tracking-wider opacity-80">
+                  <span className={`text-[11px] uppercase tracking-wider ${isSelected ? 'text-black/80 font-semibold' : 'text-neutral-400'}`}>
                     {item.dayName}
                   </span>
                   <span className="text-lg font-bold leading-tight">
                     {item.dayNumber}
                   </span>
-                  <span className="text-[10px] opacity-70">
+                  <span className={`text-[10px] ${isSelected ? 'text-black/70' : 'text-neutral-500'}`}>
                     {item.monthName}
                   </span>
                 </button>
@@ -151,11 +165,11 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
           </div>
         </div>
 
-        {/* Time Slots */}
+        {/* Time Slots Grouped By Period */}
         <div>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
-              <Clock size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <Clock size={16} weight="duotone" className="text-white" />
               Расписание на день
             </span>
             <span className="text-[11px] text-neutral-400">
@@ -166,7 +180,7 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
           {isLoading ? (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5 py-6">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="h-11 bg-neutral-800/60 rounded-xl animate-pulse" />
+                <div key={i} className="h-11 bg-neutral-900 rounded-xl animate-pulse" />
               ))}
             </div>
           ) : error ? (
@@ -174,7 +188,7 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
               {error}
             </div>
           ) : allDaySlots.length === 0 ? (
-            <div className="py-8 text-center px-4 rounded-2xl border border-white/10 bg-neutral-900/40">
+            <div className="py-8 text-center px-4 rounded-2xl border border-white/10 bg-[#0D0D11]">
               <div className="text-sm font-medium text-neutral-300 mb-1">
                 Студия закрыта в этот день
               </div>
@@ -183,45 +197,53 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto pr-1">
-              {allDaySlots.map((timeStr) => {
-                const availableSlot = availableMap.get(timeStr);
-                const isAvailable = Boolean(availableSlot);
+            <div className="space-y-4 max-h-[360px] overflow-y-auto pr-1">
+              {slotGroups.map((group) => (
+                <div key={group.id} className="space-y-2">
+                  <div className="text-[11px] font-semibold text-neutral-300 flex items-center gap-1.5 uppercase tracking-wider">
+                    <span>{group.icon}</span>
+                    <span>{group.label}</span>
+                  </div>
 
-                if (isAvailable && availableSlot) {
-                  return (
-                    <button
-                      key={timeStr}
-                      type="button"
-                      onClick={() => {
-                        onSelectSlot(availableSlot, selectedDate);
-                        onOpenChange(false);
-                      }}
-                      className="h-11 rounded-xl border border-white/15 bg-neutral-900/90 text-white hover:border-blue-400 hover:bg-white/10 font-semibold text-sm transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm"
-                      style={{
-                        borderColor: 'rgba(255, 255, 255, 0.15)',
-                      }}
-                    >
-                      {timeStr}
-                    </button>
-                  );
-                }
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {group.slots.map((timeStr) => {
+                      const availableSlot = availableMap.get(timeStr);
+                      const isAvailable = Boolean(availableSlot);
 
-                // Explicitly marked occupied / unavailable slot
-                return (
-                  <button
-                    key={timeStr}
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    title="Это время уже занято или недоступно"
-                    className="h-11 rounded-xl border border-white/5 bg-neutral-950/60 text-neutral-600 font-normal text-xs transition-none flex items-center justify-center gap-1 cursor-not-allowed line-through opacity-45"
-                  >
-                    <LockKey size={12} weight="fill" />
-                    <span>{timeStr}</span>
-                  </button>
-                );
-              })}
+                      if (isAvailable && availableSlot) {
+                        return (
+                          <button
+                            key={timeStr}
+                            type="button"
+                            onClick={() => {
+                              onSelectSlot(availableSlot, selectedDate);
+                              onOpenChange(false);
+                            }}
+                            className="h-11 rounded-xl border border-white/15 bg-[#0D0D11] text-white hover:bg-white hover:text-black hover:border-white font-semibold text-sm transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm"
+                          >
+                            {timeStr}
+                          </button>
+                        );
+                      }
+
+                      // Explicitly marked occupied / unavailable slot
+                      return (
+                        <button
+                          key={timeStr}
+                          type="button"
+                          disabled
+                          aria-disabled="true"
+                          title="Это время уже занято или недоступно"
+                          className="h-11 rounded-xl border border-white/5 bg-[#08080A] text-[#52525B] font-normal text-xs transition-none flex items-center justify-center gap-1 cursor-not-allowed line-through opacity-40"
+                        >
+                          <LockKey size={12} weight="fill" />
+                          <span>{timeStr}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
