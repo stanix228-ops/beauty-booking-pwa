@@ -30,20 +30,19 @@ export const BottomNavigation: React.FC<BottomNavProps> = ({
   const handleTabClick = (tab: 'home' | 'services' | 'my-booking') => {
     setActiveTab(tab);
     if (tab === 'home') {
-      if (location.pathname !== `/s/${tenant.slug}/` && location.pathname !== `/s/${tenant.slug}`) {
+      const isStudioPage = location.pathname === '/' || location.pathname === `/s/${tenant.slug}` || location.pathname === `/s/${tenant.slug}/`;
+      if (!isStudioPage) {
         navigate(`/s/${tenant.slug}/`);
       } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
       onSelectTab?.('home');
     } else if (tab === 'services') {
-      if (location.pathname !== `/s/${tenant.slug}/` && location.pathname !== `/s/${tenant.slug}`) {
-        navigate(`/s/${tenant.slug}/#services`);
+      const el = document.getElementById('services-section') || document.getElementById('booking-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
       } else {
-        const el = document.getElementById('services-section');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
+        navigate(`/s/${tenant.slug}/#services`);
       }
       onSelectTab?.('services');
     } else if (tab === 'my-booking') {

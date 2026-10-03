@@ -17,8 +17,18 @@ function TenantLayout() {
 export function App() {
   return (
     <Routes>
-      {/* Root Studio Directory */}
-      <Route path="/" element={<HomePage />} />
+      {/* Root points directly to flagship studio */}
+      <Route
+        path="/"
+        element={
+          <TenantProvider defaultSlug="lumi-nail-studio">
+            <ClientBookingPage />
+          </TenantProvider>
+        }
+      />
+
+      {/* Directory of all studios for multi-tenant exploration */}
+      <Route path="/studios" element={<HomePage />} />
 
       {/* Tenant Scoped Routes */}
       <Route path="/s/:slug" element={<TenantLayout />}>

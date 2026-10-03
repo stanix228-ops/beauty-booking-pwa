@@ -17,22 +17,29 @@ const TenantContext = createContext<TenantContextValue>({
   error: null,
 });
 
-export function TenantProvider({ children }: { children: React.ReactNode }) {
+export function TenantProvider({
+  children,
+  defaultSlug = 'lumi-nail-studio',
+}: {
+  children: React.ReactNode;
+  defaultSlug?: string;
+}) {
   const { slug } = useParams<{ slug: string }>();
+  const effectiveSlug = slug || defaultSlug;
   const [tenant, setTenant] = useState<BusinessConfig | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!slug) {
+    if (!effectiveSlug) {
       setError('Не указан идентификатор студии (slug)');
       setIsLoading(false);
       return;
     }
 
-    const found = getTenantBySlug(slug);
+    const found = getTenantBySlug(effectiveSlug);
     if (!found) {
-      setError(`Студия "${slug}" не найдена`);
+      setError(`Студия "${effectiveSlug}" не найдена`);
       setTenant(null);
       setIsLoading(false);
       return;
