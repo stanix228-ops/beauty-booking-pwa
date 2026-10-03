@@ -91,7 +91,13 @@ export function ClientBookingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col pb-28">
+    <div
+      style={{
+        backgroundColor: 'var(--tenant-bg, #0D0D11)',
+        color: 'var(--tenant-text, #FAF8F5)',
+      }}
+      className="min-h-screen flex flex-col pb-28"
+    >
       {/* Header */}
       <Header />
 
@@ -169,25 +175,31 @@ export function ClientBookingPage() {
         )}
 
         {/* Studio Amenities */}
-        <section className="p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800/80 space-y-3">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+        <section
+          style={{
+            backgroundColor: 'var(--tenant-card)',
+            borderColor: 'var(--tenant-card-border)',
+          }}
+          className="p-4 rounded-2xl border space-y-3"
+        >
+          <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--tenant-muted)' }}>
             О сервисе и комфорте в студии
           </h3>
-          <div className="grid grid-cols-2 gap-3 text-xs text-neutral-300">
+          <div className="grid grid-cols-2 gap-3 text-xs" style={{ color: 'var(--tenant-text)' }}>
             <div className="flex items-center gap-2">
-              <Coffee className="w-4 h-4 text-amber-400" />
+              <Coffee className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
               <span>Specialty кофе и матча</span>
             </div>
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-emerald-400" />
+              <Shield className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
               <span>Стерилизация по СанПиН</span>
             </div>
             <div className="flex items-center gap-2">
-              <Wifi className="w-4 h-4 text-sky-400" />
+              <Wifi className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
               <span>Быстрый Wi-Fi и зарядки</span>
             </div>
             <div className="flex items-center gap-2">
-              <Heart className="w-4 h-4 text-pink-400" />
+              <Heart className="w-4 h-4" style={{ color: 'var(--tenant-accent)' }} />
               <span>Одноразовые пилочки</span>
             </div>
           </div>

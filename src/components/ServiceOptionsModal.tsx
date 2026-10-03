@@ -40,29 +40,30 @@ export function ServiceOptionsModal({
               key={opt.id}
               onClick={() => onToggleOption(opt)}
               style={{
-                borderColor: isSelected ? 'var(--tenant-accent)' : undefined,
+                backgroundColor: isSelected ? 'rgba(212, 175, 55, 0.08)' : 'var(--tenant-card)',
+                borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
               }}
               className={`flex items-center justify-between p-3.5 rounded-xl border transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-neutral-800/90 shadow-sm'
-                  : 'bg-neutral-900/60 border-neutral-800 hover:border-neutral-700'
+                  ? 'shadow-sm ring-1 ring-amber-500/20'
+                  : 'hover:border-amber-400/40'
               }`}
             >
               <div className="flex-1 min-w-0 pr-3">
-                <div className="text-sm font-medium text-neutral-100 mb-0.5">
+                <div className="text-sm font-medium mb-0.5" style={{ color: 'var(--tenant-text)' }}>
                   {opt.name}
                 </div>
                 {opt.description && (
-                  <div className="text-xs text-neutral-400 leading-tight mb-1">
+                  <div className="text-xs leading-tight mb-1" style={{ color: 'var(--tenant-muted)' }}>
                     {opt.description}
                   </div>
                 )}
-                <div className="flex items-center gap-3 text-xs text-neutral-400">
-                  <span className="font-semibold text-neutral-200">
+                <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--tenant-muted)' }}>
+                  <span className="font-semibold" style={{ color: 'var(--tenant-accent-secondary, #F5EBE0)' }}>
                     +{opt.price.toLocaleString('ru-RU')} ₽
                   </span>
                   {opt.durationMin > 0 && (
-                    <span className="flex items-center gap-1 text-[11px] text-neutral-500">
+                    <span className="flex items-center gap-1 text-[11px]">
                       <Clock className="w-3 h-3" />
                       +{opt.durationMin} мин
                     </span>
@@ -74,7 +75,7 @@ export function ServiceOptionsModal({
               <div
                 style={{
                   backgroundColor: isSelected ? 'var(--tenant-accent)' : 'transparent',
-                  borderColor: isSelected ? 'var(--tenant-accent)' : 'rgba(255, 255, 255, 0.2)',
+                  borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
                 }}
                 className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors flex-shrink-0`}
               >
@@ -89,10 +90,14 @@ export function ServiceOptionsModal({
         <Button
           variant="primary"
           size="lg"
-          className="w-full"
+          className="w-full font-bold shadow-lg shadow-amber-500/20"
+          style={{
+            backgroundColor: 'var(--tenant-accent)',
+            color: '#0D0D11',
+          }}
           onClick={() => onOpenChange(false)}
         >
-          Готово
+          Готово ({selectedOptions.length})
         </Button>
       </div>
     </BottomSheet>

@@ -18,8 +18,10 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "instructions": "Студия расположена на 2 этаже арт-пространства. Быстрая запись, высокоскоростной Wi-Fi, напитки to-go.",
     "theme": {
       "accentColor": "#2DD4BF",
+      "secondaryAccentColor": "#F5EBE0",
       "bgColor": "#0F172A",
       "cardBgColor": "#1E293B",
+      "borderColor": "rgba(212, 175, 55, 0.15)",
       "textColor": "#F8FAFC",
       "mutedColor": "#94A3B8",
       "fontHeading": "Inter, sans-serif",
@@ -315,11 +317,13 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "cancellationDeadlineHours": 4,
     "instructions": "В студии действует комплиментарный бар: specialty-кофе, матча и авторские лимонады. Пожалуйста, сообщите администратору о наличии аллергических реакций.",
     "theme": {
-      "accentColor": "#E0A96D",
+      "accentColor": "#D4AF37",
+      "secondaryAccentColor": "#F5EBE0",
       "bgColor": "#0D0D11",
-      "cardBgColor": "#15151E",
-      "textColor": "#F3F4F6",
-      "mutedColor": "#9CA3AF",
+      "cardBgColor": "#16161C",
+      "borderColor": "rgba(212, 175, 55, 0.15)",
+      "textColor": "#FAF8F5",
+      "mutedColor": "#8E8E93",
       "fontHeading": "Playfair Display, serif",
       "fontBody": "Inter, sans-serif"
     },

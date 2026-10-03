@@ -19,7 +19,7 @@ describe('Beauty Booking Engine & Multi-Tenant Core Tests', () => {
     expect(aura!.name).toBe('AURA NAIL BAR');
 
     // Visual theme differentiation
-    expect(lumi!.theme.accentColor).toBe('#E0A96D');
+    expect(lumi!.theme.accentColor).toBe('#D4AF37');
     expect(aura!.theme.accentColor).toBe('#2DD4BF');
 
     // Cross-tenant ID collisions must be strictly 0

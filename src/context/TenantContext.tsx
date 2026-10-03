@@ -57,8 +57,10 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
     // Dynamic CSS Custom Properties
     const root = document.documentElement;
     root.style.setProperty('--tenant-accent', found.theme.accentColor);
+    root.style.setProperty('--tenant-accent-secondary', found.theme.secondaryAccentColor || '#F5EBE0');
     root.style.setProperty('--tenant-bg', found.theme.bgColor);
     root.style.setProperty('--tenant-card', found.theme.cardBgColor);
+    root.style.setProperty('--tenant-card-border', found.theme.borderColor || 'rgba(212, 175, 55, 0.15)');
     root.style.setProperty('--tenant-text', found.theme.textColor);
     root.style.setProperty('--tenant-muted', found.theme.mutedColor);
     root.style.setProperty('--font-heading', found.theme.fontHeading);

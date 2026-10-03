@@ -12,15 +12,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="block text-xs font-medium text-neutral-400">
+          <label htmlFor={inputId} className="block text-xs font-medium" style={{ color: 'var(--tenant-muted, #8E8E93)' }}>
             {label}
           </label>
         )}
         <input
           ref={ref}
           id={inputId}
-          className={`w-full h-11 px-3.5 bg-neutral-900/90 border border-neutral-800 rounded-xl text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-amber-400/80 transition-colors ${
-            error ? 'border-red-500 focus:border-red-500' : ''
+          style={{
+            backgroundColor: 'var(--tenant-card, #16161C)',
+            borderColor: 'var(--tenant-card-border, rgba(212, 175, 55, 0.15))',
+            color: 'var(--tenant-text, #FAF8F5)',
+          }}
+          className={`w-full h-11 px-3.5 border rounded-xl text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-amber-400/50 transition-colors ${
+            error ? '!border-red-500 !focus:border-red-500' : ''
           } ${className}`}
           {...props}
         />

@@ -104,49 +104,55 @@ export function BookingFormModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Booking Summary Box */}
-        <div className="p-4 rounded-2xl bg-neutral-900/80 border border-neutral-800 space-y-3">
+        <div
+          style={{
+            backgroundColor: 'var(--tenant-card)',
+            borderColor: 'var(--tenant-card-border)',
+          }}
+          className="p-4 rounded-2xl border space-y-3"
+        >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <div className="text-xs text-neutral-400">Услуга</div>
-              <div className="text-sm font-semibold text-neutral-100">{service.name}</div>
+              <div className="text-xs" style={{ color: 'var(--tenant-muted)' }}>Услуга</div>
+              <div className="text-sm font-semibold" style={{ color: 'var(--tenant-text)' }}>{service.name}</div>
             </div>
             <div className="text-right">
-              <div className="text-sm font-bold text-neutral-100">{totalPrice.toLocaleString('ru-RU')} ₽</div>
-              <div className="text-xs text-neutral-400">{totalDuration} мин</div>
+              <div className="text-sm font-bold" style={{ color: 'var(--tenant-text)' }}>{totalPrice.toLocaleString('ru-RU')} ₽</div>
+              <div className="text-xs" style={{ color: 'var(--tenant-muted)' }}>{totalDuration} мин</div>
             </div>
           </div>
 
           {options.length > 0 && (
-            <div className="pt-2 border-t border-neutral-800/60">
-              <div className="text-[11px] text-neutral-400 mb-1">Выбранные опции:</div>
+            <div className="pt-2 border-t" style={{ borderColor: 'var(--tenant-card-border)' }}>
+              <div className="text-[11px] mb-1" style={{ color: 'var(--tenant-muted)' }}>Выбранные опции:</div>
               <div className="space-y-0.5">
                 {options.map((opt) => (
-                  <div key={opt.id} className="flex justify-between text-xs text-neutral-300">
+                  <div key={opt.id} className="flex justify-between text-xs" style={{ color: 'var(--tenant-text)' }}>
                     <span>+ {opt.name}</span>
-                    <span>+{opt.price} ₽</span>
+                    <span style={{ color: 'var(--tenant-accent-secondary, #F5EBE0)' }}>+{opt.price} ₽</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-300">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-neutral-400" />
-              <span className="capitalize">{formattedDate}</span>
+          <div className="pt-2 border-t flex items-center justify-between text-xs" style={{ borderColor: 'var(--tenant-card-border)' }}>
+            <div className="flex items-center gap-1.5" style={{ color: 'var(--tenant-muted)' }}>
+              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
+              <span className="capitalize" style={{ color: 'var(--tenant-text)' }}>{formattedDate}</span>
             </div>
-            <div className="flex items-center gap-1.5 font-semibold text-neutral-100">
-              <Clock className="w-3.5 h-3.5 text-neutral-400" />
+            <div className="flex items-center gap-1.5 font-semibold" style={{ color: 'var(--tenant-text)' }}>
+              <Clock className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
               <span>{slot.time}</span>
             </div>
           </div>
 
-          <div className="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-300">
-            <div className="flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-neutral-400" />
+          <div className="pt-2 border-t flex items-center justify-between text-xs" style={{ borderColor: 'var(--tenant-card-border)' }}>
+            <div className="flex items-center gap-1.5" style={{ color: 'var(--tenant-muted)' }}>
+              <User className="w-3.5 h-3.5" style={{ color: 'var(--tenant-accent)' }} />
               <span>Специалист:</span>
             </div>
-            <span className="font-medium text-neutral-100">
+            <span className="font-medium" style={{ color: 'var(--tenant-text)' }}>
               {master ? master.name : 'Любой свободный мастер'}
             </span>
           </div>
@@ -180,9 +186,15 @@ export function BookingFormModal({
         </div>
 
         {/* Security badge */}
-        <div className="flex items-center gap-2 p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800 text-[11px] text-neutral-400">
-          <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-          <span>Без регистрации. Защищенный доступ по персональной ссылке.</span>
+        <div
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            borderColor: 'var(--tenant-card-border)',
+          }}
+          className="flex items-center gap-2 p-2.5 rounded-xl border text-[11px]"
+        >
+          <ShieldCheck className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--tenant-accent)' }} />
+          <span style={{ color: 'var(--tenant-muted)' }}>Без регистрации. Защищенный доступ по персональной ссылке.</span>
         </div>
 
         {error && (
@@ -198,7 +210,11 @@ export function BookingFormModal({
             variant="primary"
             size="lg"
             isLoading={isSubmitting}
-            className="w-full text-base font-bold shadow-xl cursor-pointer"
+            style={{
+              backgroundColor: 'var(--tenant-accent)',
+              color: '#0D0D11',
+            }}
+            className="w-full text-base font-bold shadow-xl shadow-amber-500/20 cursor-pointer"
           >
             Подтвердить запись
           </Button>

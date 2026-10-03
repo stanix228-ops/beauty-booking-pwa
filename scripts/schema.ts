@@ -74,10 +74,12 @@ export const HexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 export const BusinessThemeSchema = z.object({
   accentColor: z.string().regex(HexColorRegex, 'Must be valid HEX color'),
+  secondaryAccentColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').optional().default('#F5EBE0'),
   bgColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').default('#0D0D11'),
-  cardBgColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').default('#14141B'),
-  textColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').default('#F3F4F6'),
-  mutedColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').default('#9CA3AF'),
+  cardBgColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').default('#16161C'),
+  borderColor: z.string().optional().default('rgba(212, 175, 55, 0.15)'),
+  textColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').default('#FAF8F5'),
+  mutedColor: z.string().regex(HexColorRegex, 'Must be valid HEX color').default('#8E8E93'),
   fontHeading: z.string().default('Playfair Display, serif'),
   fontBody: z.string().default('Inter, sans-serif'),
 });

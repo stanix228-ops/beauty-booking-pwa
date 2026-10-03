@@ -98,13 +98,14 @@ export function SlotPickerModal({
                   key={item.dateStr}
                   onClick={() => setSelectedDate(item.dateStr)}
                   style={{
-                    backgroundColor: isSelected ? 'var(--tenant-accent)' : undefined,
-                    color: isSelected ? '#0D0D11' : undefined,
+                    backgroundColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card)',
+                    borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
+                    color: isSelected ? '#0D0D11' : 'var(--tenant-text)',
                   }}
                   className={`flex flex-col items-center justify-center min-w-[62px] h-[72px] rounded-2xl border transition-all cursor-pointer flex-shrink-0 ${
                     isSelected
-                      ? 'font-bold shadow-lg'
-                      : 'bg-neutral-900 border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                      ? 'font-bold shadow-lg shadow-amber-500/20'
+                      : 'hover:border-amber-400/40'
                   }`}
                 >
                   <span className="text-[11px] uppercase tracking-wider opacity-80">
@@ -145,7 +146,13 @@ export function SlotPickerModal({
               {error}
             </div>
           ) : slots.length === 0 ? (
-            <div className="py-8 text-center px-4 rounded-2xl bg-neutral-900/40 border border-neutral-800/60">
+            <div
+              style={{
+                backgroundColor: 'var(--tenant-card)',
+                borderColor: 'var(--tenant-card-border)',
+              }}
+              className="py-8 text-center px-4 rounded-2xl border"
+            >
               <div className="text-sm font-medium text-neutral-300 mb-1">
                 Нет свободных окон на этот день
               </div>
@@ -162,7 +169,12 @@ export function SlotPickerModal({
                     onSelectSlot(slot, selectedDate);
                     onOpenChange(false);
                   }}
-                  className="h-11 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-600 text-neutral-200 hover:text-white font-medium text-sm transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm"
+                  style={{
+                    backgroundColor: 'var(--tenant-card)',
+                    borderColor: 'var(--tenant-card-border)',
+                    color: 'var(--tenant-text)',
+                  }}
+                  className="h-11 rounded-xl border hover:border-amber-400/50 hover:text-white font-medium text-sm transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm"
                 >
                   {slot.time}
                 </button>

@@ -40,25 +40,29 @@ export function MasterPicker({
         <div
           onClick={() => onSelectMaster(null)}
           style={{
-            borderColor: selectedMasterId === null ? 'var(--tenant-accent)' : undefined,
+            backgroundColor: 'var(--tenant-card)',
+            borderColor: selectedMasterId === null ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
           }}
           className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 ${
             selectedMasterId === null
-              ? 'bg-neutral-800/80 ring-1 ring-inset shadow-md'
-              : 'bg-neutral-900/50 border-neutral-800/80 hover:border-neutral-700'
+              ? 'ring-1 ring-inset shadow-md shadow-amber-500/10'
+              : 'hover:border-amber-400/40'
           }`}
         >
           <div
-            style={{ backgroundColor: 'var(--tenant-card)' }}
-            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 border border-neutral-700/60"
+            style={{
+              backgroundColor: 'rgba(212, 175, 55, 0.08)',
+              borderColor: 'var(--tenant-card-border)',
+            }}
+            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 border"
           >
             <Sparkles className="w-6 h-6" style={{ color: 'var(--tenant-accent)' }} />
           </div>
           <div>
-            <div className="text-sm font-semibold text-neutral-100">
+            <div className="text-sm font-semibold" style={{ color: 'var(--tenant-text)' }}>
               Любой мастер
             </div>
-            <div className="text-xs text-neutral-400">
+            <div className="text-xs" style={{ color: 'var(--tenant-muted)' }}>
               Сервер выберет ближайшее свободное окно
             </div>
           </div>
@@ -73,12 +77,13 @@ export function MasterPicker({
               key={master.id}
               onClick={() => onSelectMaster(master.id)}
               style={{
-                borderColor: isSelected ? 'var(--tenant-accent)' : undefined,
+                backgroundColor: 'var(--tenant-card)',
+                borderColor: isSelected ? 'var(--tenant-accent)' : 'var(--tenant-card-border)',
               }}
               className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 ${
                 isSelected
-                  ? 'bg-neutral-800/80 ring-1 ring-inset shadow-md'
-                  : 'bg-neutral-900/50 border-neutral-800/80 hover:border-neutral-700'
+                  ? 'ring-1 ring-inset shadow-md shadow-amber-500/10'
+                  : 'hover:border-amber-400/40'
               }`}
             >
               {/* Avatar */}

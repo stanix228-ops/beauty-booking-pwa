@@ -1,6 +1,6 @@
 -- ========================================================
 -- PUBLISH TENANT: LUMI NAIL STUDIO (lumi-nail-studio)
--- Generated automatically at: 2026-10-03T11:12:59.362Z
+-- Generated automatically at: 2026-10-03T11:57:19.624Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 
@@ -19,7 +19,7 @@ BEGIN
         '+7 (495) 780-11-22', 'ул. Большая Никитская, 14/2', 'Москва', 
         'Europe/Moscow', 'RUB', 
         60, 30, 4, 
-        '#E0A96D', '#0D0D11', 
+        '#D4AF37', '#0D0D11', 
         'В студии действует комплиментарный бар: specialty-кофе, матча и авторские лимонады. Пожалуйста, сообщите администратору о наличии аллергических реакций.', now()
     )
     ON CONFLICT (slug) DO UPDATE SET

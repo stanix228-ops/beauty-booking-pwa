@@ -3,12 +3,14 @@
 
 @layer base {
   :root {
-    --tenant-accent: #E0A96D;
-    --tenant-accent-rgb: 224, 169, 109;
+    --tenant-accent: #D4AF37;
+    --tenant-accent-rgb: 212, 175, 55;
+    --tenant-accent-secondary: #F5EBE0;
     --tenant-bg: #0D0D11;
-    --tenant-card: #15151E;
-    --tenant-text: #F3F4F6;
-    --tenant-muted: #9CA3AF;
+    --tenant-card: #16161C;
+    --tenant-card-border: rgba(212, 175, 55, 0.15);
+    --tenant-text: #FAF8F5;
+    --tenant-muted: #8E8E93;
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
   }
