@@ -1,13 +1,14 @@
 import React, { useRef } from 'react';
 import { useTenant } from '../context/TenantContext';
-import { MapPin, Phone, Clock, CalendarPlus, Sparkle, ShieldCheck } from '@phosphor-icons/react';
+import { MapPin, Phone, Clock, CalendarPlus, Sparkle, ShieldCheck, DeviceMobile } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   onBookClick?: () => void;
+  onInstallClick?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
+export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) => {
   const { tenant } = useTenant();
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -52,8 +53,19 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-[#050507] pointer-events-none" />
         <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#050507] via-[#050507]/80 to-transparent pointer-events-none" />
 
-        {/* Top bar with Owner link */}
+        {/* Top bar with PWA install & Owner link */}
         <div className="absolute top-3 right-4 z-20 flex items-center gap-2">
+          {onInstallClick && (
+            <button
+              type="button"
+              onClick={onInstallClick}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-black border border-white/20 transition-all hover:bg-neutral-200 cursor-pointer shadow-[0_2px_12px_rgba(255,255,255,0.25)]"
+              title="Добавить иконку студии на рабочий стол"
+            >
+              <DeviceMobile size={13} weight="bold" />
+              <span>📱 На экран</span>
+            </button>
+          )}
           <Link
             to={`/s/${tenant.slug}/owner/login`}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-black/60 backdrop-blur-md text-neutral-300 hover:text-white border border-white/15 transition-all hover:border-white/30"

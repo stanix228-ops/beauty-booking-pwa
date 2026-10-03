@@ -20,7 +20,11 @@ import {
   ArrowClockwise,
   Bell,
   Scissors,
+  DeviceMobile,
+  PaperPlaneTilt,
+  ChatCircleDots,
 } from '@phosphor-icons/react';
+import { InstallPromptModal } from '../components/InstallPromptModal';
 
 export function BookingStatusPage() {
   const { slug, token } = useParams<{ slug: string; token: string }>();
@@ -30,6 +34,9 @@ export function BookingStatusPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
+
+  // Install modal state
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   // Push notification state
   const [pushSupported, setPushSupported] = useState(false);
@@ -81,14 +88,34 @@ export function BookingStatusPage() {
   };
 
   const handleEnablePushReminder = async () => {
-    if (!pushSupported) return;
+    if (!pushSupported) {
+      handleDownloadIcs();
+      return;
+    }
     try {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
         setPushSubscribed(true);
-        setActionMessage('Напоминание за сутки успешно включено!');
+        setActionMessage('Напоминание включено! Мы отправили вам подтверждающее уведомление.');
+
+        // Instant notification test
+        try {
+          if ('serviceWorker' in navigator) {
+            const reg = await navigator.serviceWorker.ready;
+            reg.showNotification(`Запись подтверждена! 🎉`, {
+              body: `${booking?.services[0]?.name || 'Услуга'} — ${formattedDate} в ${formattedTime}. Ждем вас!`,
+              icon: tenant?.assets.logo || undefined,
+            });
+          } else {
+            new Notification(`Запись подтверждена! 🎉`, {
+              body: `${booking?.services[0]?.name || 'Услуга'} — ${formattedDate} в ${formattedTime}. Ждем вас!`,
+            });
+          }
+        } catch (e) {
+          console.log('Notification trigger note:', e);
+        }
       } else {
-        alert('Разрешение на уведомления не было предоставлено. Вы можете добавить запись в календарь.');
+        alert('Уведомления не разрешены в браузере. Вы можете добавить запись в календарь телефона одним нажатием.');
       }
     } catch {
       alert('Не удалось включить push-уведомления.');
@@ -301,45 +328,98 @@ export function BookingStatusPage() {
           </div>
         </Card>
 
+        {/* Mobile Home Screen App Card (PWA) */}
+        <div className="p-4 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-3 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm font-semibold text-white">
+              <DeviceMobile size={18} weight="duotone" className="text-white" />
+              <span>Иконка на экран телефона</span>
+            </div>
+            <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-white border border-white/15">
+              PWA
+            </span>
+          </div>
+
+          <p className="text-xs text-[#8E8E93] leading-relaxed">
+            Добавьте иконку студии на рабочий стол смартфона — ваша запись, адрес и телефон всегда будут под рукой в один клик.
+          </p>
+
+          <Button
+            variant="primary"
+            size="md"
+            className="w-full flex items-center justify-center gap-2 cursor-pointer bg-white text-black font-semibold hover:bg-neutral-200 shadow-[0_2px_15px_rgba(255,255,255,0.2)]"
+            onClick={() => setIsInstallModalOpen(true)}
+          >
+            <DeviceMobile size={16} weight="bold" />
+            <span>Добавить иконку на рабочий стол</span>
+          </Button>
+        </div>
+
         {/* 24h Reminder Section */}
         {!isCancelled && !isCompleted && (
-          <div className="p-4 rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-md space-y-3">
+          <div className="p-4 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-3 shadow-lg">
             <div className="flex items-center gap-2 text-sm font-semibold text-white">
-              <Bell size={18} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
+              <Bell size={18} weight="duotone" className="text-white" />
               <span>Напоминание о визите</span>
             </div>
 
             {pushSupported ? (
               <div className="space-y-2.5">
-                <p className="text-xs text-neutral-400">
-                  Включите уведомление, и мы напомним вам о записи за 24 часа.
+                <p className="text-xs text-[#8E8E93]">
+                  Включите уведомление, и мы напомним вам о процедуре за 24 часа.
                 </p>
                 <Button
                   variant={pushSubscribed ? 'secondary' : 'primary'}
                   size="md"
-                  className="w-full flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 cursor-pointer bg-white text-black font-semibold hover:bg-neutral-200 shadow-[0_2px_15px_rgba(255,255,255,0.2)]"
                   onClick={handleEnablePushReminder}
                   disabled={pushSubscribed}
                 >
-                  <Bell size={16} />
+                  <Bell size={16} weight="bold" />
                   <span>{pushSubscribed ? 'Напоминание включено' : 'Включить напоминание за сутки'}</span>
                 </Button>
               </div>
             ) : (
-              <p className="text-xs text-neutral-400">
-                Ваше устройство или браузер не поддерживает прямые push-уведомления. Добавьте запись в календарь одним нажатием ниже.
+              <p className="text-xs text-[#8E8E93]">
+                Ваше устройство не поддерживает системные push-уведомления. Добавьте событие в календарь, чтобы сработал встроенный будильник телефона.
               </p>
             )}
 
             <Button
               variant="outline"
               size="md"
-              className="w-full flex items-center justify-center gap-2 cursor-pointer border-white/15 hover:bg-white/5"
+              className="w-full flex items-center justify-center gap-2 cursor-pointer border-white/15 hover:bg-white/5 text-white"
               onClick={handleDownloadIcs}
             >
               <CalendarPlus size={16} />
               <span>Добавить в календарь (.ics)</span>
             </Button>
+
+            {/* Quick messengers share */}
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/10">
+              <a
+                href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(
+                  `Моя запись в ${tenant?.name || 'студию'}: ${booking.services[0]?.name} на ${formattedDate} в ${formattedTime}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-10 px-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs text-neutral-300 hover:text-white flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <PaperPlaneTilt size={16} weight="bold" className="text-[#2AABEE]" />
+                <span>В Telegram</span>
+              </a>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(
+                  `Моя запись в ${tenant?.name || 'студию'}: ${booking.services[0]?.name} на ${formattedDate} в ${formattedTime}. Ссылка: ${window.location.href}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-10 px-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs text-neutral-300 hover:text-white flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <ChatCircleDots size={16} weight="bold" className="text-[#25D366]" />
+                <span>В WhatsApp</span>
+              </a>
+            </div>
           </div>
         )}
 
@@ -400,6 +480,12 @@ export function BookingStatusPage() {
           onSelectSlot={handleRescheduleSlot}
         />
       )}
+
+      {/* PWA Home Screen Icon Modal */}
+      <InstallPromptModal
+        open={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+      />
     </div>
   );
 }

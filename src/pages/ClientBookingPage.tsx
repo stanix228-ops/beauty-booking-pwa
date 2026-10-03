@@ -16,7 +16,8 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 import { CalendarPlus, ShieldCheck, Heart, Coffee, WifiHigh } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import type { Service, ServiceOption } from '../../scripts/schema';
-import type { AvailableSlot } from '../lib/booking-store';
+import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
+import { InstallPromptModal } from '../components/InstallPromptModal';
 
 export function ClientBookingPage() {
   const { tenant, isLoading, error } = useTenant();
@@ -32,7 +33,10 @@ export function ClientBookingPage() {
   const [isSlotPickerOpen, setIsSlotPickerOpen] = useState(false);
   const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
   const [isLookupModalOpen, setIsLookupModalOpen] = useState(false);
-  const [lookupPhone, setLookupPhone] = useState('');
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
+  const [lookupPhone, setLookupPhone] = useState('+7 ');
+  const [isSearchingBooking, setIsSearchingBooking] = useState(false);
+  const [lookupError, setLookupError] = useState<string | null>(null);
 
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
@@ -96,17 +100,53 @@ export function ClientBookingPage() {
     setIsBookingFormOpen(true);
   };
 
-  const handleLookupBooking = (e: React.FormEvent) => {
+  const formatRussianPhone = (raw: string): string => {
+    const digits = raw.replace(/\D/g, '');
+    if (!digits) return '';
+    let nat = digits;
+    if (digits.startsWith('7') || digits.startsWith('8')) nat = digits.slice(1);
+    nat = nat.slice(0, 10);
+    let formatted = '+7';
+    if (nat.length > 0) formatted += ` (${nat.slice(0, 3)}`;
+    if (nat.length >= 3) formatted += `) ${nat.slice(3, 6)}`;
+    if (nat.length >= 6) formatted += `-${nat.slice(6, 8)}`;
+    if (nat.length >= 8) formatted += `-${nat.slice(8, 10)}`;
+    return formatted;
+  };
+
+  const handleLookupPhoneChange = (val: string) => {
+    setLookupPhone(formatRussianPhone(val));
+    if (lookupError) setLookupError(null);
+  };
+
+  const handleLookupBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!lookupPhone.trim()) return;
-    // Find booking from local session
-    const lastToken = localStorage.getItem(`beauty_last_booking_token_${tenant.slug}`);
-    if (lastToken) {
-      setIsLookupModalOpen(false);
-      navigate(`/s/${tenant.slug}/b/${lastToken}`);
-    } else {
-      alert('Активных записей по указанным данным не найдено. Вы можете оформить новую запись ниже.');
-      setIsLookupModalOpen(false);
+    if (!lookupPhone.trim() || !tenant) return;
+    setIsSearchingBooking(true);
+    setLookupError(null);
+
+    try {
+      const found = await BookingEngine.findBookingsByPhone(tenant.slug, lookupPhone);
+      if (found.length > 0) {
+        const latest = found[found.length - 1];
+        setIsLookupModalOpen(false);
+        navigate(`/s/${tenant.slug}/b/${latest.token_hash || latest.id}`);
+        return;
+      }
+
+      // Check last token
+      const lastToken = localStorage.getItem(`beauty_last_booking_token_${tenant.slug}`);
+      if (lastToken) {
+        setIsLookupModalOpen(false);
+        navigate(`/s/${tenant.slug}/b/${lastToken}`);
+        return;
+      }
+
+      setLookupError('Активных записей по указанному номеру не найдено. Проверьте правильность номера или оформите новую запись.');
+    } catch {
+      setLookupError('Ошибка при поиске записи. Попробуйте еще раз.');
+    } finally {
+      setIsSearchingBooking(false);
     }
   };
 
@@ -124,6 +164,7 @@ export function ClientBookingPage() {
           const el = document.getElementById('booking-section');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
+        onInstallClick={() => setIsInstallModalOpen(true)}
       />
 
       {/* 2. 3 Dynamic Info Cards (configured per studio, not hardcoded) */}
@@ -269,39 +310,90 @@ export function ClientBookingPage() {
       {/* "Моя запись" Quick Lookup Modal */}
       {isLookupModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#0D0D11] border border-white/15 p-6 rounded-3xl max-w-sm w-full space-y-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+          <div className="bg-[#0D0D11] border border-white/15 p-6 rounded-3xl max-w-sm w-full space-y-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between">
               <h3 className="font-serif font-bold text-lg text-white">Моя запись</h3>
               <button
                 type="button"
-                onClick={() => setIsLookupModalOpen(false)}
+                onClick={() => {
+                  setIsLookupModalOpen(false);
+                  setLookupError(null);
+                }}
                 className="text-neutral-400 hover:text-white text-sm cursor-pointer p-1"
               >
                 ✕
               </button>
             </div>
+
+            {/* Quick saved booking banner if present */}
+            {(() => {
+              try {
+                const savedRaw = localStorage.getItem(`beauty_active_booking_${tenant.slug}`);
+                if (!savedRaw) return null;
+                const saved = JSON.parse(savedRaw);
+                return (
+                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-semibold text-neutral-300">Сохраненная запись</span>
+                      <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Найдена</span>
+                    </div>
+                    <div className="text-xs text-white font-medium">
+                      {saved.serviceName || 'Услуга'} · {saved.clientName}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsLookupModalOpen(false);
+                        navigate(`/s/${tenant.slug}/b/${saved.token || saved.bookingId}`);
+                      }}
+                      className="w-full h-9 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-colors flex items-center justify-center cursor-pointer shadow-md"
+                    >
+                      Открыть сохраненную запись →
+                    </button>
+                  </div>
+                );
+              } catch {
+                return null;
+              }
+            })()}
+
             <p className="text-xs text-[#8E8E93]">
-              Введите номер телефона, указанный при бронировании, чтобы открыть детали вашей записи:
+              Или введите ваш номер телефона для поиска актуального бронирования:
             </p>
+
             <form onSubmit={handleLookupBooking} className="space-y-3">
               <input
                 type="tel"
                 value={lookupPhone}
-                onChange={(e) => setLookupPhone(e.target.value)}
+                onChange={(e) => handleLookupPhoneChange(e.target.value)}
                 placeholder="+7 (999) 000-00-00"
                 className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-white text-sm focus:outline-none focus:border-white transition-colors"
                 required
               />
+
+              {lookupError && (
+                <div className="p-2.5 rounded-xl bg-red-950/40 border border-red-800 text-[11px] text-red-300">
+                  {lookupError}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full h-11 rounded-xl bg-white text-black font-bold text-sm cursor-pointer hover:bg-neutral-100 shadow-[0_4px_20px_rgba(255,255,255,0.2)] transition-all"
+                disabled={isSearchingBooking}
+                className="w-full h-11 rounded-xl bg-white text-black font-bold text-sm cursor-pointer hover:bg-neutral-100 shadow-[0_4px_20px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center gap-2"
               >
-                Найти запись
+                {isSearchingBooking ? 'Поиск...' : 'Найти запись'}
               </button>
             </form>
           </div>
         </div>
       )}
+
+      {/* PWA Home Screen Icon Modal */}
+      <InstallPromptModal
+        open={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+      />
     </div>
   );
 }

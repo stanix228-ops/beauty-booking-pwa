@@ -68,14 +68,14 @@ export interface AvailableSlot {
 
 // In-Memory Database Store (Faithful PostgreSQL implementation mirror)
 class MemoryBookingStore {
-  private bookings: BookingDetails[] = [];
-  private occupancies: ResourceOccupancy[] = [];
+  public bookings: BookingDetails[] = [];
+  public occupancies: ResourceOccupancy[] = [];
 
   constructor() {
     this.loadFromStorage();
   }
 
-  private saveToStorage() {
+  public saveToStorage() {
     if (typeof localStorage !== 'undefined') {
       try {
         localStorage.setItem('beauty_bookings', JSON.stringify(this.bookings));
@@ -86,7 +86,7 @@ class MemoryBookingStore {
     }
   }
 
-  private loadFromStorage() {
+  public loadFromStorage() {
     if (typeof localStorage !== 'undefined') {
       try {
         const savedB = localStorage.getItem('beauty_bookings');
@@ -413,6 +413,13 @@ class MemoryBookingStore {
     this.bookings.push(newBooking);
     this.saveToStorage();
 
+    if (typeof localStorage !== 'undefined') {
+      try {
+        localStorage.setItem(`beauty_active_booking_full_${tenant.slug}`, JSON.stringify(newBooking));
+        localStorage.setItem('beauty_last_booking_full', JSON.stringify(newBooking));
+      } catch {}
+    }
+
     return {
       success: true,
       bookingId,
@@ -422,11 +429,64 @@ class MemoryBookingStore {
   }
 
   public async lookupBookingByToken(tenantSlug: string, tokenHash: string): Promise<BookingDetails | null> {
+    this.loadFromStorage();
     const tenant = getTenantBySlug(tenantSlug);
     if (!tenant) return null;
 
-    const booking = this.bookings.find((b) => b.tenant_id === tenant.id && b.token_hash === tokenHash);
-    return booking || null;
+    let booking = this.bookings.find(
+      (b) => b.tenant_id === tenant.id && (b.token_hash === tokenHash || b.id === tokenHash)
+    );
+    if (booking) return booking;
+
+    // Check localStorage backups
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const fullRaw = localStorage.getItem(`beauty_active_booking_full_${tenantSlug}`) || localStorage.getItem('beauty_last_booking_full');
+        if (fullRaw) {
+          const parsed: BookingDetails = JSON.parse(fullRaw);
+          if (parsed && (parsed.token_hash === tokenHash || parsed.id === tokenHash)) {
+            this.bookings.push(parsed);
+            return parsed;
+          }
+        }
+      } catch {}
+    }
+    return null;
+  }
+
+  public async findBookingsByPhone(tenantSlug: string, phoneQuery: string): Promise<BookingDetails[]> {
+    this.loadFromStorage();
+    const tenant = getTenantBySlug(tenantSlug);
+    if (!tenant) return [];
+
+    const cleanQuery = phoneQuery.replace(/\D/g, '');
+    const searchTenDigits = cleanQuery.slice(-10);
+
+    const candidates = [...this.bookings];
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const fullRaw = localStorage.getItem(`beauty_active_booking_full_${tenantSlug}`);
+        if (fullRaw) candidates.push(JSON.parse(fullRaw));
+        const lastRaw = localStorage.getItem('beauty_last_booking_full');
+        if (lastRaw) candidates.push(JSON.parse(lastRaw));
+      } catch {}
+    }
+
+    const matches = candidates.filter((b) => {
+      if (b.tenant_id !== tenant.id) return false;
+      const bDigits = (b.client?.phone || '').replace(/\D/g, '');
+      if (searchTenDigits.length >= 7) {
+        return bDigits.endsWith(searchTenDigits) || searchTenDigits.endsWith(bDigits.slice(-10));
+      }
+      return bDigits.includes(cleanQuery);
+    });
+
+    const seen = new Set<string>();
+    return matches.filter((b) => {
+      if (seen.has(b.id)) return false;
+      seen.add(b.id);
+      return true;
+    });
   }
 
   public async rescheduleBooking(params: {
@@ -639,10 +699,27 @@ export const BookingEngine = {
         p_tenant_slug: tenantSlug,
         p_token_hash: tokenHash,
       });
-      if (error || !data || data.error) return null;
-      return data as BookingDetails;
+      if (!error && data && !data.error) return data as BookingDetails;
     }
-    return memoryStore.lookupBookingByToken(tenantSlug, tokenHash);
+
+    // Try by hashed token
+    let res = await memoryStore.lookupBookingByToken(tenantSlug, tokenHash);
+    if (res) return res;
+
+    // Fallback: try by raw accessToken
+    res = await memoryStore.lookupBookingByToken(tenantSlug, accessToken);
+    if (res) return res;
+
+    // Fallback: look in memory store bookings list directly
+    memoryStore.loadFromStorage();
+    const fallback = memoryStore.bookings.find(
+      (b) => b.token_hash === tokenHash || b.token_hash === accessToken || b.id === accessToken || b.booking_number === accessToken
+    );
+    return fallback || null;
+  },
+
+  async findBookingsByPhone(tenantSlug: string, phone: string): Promise<BookingDetails[]> {
+    return memoryStore.findBookingsByPhone(tenantSlug, phone);
   },
 
   async rescheduleBooking(

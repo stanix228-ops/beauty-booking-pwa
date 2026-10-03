@@ -6,14 +6,7 @@ import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
 import { useTenant } from '../context/TenantContext';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ShieldCheck } from '@phosphor-icons/react';
-import { z } from 'zod';
 import type { Service, ServiceOption, Master } from '../../scripts/schema';
-
-const ClientBookingInputSchema = z.object({
-  name: z.string().trim().min(2, 'Имя должно содержать минимум 2 буквы'),
-  phone: z.string().trim().regex(/^\+?[0-9\s\-()]{10,20}$/, 'Пожалуйста, введите корректный номер телефона'),
-  notes: z.string().max(500).optional(),
-});
 
 interface BookingFormModalProps {
   open: boolean;
@@ -59,12 +52,35 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
     month: 'long',
   });
 
-  const handlePhoneChange = (val: string) => {
-    if (!val.startsWith('+7')) {
-      setPhone('+7 ');
-      return;
+  const formatRussianPhone = (raw: string): string => {
+    const digits = raw.replace(/\D/g, '');
+    if (!digits) return '';
+
+    let nationalDigits = digits;
+    if (digits.startsWith('7') || digits.startsWith('8')) {
+      nationalDigits = digits.slice(1);
     }
-    setPhone(val);
+    nationalDigits = nationalDigits.slice(0, 10);
+
+    let formatted = '+7';
+    if (nationalDigits.length > 0) {
+      formatted += ` (${nationalDigits.slice(0, 3)}`;
+    }
+    if (nationalDigits.length >= 3) {
+      formatted += `) ${nationalDigits.slice(3, 6)}`;
+    }
+    if (nationalDigits.length >= 6) {
+      formatted += `-${nationalDigits.slice(6, 8)}`;
+    }
+    if (nationalDigits.length >= 8) {
+      formatted += `-${nationalDigits.slice(8, 10)}`;
+    }
+    return formatted;
+  };
+
+  const handlePhoneChange = (val: string) => {
+    const formatted = formatRussianPhone(val);
+    setPhone(formatted);
     if (fieldErrors.phone) {
       setFieldErrors((prev) => ({ ...prev, phone: undefined }));
     }
@@ -81,19 +97,19 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
     e.preventDefault();
     if (isSubmitting) return;
 
-    // Validate using Zod
-    const validationResult = ClientBookingInputSchema.safeParse({
-      name,
-      phone,
-      notes: notes || undefined,
-    });
+    const trimmedName = name.trim();
+    const cleanDigits = phone.replace(/\D/g, '');
+    const errMap: { name?: string; phone?: string } = {};
 
-    if (!validationResult.success) {
-      const errMap: { name?: string; phone?: string } = {};
-      for (const issue of validationResult.error.issues) {
-        if (issue.path[0] === 'name') errMap.name = issue.message;
-        if (issue.path[0] === 'phone') errMap.phone = issue.message;
-      }
+    if (!trimmedName || trimmedName.length < 2) {
+      errMap.name = 'Пожалуйста, введите ваше имя (минимум 2 буквы)';
+    }
+
+    if (!cleanDigits || cleanDigits.length < 10) {
+      errMap.phone = 'Пожалуйста, введите полный номер телефона (10 цифр)';
+    }
+
+    if (Object.keys(errMap).length > 0) {
       setFieldErrors(errMap);
       return;
     }
@@ -104,7 +120,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
 
     try {
       // Deterministic idempotency key to prevent double bookings
-      const idempotencyKey = `${tenant.slug}-${service.id}-${slot.datetime}-${phone.replace(/\D/g, '')}`;
+      const idempotencyKey = `${tenant.slug}-${service.id}-${slot.datetime}-${cleanDigits}`;
 
       const res = await BookingEngine.createBooking({
         tenantSlug: tenant.slug,
@@ -112,18 +128,43 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
         optionIds: options.map((o) => o.id),
         masterId: master ? master.id : null,
         startAt: slot.datetime,
-        clientName: name.trim(),
+        clientName: trimmedName,
         clientPhone: phone.trim(),
         notes: notes.trim() || undefined,
         idempotencyKey,
       });
 
-      // Save token for "Моя запись" in bottom navigation
-      localStorage.setItem(`beauty_last_booking_token_${tenant.slug}`, res.accessToken);
+      const accessToken = res.accessToken || (res as any).token;
+
+      // 1. Save token for "Моя запись" in bottom navigation
+      localStorage.setItem(`beauty_last_booking_token_${tenant.slug}`, accessToken);
+      localStorage.setItem(`beauty_last_booking_phone_${tenant.slug}`, phone.trim());
+
+      // 2. Save active booking data in localStorage for guaranteed retrieval
+      const activeBookingData = {
+        bookingId: res.bookingId,
+        bookingNumber: res.bookingNumber,
+        token: accessToken,
+        tenantSlug: tenant.slug,
+        serviceName: service.name,
+        price: totalPrice,
+        startAt: slot.datetime,
+        clientName: trimmedName,
+        clientPhone: phone.trim(),
+        createdAt: new Date().toISOString(),
+      };
+      localStorage.setItem(`beauty_active_booking_${tenant.slug}`, JSON.stringify(activeBookingData));
+
+      // 3. Keep in recent bookings list
+      try {
+        const recent = JSON.parse(localStorage.getItem('beauty_my_bookings') || '[]');
+        recent.unshift(activeBookingData);
+        localStorage.setItem('beauty_my_bookings', JSON.stringify(recent.slice(0, 10)));
+      } catch {}
 
       onOpenChange(false);
       // Navigate to direct booking status screen with crypto access token
-      navigate(`/s/${tenant.slug}/b/${res.accessToken}`);
+      navigate(`/s/${tenant.slug}/b/${accessToken}`);
     } catch (err) {
       setError((err as Error).message || 'Не удалось создать запись. Пожалуйста, попробуйте снова.');
       setIsSubmitting(false);
@@ -137,7 +178,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
       title="Подтверждение записи"
       description="Проверьте детали визита и укажите ваши данные"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} data-vaul-no-drag className="space-y-4">
         {/* Appointment Summary Card */}
         <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-2.5 shadow-lg">
           <div className="flex items-start justify-between">
