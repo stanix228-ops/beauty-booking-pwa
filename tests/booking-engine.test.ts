@@ -15,7 +15,7 @@ describe('Beauty Booking Engine & Multi-Tenant Core Tests', () => {
     expect(aura).toBeDefined();
 
     expect(lumi!.id).not.toBe(aura!.id);
-    expect(lumi!.name).toBe('LUMI NAIL STUDIO');
+    expect(lumi!.name).toBe('DEMO BEAUTY STUDIO');
     expect(aura!.name).toBe('AURA NAIL BAR');
 
     // Visual theme differentiation

@@ -305,7 +305,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
   "lumi-nail-studio": {
     "id": "11111111-1111-4111-8111-111111111111",
     "slug": "lumi-nail-studio",
-    "name": "LUMI NAIL STUDIO",
+    "name": "DEMO BEAUTY STUDIO",
     "tagline": "Премиальная эстетика, безупречный маникюр и забота о деталях",
     "phone": "+7 (495) 780-11-22",
     "address": "ул. Большая Никитская, 14/2",

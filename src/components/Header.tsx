@@ -36,16 +36,6 @@ export function Header() {
       {/* Studio Info Card */}
       <div className="relative px-4 pb-5 -mt-12 max-w-lg mx-auto text-center">
         <div className="mb-2">
-          <div
-            className="inline-block text-xs font-bold tracking-[0.25em] uppercase px-3.5 py-1 rounded-full mb-2.5 border shadow-sm backdrop-blur-md"
-            style={{
-              backgroundColor: 'rgba(212, 175, 55, 0.12)',
-              borderColor: 'rgba(212, 175, 55, 0.35)',
-              color: 'var(--tenant-accent, #D4AF37)',
-            }}
-          >
-            DEMO BEAUTY
-          </div>
           <h1 className="text-xl sm:text-2xl font-bold font-heading text-neutral-100 truncate tracking-tight text-center">
             {tenant.name}
           </h1>

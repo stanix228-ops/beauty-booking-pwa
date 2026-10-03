@@ -1,6 +1,6 @@
 -- ========================================================
--- PUBLISH TENANT: LUMI NAIL STUDIO (lumi-nail-studio)
--- Generated automatically at: 2026-10-03T12:39:26.793Z
+-- PUBLISH TENANT: DEMO BEAUTY STUDIO (lumi-nail-studio)
+-- Generated automatically at: 2026-10-03T12:52:27.943Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 
@@ -14,7 +14,7 @@ BEGIN
         min_booking_notice_min, max_booking_horizon_days, cancellation_deadline_hours,
         theme_accent_color, theme_bg_color, instructions, updated_at
     ) VALUES (
-        v_tenant_id, 'lumi-nail-studio', 'LUMI NAIL STUDIO', 
+        v_tenant_id, 'lumi-nail-studio', 'DEMO BEAUTY STUDIO', 
         'Премиальная эстетика, безупречный маникюр и забота о деталях', 
         '+7 (495) 780-11-22', 'ул. Большая Никитская, 14/2', 'Москва', 
         'Europe/Moscow', 'RUB', 

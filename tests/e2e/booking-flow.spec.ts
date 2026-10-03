@@ -4,10 +4,10 @@ test.describe('Nail Studio PWA End-to-End Booking & Isolation Flow', () => {
   test('Complete flow: Studio open -> Service select -> Master select -> Slot pick -> Booking submit -> Verification in Owner Portal', async ({ page }) => {
     // 1. Open Lumi Nail Studio
     await page.goto('/s/lumi-nail-studio/');
-    await expect(page).toHaveTitle(/LUMI NAIL STUDIO/);
+    await expect(page).toHaveTitle(/DEMO BEAUTY STUDIO/);
 
     // Verify studio header & address
-    await expect(page.locator('h1')).toContainText('LUMI NAIL STUDIO');
+    await expect(page.locator('h1')).toContainText('DEMO BEAUTY STUDIO');
     await expect(page.getByText('ул. Большая Никитская, 14/2')).toBeVisible();
 
     // 2. Click on primary service card
