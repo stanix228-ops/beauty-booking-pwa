@@ -11,7 +11,6 @@ import { SlotPickerModal } from '../components/SlotPickerModal';
 import { BookingFormModal } from '../components/BookingFormModal';
 import { StickyBookingBar } from '../components/StickyBookingBar';
 import { BottomNavigation } from '../components/BottomNavigation';
-import { AIAssistantWidget } from '../components/AIAssistantWidget';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { CalendarPlus, ShieldCheck, Heart, Coffee, WifiHigh } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
@@ -258,9 +257,6 @@ export function ClientBookingPage() {
           onOpenMyBooking={() => setIsLookupModalOpen(true)}
         />
       )}
-
-      {/* AI Assistant Floating Widget */}
-      <AIAssistantWidget />
 
       {/* Modals */}
       <ServiceOptionsModal

@@ -11,8 +11,6 @@ import {
   SignOut,
   Prohibit,
   Plus,
-  Robot,
-  PaperPlaneRight,
   Trash,
 } from '@phosphor-icons/react';
 import type { GalleryItem } from '../../scripts/schema';
@@ -52,7 +50,6 @@ export function OwnerDashboardPage() {
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
   const [isManualBookingOpen, setIsManualBookingOpen] = useState(false);
-  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
 
   // Manual booking fields
   const [manualClientName, setManualClientName] = useState('');
@@ -78,12 +75,6 @@ export function OwnerDashboardPage() {
   });
   const [newWorkUrl, setNewWorkUrl] = useState('');
   const [newWorkCaption, setNewWorkCaption] = useState('');
-
-  // Owner Assistant state
-  const [assistantMessages, setAssistantMessages] = useState<Array<{ id: string; sender: 'user' | 'assistant'; text: string }>>([
-    { id: 'w', sender: 'assistant', text: 'Здравствуйте! Я ваш бизнес-ассистент студии. Могу рассчитать выручку за неделю, показать расписание на завтра или проверить статистику по мастерам.' }
-  ]);
-  const [assistantInput, setAssistantInput] = useState('');
 
   const loadData = async () => {
     if (!slug || !tenant) return;
@@ -204,72 +195,6 @@ export function OwnerDashboardPage() {
     );
   };
 
-  const handleAskOwnerAssistant = (query: string) => {
-    if (!query.trim() || !tenant) return;
-    const userMsg = { id: `u-${Date.now()}`, sender: 'user' as const, text: query.trim() };
-    setAssistantMessages((prev) => [...prev, userMsg]);
-    setAssistantInput('');
-
-    const lower = query.toLowerCase();
-    let answer = '';
-
-    const todayStr = new Date().toISOString().split('T')[0];
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowStr = tomorrow.toISOString().split('T')[0];
-
-    const todayList = bookings.filter((b) => b.start_at.startsWith(todayStr));
-    const tomorrowList = bookings.filter((b) => b.start_at.startsWith(tomorrowStr));
-
-    if (lower.includes('завтра')) {
-      if (tomorrowList.length > 0) {
-        const details = tomorrowList.map((b) => `• ${b.start_at.slice(11, 16)} — ${b.client.name} (${b.services[0]?.name}, мастер ${b.master.name})`).join('\n');
-        answer = `На завтра (${tomorrowStr}) запланировано ${tomorrowList.length} записей:\n${details}`;
-      } else {
-        answer = `На завтра пока нет активных записей. Все слоты свободны.`;
-      }
-    } else if (lower.includes('недел') || lower.includes('клиент')) {
-      const uniqueClients = new Set(bookings.map((b) => b.client.phone)).size;
-      answer = `За весь период зарегистрировано ${uniqueClients} уникальных клиентов. Всего создано ${bookings.length} записей.`;
-    } else if (lower.includes('процедур') || lower.includes('выполнен')) {
-      const completed = bookings.filter((b) => b.status === 'COMPLETED').length;
-      answer = `Успешно выполнено ${completed} процедур(ы).`;
-    } else if (lower.includes('денег') || lower.includes('выручк') || lower.includes('получен')) {
-      const completedRevenue = bookings
-        .filter((b) => b.status === 'COMPLETED')
-        .reduce((sum, b) => sum + b.total_price, 0);
-      const projectedRevenue = bookings
-        .filter((b) => b.status !== 'CANCELLED')
-        .reduce((sum, b) => sum + b.total_price, 0);
-      answer = `Фактически получено (завершенные процедуры): ${completedRevenue.toLocaleString('ru-RU')} ₽.\nОжидаемая выручка со всеми бронями: ${projectedRevenue.toLocaleString('ru-RU')} ₽.`;
-    } else if (lower.includes('чаще') || lower.includes('популярн')) {
-      const counts: Record<string, number> = {};
-      bookings.forEach((b) => {
-        b.services.forEach((s) => {
-          counts[s.name] = (counts[s.name] || 0) + 1;
-        });
-      });
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-      if (sorted.length > 0) {
-        answer = `Самые популярные услуги в студии:\n` + sorted.map(([name, c]) => `• ${name} — ${c} раз(а)`).join('\n');
-      } else {
-        answer = `Пока недостаточно данных по популярности услуг.`;
-      }
-    } else if (lower.includes('мастера') || lower.includes('работают')) {
-      const activeMasters = tenant.masters.filter((m) => m.isActive).map((m) => `• ${m.name} (${m.title})`).join('\n');
-      answer = `В студии ведут прием мастера:\n${activeMasters}`;
-    } else {
-      answer = `На сегодня (${todayStr}) запланировано ${todayList.length} записей на общую сумму ${todayList.reduce((s, b) => s + b.total_price, 0).toLocaleString('ru-RU')} ₽.`;
-    }
-
-    setTimeout(() => {
-      setAssistantMessages((prev) => [
-        ...prev,
-        { id: `a-${Date.now()}`, sender: 'assistant', text: answer }
-      ]);
-    }, 400);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem(`owner_session_${slug}`);
     navigate(`/s/${slug}/owner/login`);
@@ -329,14 +254,6 @@ export function OwnerDashboardPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsAssistantOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-white border border-white/15 transition-all cursor-pointer"
-            >
-              <Robot size={15} className="text-blue-400" />
-              <span>AI Помощник</span>
-            </button>
-
             <button
               onClick={handleLogout}
               className="p-2 rounded-xl text-neutral-400 hover:text-red-400 hover:bg-neutral-800 transition-colors cursor-pointer"
@@ -922,55 +839,6 @@ export function OwnerDashboardPage() {
           </Button>
         </form>
       </BottomSheet>
-
-      {/* Owner Assistant Modal */}
-      {isAssistantOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-neutral-950 border border-white/15 rounded-2xl max-w-md w-full p-4 flex flex-col h-[520px]">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2">
-                <Robot size={20} className="text-blue-400" />
-                <h3 className="font-bold text-sm text-white">AI Помощник владельца</h3>
-              </div>
-              <button onClick={() => setIsAssistantOpen(false)} className="text-neutral-400 hover:text-white">✕</button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-2 space-y-2.5 text-xs">
-              {assistantMessages.map((m) => (
-                <div key={m.id} className={`p-2.5 rounded-xl max-w-[85%] whitespace-pre-line ${m.sender === 'user' ? 'bg-blue-600 ml-auto text-white' : 'bg-neutral-900 text-neutral-200 border border-white/10'}`}>
-                  {m.text}
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-2 border-t border-white/10 space-y-2">
-              <div className="flex gap-1 overflow-x-auto no-scrollbar pb-1 text-[11px]">
-                {['Что у меня завтра?', 'Сколько денег получено?', 'Сколько клиентов было на неделе?', 'Какие услуги чаще всего записывают?'].map((q, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleAskOwnerAssistant(q)}
-                    className="px-2.5 py-1 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 whitespace-nowrap border border-white/10"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
-              <form onSubmit={(e) => { e.preventDefault(); handleAskOwnerAssistant(assistantInput); }} className="flex gap-1.5">
-                <input
-                  type="text"
-                  value={assistantInput}
-                  onChange={(e) => setAssistantInput(e.target.value)}
-                  placeholder="Задайте вопрос по студии..."
-                  className="flex-1 h-9 px-3 rounded-lg bg-neutral-900 border border-white/15 text-xs text-white focus:outline-none"
-                />
-                <button type="submit" className="px-3 h-9 rounded-lg bg-blue-600 text-white cursor-pointer">
-                  <PaperPlaneRight size={14} weight="bold" />
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
