@@ -17,6 +17,7 @@ import { CalendarPlus, ShieldCheck, Heart, Coffee, WifiHigh } from '@phosphor-ic
 import { useNavigate } from 'react-router-dom';
 import type { Service, ServiceOption } from '../../scripts/schema';
 import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
+import { handlePhoneInput } from '../lib/phone';
 import { InstallPromptModal } from '../components/InstallPromptModal';
 
 export function ClientBookingPage() {
@@ -34,9 +35,10 @@ export function ClientBookingPage() {
   const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
   const [isLookupModalOpen, setIsLookupModalOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
-  const [lookupPhone, setLookupPhone] = useState('+7 ');
+  const [lookupPhone, setLookupPhone] = useState('');
   const [isSearchingBooking, setIsSearchingBooking] = useState(false);
   const [lookupError, setLookupError] = useState<string | null>(null);
+  const [, setLookupRefreshTick] = useState(0);
 
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
@@ -100,22 +102,8 @@ export function ClientBookingPage() {
     setIsBookingFormOpen(true);
   };
 
-  const formatRussianPhone = (raw: string): string => {
-    const digits = raw.replace(/\D/g, '');
-    if (!digits) return '';
-    let nat = digits;
-    if (digits.startsWith('7') || digits.startsWith('8')) nat = digits.slice(1);
-    nat = nat.slice(0, 10);
-    let formatted = '+7';
-    if (nat.length > 0) formatted += ` (${nat.slice(0, 3)}`;
-    if (nat.length >= 3) formatted += `) ${nat.slice(3, 6)}`;
-    if (nat.length >= 6) formatted += `-${nat.slice(6, 8)}`;
-    if (nat.length >= 8) formatted += `-${nat.slice(8, 10)}`;
-    return formatted;
-  };
-
   const handleLookupPhoneChange = (val: string) => {
-    setLookupPhone(formatRussianPhone(val));
+    setLookupPhone(handlePhoneInput(val, lookupPhone));
     if (lookupError) setLookupError(null);
   };
 
@@ -340,16 +328,31 @@ export function ClientBookingPage() {
                     <div className="text-xs text-white font-medium">
                       {saved.serviceName || 'Услуга'} · {saved.clientName}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsLookupModalOpen(false);
-                        navigate(`/s/${tenant.slug}/b/${saved.token || saved.bookingId}`);
-                      }}
-                      className="w-full h-9 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-colors flex items-center justify-center cursor-pointer shadow-md"
-                    >
-                      Открыть сохраненную запись →
-                    </button>
+                    <div className="flex gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsLookupModalOpen(false);
+                          navigate(`/s/${tenant.slug}/b/${saved.token || saved.bookingId}`);
+                        }}
+                        className="flex-1 h-9 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-colors flex items-center justify-center cursor-pointer shadow-md"
+                      >
+                        Открыть запись →
+                      </button>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (saved.bookingId) {
+                            await BookingEngine.deleteBooking(saved.bookingId, tenant.slug);
+                          }
+                          setLookupRefreshTick((t) => t + 1);
+                        }}
+                        className="px-3 h-9 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-950/40 text-xs font-medium transition-colors flex items-center justify-center cursor-pointer"
+                        title="Удалить запись"
+                      >
+                        Удалить
+                      </button>
+                    </div>
                   </div>
                 );
               } catch {

@@ -3,6 +3,7 @@ import { BottomSheet } from './ui/BottomSheet';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
+import { handlePhoneInput } from '../lib/phone';
 import { useTenant } from '../context/TenantContext';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ShieldCheck } from '@phosphor-icons/react';
@@ -31,7 +32,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('+7 ');
+  const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
@@ -52,34 +53,8 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
     month: 'long',
   });
 
-  const formatRussianPhone = (raw: string): string => {
-    const digits = raw.replace(/\D/g, '');
-    if (!digits) return '';
-
-    let nationalDigits = digits;
-    if (digits.startsWith('7') || digits.startsWith('8')) {
-      nationalDigits = digits.slice(1);
-    }
-    nationalDigits = nationalDigits.slice(0, 10);
-
-    let formatted = '+7';
-    if (nationalDigits.length > 0) {
-      formatted += ` (${nationalDigits.slice(0, 3)}`;
-    }
-    if (nationalDigits.length >= 3) {
-      formatted += `) ${nationalDigits.slice(3, 6)}`;
-    }
-    if (nationalDigits.length >= 6) {
-      formatted += `-${nationalDigits.slice(6, 8)}`;
-    }
-    if (nationalDigits.length >= 8) {
-      formatted += `-${nationalDigits.slice(8, 10)}`;
-    }
-    return formatted;
-  };
-
   const handlePhoneChange = (val: string) => {
-    const formatted = formatRussianPhone(val);
+    const formatted = handlePhoneInput(val, phone);
     setPhone(formatted);
     if (fieldErrors.phone) {
       setFieldErrors((prev) => ({ ...prev, phone: undefined }));
@@ -247,7 +222,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
             <Input
               value={phone}
               onChange={(e) => handlePhoneChange(e.target.value)}
-              placeholder="+7 (___) ___-__-__"
+              placeholder="+7 (999) 000-00-00"
               required
               type="tel"
               inputMode="tel"

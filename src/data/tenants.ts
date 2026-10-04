@@ -803,31 +803,52 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       }
     ],
     "assets": {
-      "logo": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=150&q=80",
-      "hero": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80",
+      "hero": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=85",
       "gallery": [
-        "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+        "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1566113519662-7807a42cc50d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80"
       ],
       "galleryItems": [
         {
           "id": "work-1",
-          "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
-          "caption": "Французский маникюр с молочным камуфляжем",
+          "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
+          "caption": "Chanel Noire — глянец глубокого черного",
           "displayOrder": 1
         },
         {
           "id": "work-2",
-          "imageUrl": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
-          "caption": "Японский эко-уход и сияние натуральных ногтей",
+          "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+          "caption": "Французский маникюр с молочным камуфляжем",
           "displayOrder": 2
         },
         {
           "id": "work-3",
-          "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
-          "caption": "Авторский nail-арт и золотые акценты",
+          "imageUrl": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80",
+          "caption": "Японский эко-уход Masura и зеркальный блеск",
           "displayOrder": 3
+        },
+        {
+          "id": "work-4",
+          "imageUrl": "https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?auto=format&fit=crop&w=800&q=80",
+          "caption": "Микро-френч и серебряные линии",
+          "displayOrder": 4
+        },
+        {
+          "id": "work-5",
+          "imageUrl": "https://images.unsplash.com/photo-1566113519662-7807a42cc50d?auto=format&fit=crop&w=800&q=80",
+          "caption": "Haute Couture — подиумный минимализм",
+          "displayOrder": 5
+        },
+        {
+          "id": "work-6",
+          "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80",
+          "caption": "Эстетический Smart-педикюр СПА",
+          "displayOrder": 6
         }
       ]
     }

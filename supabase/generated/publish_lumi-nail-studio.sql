@@ -1,6 +1,6 @@
 -- ========================================================
 -- PUBLISH TENANT: DEMO BEAUTY STUDIO (lumi-nail-studio)
--- Generated automatically at: 2026-10-03T21:06:48.441Z
+-- Generated automatically at: 2026-10-04T10:27:21.230Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 

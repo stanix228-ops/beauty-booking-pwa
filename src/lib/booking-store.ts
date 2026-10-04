@@ -549,7 +549,92 @@ class MemoryBookingStore {
     booking.cancellation_reason = params.reason || 'Отменено клиентом';
     this.saveToStorage();
 
+    // Sync cancelled status in localStorage
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const fullRaw = localStorage.getItem('beauty_last_booking_full');
+        if (fullRaw) {
+          const parsed = JSON.parse(fullRaw);
+          if (parsed && parsed.id === booking.id) {
+            parsed.status = 'CANCELLED';
+            localStorage.setItem('beauty_last_booking_full', JSON.stringify(parsed));
+          }
+        }
+      } catch {}
+    }
+
     return { success: true, status: 'CANCELLED' };
+  }
+
+  public async deleteBooking(bookingId: string, tenantSlug?: string): Promise<{ success: boolean }> {
+    this.loadFromStorage();
+    const target = this.bookings.find((b) => b.id === bookingId);
+
+    // Free any resource occupancies
+    this.occupancies = this.occupancies.filter((o) => o.booking_id !== bookingId);
+    // Remove booking
+    this.bookings = this.bookings.filter((b) => b.id !== bookingId);
+    this.saveToStorage();
+
+    // Clean up local storage references
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const slug = tenantSlug || (target ? target.tenant_id : undefined);
+        const keysToRemove = [
+          `beauty_active_booking_${slug}`,
+          `beauty_active_booking_full_${slug}`,
+          `beauty_last_booking_token_${slug}`,
+          `beauty_last_booking_phone_${slug}`,
+        ];
+        keysToRemove.forEach((k) => localStorage.removeItem(k));
+
+        const lastFullRaw = localStorage.getItem('beauty_last_booking_full');
+        if (lastFullRaw) {
+          const lastFull = JSON.parse(lastFullRaw);
+          if (lastFull && lastFull.id === bookingId) {
+            localStorage.removeItem('beauty_last_booking_full');
+          }
+        }
+
+        const myRaw = localStorage.getItem('beauty_my_bookings');
+        if (myRaw) {
+          const myArr = JSON.parse(myRaw);
+          if (Array.isArray(myArr)) {
+            const filtered = myArr.filter((item: any) => item.bookingId !== bookingId && item.id !== bookingId);
+            localStorage.setItem('beauty_my_bookings', JSON.stringify(filtered));
+          }
+        }
+      } catch {}
+    }
+
+    return { success: true };
+  }
+
+  public async updateBookingStatus(bookingId: string, status: BookingDetails['status']): Promise<{ success: boolean }> {
+    this.loadFromStorage();
+    const booking = this.bookings.find((b) => b.id === bookingId);
+    if (!booking) return { success: false };
+
+    booking.status = status;
+    if (status === 'CANCELLED') {
+      this.occupancies = this.occupancies.filter((o) => o.booking_id !== bookingId);
+    }
+    this.saveToStorage();
+
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const fullRaw = localStorage.getItem('beauty_last_booking_full');
+        if (fullRaw) {
+          const parsed = JSON.parse(fullRaw);
+          if (parsed && parsed.id === bookingId) {
+            parsed.status = status;
+            localStorage.setItem('beauty_last_booking_full', JSON.stringify(parsed));
+          }
+        }
+      } catch {}
+    }
+
+    return { success: true };
   }
 
   public async getOwnerBookings(tenantSlug: string): Promise<BookingDetails[]> {
@@ -760,6 +845,14 @@ export const BookingEngine = {
       tokenHash,
       reason,
     });
+  },
+
+  async deleteBooking(bookingId: string, tenantSlug?: string): Promise<{ success: boolean }> {
+    return memoryStore.deleteBooking(bookingId, tenantSlug);
+  },
+
+  async updateBookingStatus(bookingId: string, status: BookingDetails['status']): Promise<{ success: boolean }> {
+    return memoryStore.updateBookingStatus(bookingId, status);
   },
 
   async getOwnerBookings(tenantSlug: string): Promise<BookingDetails[]> {

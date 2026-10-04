@@ -13,8 +13,10 @@ import {
   Plus,
   Robot,
   PaperPlaneRight,
+  Trash,
 } from '@phosphor-icons/react';
 import type { GalleryItem } from '../../scripts/schema';
+import { handlePhoneInput } from '../lib/phone';
 
 type Tab = 'today' | 'bookings' | 'calendar' | 'stats' | 'gallery' | 'masters' | 'services' | 'settings';
 
@@ -54,7 +56,7 @@ export function OwnerDashboardPage() {
 
   // Manual booking fields
   const [manualClientName, setManualClientName] = useState('');
-  const [manualClientPhone, setManualClientPhone] = useState('+7 ');
+  const [manualClientPhone, setManualClientPhone] = useState('');
   const [manualServiceId, setManualServiceId] = useState('');
   const [manualMasterId, setManualMasterId] = useState('');
   const [manualDate, setManualDate] = useState(() => new Date().toISOString().split('T')[0]);
@@ -102,10 +104,27 @@ export function OwnerDashboardPage() {
     loadData();
   }, [slug, tenant]);
 
-  const handleStatusChange = (bookingId: string, newStatus: BookingDetails['status']) => {
+  const handleStatusChange = async (bookingId: string, newStatus: BookingDetails['status']) => {
     setBookings((prev) =>
       prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b))
     );
+    try {
+      await BookingEngine.updateBookingStatus(bookingId, newStatus);
+      loadData();
+    } catch (err) {
+      console.error('Failed to update status', err);
+    }
+  };
+
+  const handleDeleteBooking = async (bookingId: string) => {
+    if (!window.confirm('Вы действительно хотите удалить эту запись? Она будет стёрта из расписания.')) return;
+    try {
+      await BookingEngine.deleteBooking(bookingId, slug);
+      setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+      loadData();
+    } catch (err) {
+      alert((err as Error).message || 'Ошибка удаления записи');
+    }
   };
 
   const handleCreateBlock = async (e: React.FormEvent) => {
@@ -462,30 +481,38 @@ export function OwnerDashboardPage() {
                       </div>
 
                       {/* Action buttons */}
-                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/10 text-xs">
+                      <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/10 text-xs">
                         <button
                           onClick={() => handleStatusChange(b.id, 'IN_PROGRESS')}
-                          className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-colors"
+                          className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-colors cursor-pointer"
                         >
                           Пришёл
                         </button>
                         <button
                           onClick={() => handleStatusChange(b.id, 'COMPLETED')}
-                          className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors"
+                          className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors cursor-pointer"
                         >
                           Завершено
                         </button>
                         <button
                           onClick={() => handleStatusChange(b.id, 'NO_SHOW')}
-                          className="px-2.5 py-1 rounded-lg bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30 transition-colors"
+                          className="px-2.5 py-1 rounded-lg bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30 transition-colors cursor-pointer"
                         >
                           Неявка
                         </button>
                         <button
                           onClick={() => handleStatusChange(b.id, 'CANCELLED')}
-                          className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors"
+                          className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors cursor-pointer"
                         >
                           Отменить
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBooking(b.id)}
+                          className="ml-auto px-2.5 py-1 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/50 transition-colors flex items-center gap-1 cursor-pointer"
+                          title="Удалить запись"
+                        >
+                          <Trash size={12} />
+                          <span>Удалить</span>
                         </button>
                       </div>
                     </Card>
@@ -523,16 +550,47 @@ export function OwnerDashboardPage() {
 
             <div className="space-y-2">
               {filteredBookings.map((b) => (
-                <Card key={b.id} className="p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-semibold text-white">{b.client.name} · {b.client.phone}</div>
-                    <div className="text-[11px] text-neutral-400">
-                      {b.start_at.slice(0, 10)} в {b.start_at.slice(11, 16)} · Мастер: {b.master.name}
+                <Card key={b.id} className="p-3.5 border border-white/10 bg-neutral-900/60 space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="text-xs font-semibold text-white">{b.client.name} · {b.client.phone}</div>
+                      <div className="text-[11px] text-neutral-400">
+                        {b.start_at.slice(0, 10)} в {b.start_at.slice(11, 16)} · Мастер: {b.master.name}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs font-bold text-white">{b.total_price.toLocaleString('ru-RU')} ₽</div>
+                      <Badge
+                        variant={
+                          b.status === 'COMPLETED' ? 'success' : b.status === 'CANCELLED' ? 'destructive' : 'default'
+                        }
+                        className="mt-1 text-[10px]"
+                      >
+                        {b.status}
+                      </Badge>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xs font-bold text-white">{b.total_price} ₽</div>
-                    <span className="text-[10px] text-neutral-400 uppercase">{b.status}</span>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+                    <select
+                      value={b.status}
+                      onChange={(e) => handleStatusChange(b.id, e.target.value as any)}
+                      className="h-7 px-2 rounded-lg bg-black/60 border border-white/10 text-[11px] text-neutral-300 focus:outline-none cursor-pointer"
+                    >
+                      <option value="CONFIRMED">CONFIRMED</option>
+                      <option value="IN_PROGRESS">IN_PROGRESS</option>
+                      <option value="COMPLETED">COMPLETED</option>
+                      <option value="NO_SHOW">NO_SHOW</option>
+                      <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                    <button
+                      onClick={() => handleDeleteBooking(b.id)}
+                      className="ml-auto px-2.5 py-1 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/50 text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Удалить запись"
+                    >
+                      <Trash size={12} />
+                      <span>Удалить</span>
+                    </button>
                   </div>
                 </Card>
               ))}
@@ -750,7 +808,12 @@ export function OwnerDashboardPage() {
           </div>
           <div>
             <label className="text-neutral-400 mb-1 block">Номер телефона</label>
-            <Input value={manualClientPhone} onChange={(e) => setManualClientPhone(e.target.value)} placeholder="+7 ..." required />
+            <Input
+              value={manualClientPhone}
+              onChange={(e) => setManualClientPhone(handlePhoneInput(e.target.value, manualClientPhone))}
+              placeholder="+7 (999) 000-00-00"
+              required
+            />
           </div>
           <div>
             <label className="text-neutral-400 mb-1 block">Услуга</label>

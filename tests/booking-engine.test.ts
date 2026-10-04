@@ -282,4 +282,71 @@ describe('Beauty Booking Engine & Multi-Tenant Core Tests', () => {
     });
     expect(newBook.bookingId).toBeDefined();
   });
+
+  it('9. handlePhoneInput correctly formats and allows natural erasing with Backspace', async () => {
+    const { handlePhoneInput } = await import('../src/lib/phone');
+
+    // Empty input returns empty
+    expect(handlePhoneInput('', '')).toBe('');
+    expect(handlePhoneInput('+7', '+7 ')).toBe('');
+    expect(handlePhoneInput('+', '+7')).toBe('');
+
+    // Typing numbers
+    expect(handlePhoneInput('9', '')).toBe('+7 (9');
+    expect(handlePhoneInput('+7 (999', '+7 (99')).toBe('+7 (999');
+    expect(handlePhoneInput('+7 (999) 123-45-67', '')).toBe('+7 (999) 123-45-67');
+
+    // Erasing with backspace (removing delimiter also removes preceding digit)
+    const prev = '+7 (999) ';
+    const afterDeletingParenthesis = '+7 (999)';
+    const result = handlePhoneInput(afterDeletingParenthesis, prev);
+    expect(result).toBe('+7 (99');
+
+    // Completely clearing returns empty string
+    expect(handlePhoneInput('', '+7 (999) 123-45-67')).toBe('');
+  });
+
+  it('10. deleteBooking completely removes booking and frees slots', async () => {
+    const lumi = getTenantBySlug(lumiSlug)!;
+    const service = lumi.services[0];
+    const master = lumi.masters[0];
+
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 9);
+    targetDate.setHours(14, 0, 0, 0);
+
+    const b = await BookingEngine.createBooking({
+      tenantSlug: lumiSlug,
+      serviceId: service.id,
+      optionIds: [],
+      masterId: master.id,
+      startAt: targetDate.toISOString(),
+      clientName: 'Клиент Для Удаления',
+      clientPhone: '+7 (999) 555-44-33',
+    });
+
+    // Verify it exists in owner bookings
+    let ownerList = await BookingEngine.getOwnerBookings(lumiSlug);
+    expect(ownerList.some((x) => x.id === b.bookingId)).toBe(true);
+
+    // Delete it
+    const delRes = await BookingEngine.deleteBooking(b.bookingId, lumiSlug);
+    expect(delRes.success).toBe(true);
+
+    // Verify it is gone from owner list
+    ownerList = await BookingEngine.getOwnerBookings(lumiSlug);
+    expect(ownerList.some((x) => x.id === b.bookingId)).toBe(false);
+
+    // Slot is now completely free to book again
+    const rebooked = await BookingEngine.createBooking({
+      tenantSlug: lumiSlug,
+      serviceId: service.id,
+      optionIds: [],
+      masterId: master.id,
+      startAt: targetDate.toISOString(),
+      clientName: 'Клиент После Удаления',
+      clientPhone: '+7 (999) 111-22-33',
+    });
+    expect(rebooked.bookingId).toBeDefined();
+  });
 });

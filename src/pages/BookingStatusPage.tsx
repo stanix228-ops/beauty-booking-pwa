@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookingEngine, type BookingDetails, type AvailableSlot } from '../lib/booking-store';
 import { useTenant } from '../context/TenantContext';
 import { downloadIcsFile } from '../lib/ics';
@@ -23,12 +23,14 @@ import {
   DeviceMobile,
   PaperPlaneTilt,
   ChatCircleDots,
+  Trash,
 } from '@phosphor-icons/react';
 import { InstallPromptModal } from '../components/InstallPromptModal';
 
 export function BookingStatusPage() {
   const { slug, token } = useParams<{ slug: string; token: string }>();
   const { tenant } = useTenant();
+  const navigate = useNavigate();
 
   const [booking, setBooking] = useState<BookingDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +47,7 @@ export function BookingStatusPage() {
   // Reschedule state
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     // Detect push support
@@ -136,6 +139,21 @@ export function BookingStatusPage() {
       alert((err as Error).message || 'Ошибка отмены записи');
     } finally {
       setIsCancelling(false);
+    }
+  };
+
+  const handleDeleteBooking = async () => {
+    if (!booking) return;
+    if (!window.confirm('Вы уверены, что хотите удалить эту запись навсегда из базы?')) return;
+
+    setIsDeleting(true);
+    try {
+      await BookingEngine.deleteBooking(booking.id, slug);
+      alert('Запись успешно удалена.');
+      navigate(`/s/${slug}/`);
+    } catch (err) {
+      alert((err as Error).message || 'Ошибка при удалении записи');
+      setIsDeleting(false);
     }
   };
 
@@ -443,28 +461,60 @@ export function BookingStatusPage() {
           )}
         </Card>
 
-        {/* Actions (Reschedule, Cancel) */}
+        {/* Actions (Reschedule, Cancel, Delete) */}
         {canModify && (
-          <div className="grid grid-cols-2 gap-2.5 pt-2">
-            <Button
-              variant="secondary"
-              size="md"
-              className="flex items-center justify-center gap-1.5 cursor-pointer"
-              onClick={() => setIsRescheduleOpen(true)}
-            >
-              <ArrowClockwise size={16} />
-              <span>Перенести</span>
-            </Button>
+          <div className="space-y-2 pt-2">
+            <div className="grid grid-cols-2 gap-2.5">
+              <Button
+                variant="secondary"
+                size="md"
+                className="flex items-center justify-center gap-1.5 cursor-pointer"
+                onClick={() => setIsRescheduleOpen(true)}
+              >
+                <ArrowClockwise size={16} />
+                <span>Перенести</span>
+              </Button>
 
-            <Button
-              variant="destructive"
-              size="md"
-              isLoading={isCancelling}
-              className="cursor-pointer"
-              onClick={handleCancelBooking}
+              <Button
+                variant="destructive"
+                size="md"
+                isLoading={isCancelling}
+                className="cursor-pointer"
+                onClick={handleCancelBooking}
+              >
+                <span>Отменить</span>
+              </Button>
+            </div>
+
+            <button
+              type="button"
+              disabled={isDeleting}
+              onClick={handleDeleteBooking}
+              className="w-full py-2.5 rounded-xl border border-red-500/20 text-red-400 hover:bg-red-950/30 text-xs font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <span>Отменить</span>
-            </Button>
+              <Trash size={14} />
+              <span>{isDeleting ? 'Удаление...' : 'Удалить запись'}</span>
+            </button>
+          </div>
+        )}
+
+        {isCancelled && (
+          <div className="space-y-2 pt-2">
+            <button
+              type="button"
+              disabled={isDeleting}
+              onClick={handleDeleteBooking}
+              className="w-full py-2.5 rounded-xl border border-red-500/30 bg-red-950/20 text-red-300 hover:bg-red-950/40 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <Trash size={14} />
+              <span>{isDeleting ? 'Удаление...' : 'Удалить эту отмененную запись'}</span>
+            </button>
+            <Link
+              to={`/s/${slug}/`}
+              className="w-full h-11 rounded-xl bg-white text-black font-bold text-xs flex items-center justify-center hover:bg-neutral-200 transition-colors shadow-md"
+            >
+              Записаться заново
+            </Link>
           </div>
         )}
       </main>
