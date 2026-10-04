@@ -49,7 +49,7 @@ export function ClientBookingPage() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
         <div className="w-12 h-12 rounded-full border-2 border-neutral-700 border-t-blue-500 animate-spin mb-4" />
-        <p className="text-xs text-neutral-400 font-medium">Загрузка студии...</p>
+        <p className="text-xs text-neutral-400 font-medium">Loading studio...</p>
       </div>
     );
   }
@@ -60,9 +60,9 @@ export function ClientBookingPage() {
         <div className="p-4 rounded-full bg-red-950/40 border border-red-800 mb-3 text-red-400">
           <ShieldCheck size={32} />
         </div>
-        <h2 className="text-lg font-bold text-white mb-1">Студия не найдена</h2>
+        <h2 className="text-lg font-bold text-white mb-1">Studio Not Found</h2>
         <p className="text-xs text-neutral-400 max-w-xs mb-4">
-          {error || 'Проверьте правильность адреса в строке браузера.'}
+          {error || 'Please check the URL in your browser address bar.'}
         </p>
       </div>
     );
@@ -129,9 +129,9 @@ export function ClientBookingPage() {
         return;
       }
 
-      setLookupError('Активных записей по указанному номеру не найдено. Проверьте правильность номера или оформите новую запись.');
+      setLookupError('No active appointments found for this phone number. Please verify the number or book a new appointment.');
     } catch {
-      setLookupError('Ошибка при поиске записи. Попробуйте еще раз.');
+      setLookupError('Error finding your appointment. Please try again.');
     } finally {
       setIsSearchingBooking(false);
     }
@@ -161,20 +161,20 @@ export function ClientBookingPage() {
       <WorksGallery />
 
       <main className="max-w-lg mx-auto w-full px-4 pt-2 space-y-8 flex-1">
-        {/* 4. Booking Section with prominent title "Запись в студию" */}
+        {/* 4. Booking Section with prominent title "Book Appointment" */}
         <section id="booking-section" className="reveal-section space-y-4 pt-4 border-t border-white/10">
           <div className="flex items-center justify-between">
             <div>
               <div className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] px-2.5 py-0.5 rounded-full border border-white/20 bg-white/5 text-neutral-200 mb-1.5">
                 <CalendarPlus size={14} weight="bold" className="text-white" />
-                <span>Онлайн-бронирование</span>
+                <span>Online Booking</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-serif text-white tracking-tight">
-                Запись в студию
+                Book Appointment
               </h2>
             </div>
             <span className="text-xs text-[#8E8E93]">
-              {filteredServices.length} {filteredServices.length === 1 ? 'услуга' : 'услуг'}
+              {filteredServices.length} {filteredServices.length === 1 ? 'service' : 'services'}
             </span>
           </div>
 
@@ -221,24 +221,24 @@ export function ClientBookingPage() {
         {/* 6. Studio Amenities & Atmosphere */}
         <section className="reveal-section p-4 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-3 shadow-lg">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-            О сервисе и комфорте студии
+            Studio Amenities & Atmosphere
           </h3>
           <div className="grid grid-cols-2 gap-3 text-xs text-neutral-200">
             <div className="flex items-center gap-2">
               <Coffee size={16} weight="duotone" className="text-white" />
-              <span>Specialty кофе и чай</span>
+              <span>Specialty Coffee & Matcha Bar</span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck size={16} weight="duotone" className="text-white" />
-              <span>Стерилизация СанПиН</span>
+              <span>Autoclave Sterilization</span>
             </div>
             <div className="flex items-center gap-2">
               <WifiHigh size={16} weight="duotone" className="text-white" />
-              <span>Быстрый Wi-Fi и зарядки</span>
+              <span>Fast Wi-Fi & Charging</span>
             </div>
             <div className="flex items-center gap-2">
               <Heart size={16} weight="duotone" className="text-white" />
-              <span>Гарантия на покрытие 7 дней</span>
+              <span>7-Day Perfection Guarantee</span>
             </div>
           </div>
         </section>
@@ -251,7 +251,7 @@ export function ClientBookingPage() {
         onOpenSlotPicker={() => setIsSlotPickerOpen(true)}
       />
 
-      {/* Glass Bottom Navigation: Главная · Услуги · Моя запись */}
+      {/* Glass Bottom Navigation: Home · Services · My Booking */}
       {!selectedService && (
         <BottomNavigation
           onOpenMyBooking={() => setIsLookupModalOpen(true)}
@@ -291,12 +291,12 @@ export function ClientBookingPage() {
         dateStr={selectedDateStr}
       />
 
-      {/* "Моя запись" Quick Lookup Modal */}
+      {/* "My Appointment" Quick Lookup Modal */}
       {isLookupModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-[#0D0D11] border border-white/15 p-6 rounded-3xl max-w-sm w-full space-y-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between">
-              <h3 className="font-serif font-bold text-lg text-white">Моя запись</h3>
+              <h3 className="font-serif font-bold text-lg text-white">My Appointment</h3>
               <button
                 type="button"
                 onClick={() => {
@@ -318,11 +318,11 @@ export function ClientBookingPage() {
                 return (
                   <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-semibold text-neutral-300">Сохраненная запись</span>
-                      <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Найдена</span>
+                      <span className="text-[11px] font-semibold text-neutral-300">Saved Booking</span>
+                      <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Active</span>
                     </div>
                     <div className="text-xs text-white font-medium">
-                      {saved.serviceName || 'Услуга'} · {saved.clientName}
+                      {saved.serviceName || 'Service'} · {saved.clientName}
                     </div>
                     <div className="flex gap-2 pt-1">
                       <button
@@ -333,7 +333,7 @@ export function ClientBookingPage() {
                         }}
                         className="flex-1 h-9 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-colors flex items-center justify-center cursor-pointer shadow-md"
                       >
-                        Открыть запись →
+                        View Booking →
                       </button>
                       <button
                         type="button"
@@ -344,9 +344,9 @@ export function ClientBookingPage() {
                           setLookupRefreshTick((t) => t + 1);
                         }}
                         className="px-3 h-9 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-950/40 text-xs font-medium transition-colors flex items-center justify-center cursor-pointer"
-                        title="Удалить запись"
+                        title="Delete booking"
                       >
-                        Удалить
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -357,7 +357,7 @@ export function ClientBookingPage() {
             })()}
 
             <p className="text-xs text-[#8E8E93]">
-              Или введите ваш номер телефона для поиска актуального бронирования:
+              Or enter your phone number to find your active reservation:
             </p>
 
             <form onSubmit={handleLookupBooking} className="space-y-3">
@@ -365,7 +365,7 @@ export function ClientBookingPage() {
                 type="tel"
                 value={lookupPhone}
                 onChange={(e) => handleLookupPhoneChange(e.target.value)}
-                placeholder="+7 (999) 000-00-00"
+                placeholder="+1 (310) 555-0199"
                 className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-white text-sm focus:outline-none focus:border-white transition-colors"
                 required
               />
@@ -381,7 +381,7 @@ export function ClientBookingPage() {
                 disabled={isSearchingBooking}
                 className="w-full h-11 rounded-xl bg-white text-black font-bold text-sm cursor-pointer hover:bg-neutral-100 shadow-[0_4px_20px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center gap-2"
               >
-                {isSearchingBooking ? 'Поиск...' : 'Найти запись'}
+                {isSearchingBooking ? 'Searching...' : 'Find Appointment'}
               </button>
             </form>
           </div>

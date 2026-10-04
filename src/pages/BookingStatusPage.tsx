@@ -65,7 +65,7 @@ export function BookingStatusPage() {
     BookingEngine.lookupBooking(slug, token)
       .then((res) => {
         if (!res) {
-          setError('Запись не найдена или срок действия ссылки истек.');
+          setError('Appointment not found or link has expired.');
         } else {
           setBooking(res);
         }
@@ -80,10 +80,10 @@ export function BookingStatusPage() {
   const handleDownloadIcs = () => {
     if (!booking || !tenant) return;
 
-    const primaryService = booking.services[0]?.name || 'Услуга маникюра';
+    const primaryService = booking.services[0]?.name || 'Manicure Service';
     downloadIcsFile(`booking-${booking.booking_number}`, {
       title: `${primaryService} — ${tenant.name}`,
-      description: `Мастер: ${booking.master.name}\nТелефон студии: ${tenant.phone}\n${tenant.instructions || ''}`,
+      description: `Artist: ${booking.master.name}\nStudio Phone: ${tenant.phone}\n${tenant.instructions || ''}`,
       location: tenant.address,
       startAt: booking.start_at,
       endAt: booking.end_at,
@@ -99,44 +99,44 @@ export function BookingStatusPage() {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
         setPushSubscribed(true);
-        setActionMessage('Напоминание включено! Мы отправили вам подтверждающее уведомление.');
+        setActionMessage('Reminder enabled! We sent you a confirmation notification.');
 
         // Instant notification test
         try {
           if ('serviceWorker' in navigator) {
             const reg = await navigator.serviceWorker.ready;
-            reg.showNotification(`Запись подтверждена! 🎉`, {
-              body: `${booking?.services[0]?.name || 'Услуга'} — ${formattedDate} в ${formattedTime}. Ждем вас!`,
+            reg.showNotification(`Appointment Confirmed! 🎉`, {
+              body: `${booking?.services[0]?.name || 'Service'} — ${formattedDate} at ${formattedTime}. See you soon!`,
               icon: tenant?.assets.logo || undefined,
             });
           } else {
-            new Notification(`Запись подтверждена! 🎉`, {
-              body: `${booking?.services[0]?.name || 'Услуга'} — ${formattedDate} в ${formattedTime}. Ждем вас!`,
+            new Notification(`Appointment Confirmed! 🎉`, {
+              body: `${booking?.services[0]?.name || 'Service'} — ${formattedDate} at ${formattedTime}. See you soon!`,
             });
           }
         } catch (e) {
           console.log('Notification trigger note:', e);
         }
       } else {
-        alert('Уведомления не разрешены в браузере. Вы можете добавить запись в календарь телефона одним нажатием.');
+        alert('Browser notifications not allowed. You can still add this visit to your phone calendar with one tap.');
       }
     } catch {
-      alert('Не удалось включить push-уведомления.');
+      alert('Unable to enable push notifications.');
     }
   };
 
   const handleCancelBooking = async () => {
     if (!booking || !token) return;
-    if (!window.confirm('Вы действительно хотите отменить вашу запись?')) return;
+    if (!window.confirm('Are you sure you want to cancel your appointment?')) return;
 
     setIsCancelling(true);
     setActionMessage(null);
     try {
-      await BookingEngine.cancelBooking(booking.id, token, 'Отменено клиентом');
+      await BookingEngine.cancelBooking(booking.id, token, 'Cancelled by client');
       setBooking((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null));
-      setActionMessage('Запись успешно отменена.');
+      setActionMessage('Appointment successfully cancelled.');
     } catch (err) {
-      alert((err as Error).message || 'Ошибка отмены записи');
+      alert((err as Error).message || 'Error cancelling appointment');
     } finally {
       setIsCancelling(false);
     }
@@ -144,15 +144,15 @@ export function BookingStatusPage() {
 
   const handleDeleteBooking = async () => {
     if (!booking) return;
-    if (!window.confirm('Вы уверены, что хотите удалить эту запись навсегда из базы?')) return;
+    if (!window.confirm('Are you sure you want to permanently delete this booking?')) return;
 
     setIsDeleting(true);
     try {
       await BookingEngine.deleteBooking(booking.id, slug);
-      alert('Запись успешно удалена.');
+      alert('Booking successfully deleted.');
       navigate(`/s/${slug}/`);
     } catch (err) {
-      alert((err as Error).message || 'Ошибка при удалении записи');
+      alert((err as Error).message || 'Error deleting booking');
       setIsDeleting(false);
     }
   };
@@ -172,9 +172,9 @@ export function BookingStatusPage() {
             }
           : null
       );
-      setActionMessage('Время записи успешно перенесено!');
+      setActionMessage('Appointment time successfully rescheduled!');
     } catch (err) {
-      alert((err as Error).message || 'Не удалось перенести запись');
+      alert((err as Error).message || 'Unable to reschedule appointment');
     }
   };
 
@@ -182,7 +182,7 @@ export function BookingStatusPage() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
         <div className="w-10 h-10 rounded-full border-2 border-neutral-700 border-t-blue-500 animate-spin mb-3" />
-        <p className="text-xs text-neutral-400">Поиск вашей записи...</p>
+        <p className="text-xs text-neutral-400">Searching for your appointment...</p>
       </div>
     );
   }
@@ -193,13 +193,13 @@ export function BookingStatusPage() {
         <div className="p-4 rounded-full bg-red-950/40 border border-red-800 mb-4 text-red-400">
           <WarningCircle size={40} />
         </div>
-        <h2 className="text-lg font-bold text-white mb-1">Запись не найдена</h2>
+        <h2 className="text-lg font-bold text-white mb-1">Appointment Not Found</h2>
         <p className="text-xs text-neutral-400 max-w-sm mb-6">
-          {error || 'Проверьте ссылку или обратитесь напрямую к администратору студии.'}
+          {error || 'Please check your link or contact the studio directly.'}
         </p>
         <Link to={`/s/${slug}/`}>
           <Button variant="secondary" size="md">
-            Вернуться на главную
+            Back to Home
           </Button>
         </Link>
       </div>
@@ -207,14 +207,16 @@ export function BookingStatusPage() {
   }
 
   const startDate = new Date(booking.start_at);
-  const formattedDate = startDate.toLocaleDateString('ru-RU', {
-    weekday: 'long',
+  const formattedDate = startDate.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
     day: 'numeric',
-    month: 'long',
+    year: 'numeric',
   });
-  const formattedTime = startDate.toLocaleTimeString('ru-RU', {
-    hour: '2-digit',
+  const formattedTime = startDate.toLocaleTimeString('en-US', {
+    hour: 'numeric',
     minute: '2-digit',
+    hour12: true,
   });
 
   const durationMin = Math.round(
@@ -235,7 +237,7 @@ export function BookingStatusPage() {
             className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition-colors"
           >
             <ArrowLeft size={16} />
-            <span>В студию</span>
+            <span>Back to Studio</span>
           </Link>
           <div className="text-xs font-semibold text-neutral-300">
             {booking.booking_number}
@@ -257,7 +259,7 @@ export function BookingStatusPage() {
           </div>
 
           <h1 className="text-xl font-bold text-white mb-1">
-            {isCancelled ? 'Запись отменена' : isCompleted ? 'Процедура завершена' : 'Вы записаны!'}
+            {isCancelled ? 'Appointment Cancelled' : isCompleted ? 'Service Completed' : "You're Booked!"}
           </h1>
 
           <div className="flex justify-center mt-2">
@@ -266,11 +268,11 @@ export function BookingStatusPage() {
                 isCancelled ? 'destructive' : isCompleted ? 'success' : 'accent'
               }
             >
-              {booking.status === 'CONFIRMED' && 'Подтверждено студией'}
-              {booking.status === 'CREATED' && 'Новая бронь'}
-              {booking.status === 'COMPLETED' && 'Завершено'}
-              {booking.status === 'CANCELLED' && 'Отменено'}
-              {booking.status === 'NO_SHOW' && 'Неявка'}
+              {booking.status === 'CONFIRMED' && 'Confirmed by Studio'}
+              {booking.status === 'CREATED' && 'New Booking'}
+              {booking.status === 'COMPLETED' && 'Completed'}
+              {booking.status === 'CANCELLED' && 'Cancelled'}
+              {booking.status === 'NO_SHOW' && 'No-Show'}
             </Badge>
           </div>
         </div>
@@ -291,7 +293,7 @@ export function BookingStatusPage() {
             <div className="flex items-center gap-1.5 text-sm font-bold text-white">
               <Clock size={16} weight="duotone" style={{ color: 'var(--tenant-accent, #4690FF)' }} />
               <span>{formattedTime}</span>
-              <span className="text-xs text-neutral-400 font-normal">({durationMin} мин)</span>
+              <span className="text-xs text-neutral-400 font-normal">({durationMin} min)</span>
             </div>
           </div>
 
@@ -311,7 +313,7 @@ export function BookingStatusPage() {
               )}
             </div>
             <div>
-              <div className="text-xs text-neutral-400">Мастер</div>
+              <div className="text-xs text-neutral-400">Artist</div>
               <div className="text-sm font-semibold text-white">{booking.master.name}</div>
               <div className="text-[11px] text-neutral-500">{booking.master.title}</div>
             </div>
@@ -319,28 +321,28 @@ export function BookingStatusPage() {
 
           {/* Services & Options */}
           <div className="pt-2 border-t border-white/10 space-y-2">
-            <div className="text-xs font-semibold text-neutral-400">Перечень услуг:</div>
+            <div className="text-xs font-semibold text-neutral-400">Selected Services:</div>
             {booking.services.map((s) => (
               <div key={s.id} className="flex justify-between text-xs text-neutral-200 font-medium">
                 <span className="flex items-center gap-1.5">
                   <Scissors size={14} className="text-neutral-400" />
                   {s.name}
                 </span>
-                <span>{s.price.toLocaleString('ru-RU')} ₽</span>
+                <span>${s.price}</span>
               </div>
             ))}
 
             {booking.options.map((opt) => (
               <div key={opt.id} className="flex justify-between text-xs text-neutral-400 pl-5">
                 <span>+ {opt.name}</span>
-                <span>+{opt.price} ₽</span>
+                <span>+${opt.price}</span>
               </div>
             ))}
 
             <div className="pt-2 border-t border-white/10 flex justify-between items-baseline font-bold text-base text-white">
-              <span>Итого к оплате:</span>
+              <span>Total Price:</span>
               <span style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                {booking.total_price.toLocaleString('ru-RU')} ₽
+                ${booking.total_price}
               </span>
             </div>
           </div>
@@ -351,7 +353,7 @@ export function BookingStatusPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-semibold text-white">
               <DeviceMobile size={18} weight="duotone" className="text-white" />
-              <span>Иконка на экран телефона</span>
+              <span>Add to Home Screen</span>
             </div>
             <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-white border border-white/15">
               PWA
@@ -359,7 +361,7 @@ export function BookingStatusPage() {
           </div>
 
           <p className="text-xs text-[#8E8E93] leading-relaxed">
-            Добавьте иконку студии на рабочий стол смартфона — ваша запись, адрес и телефон всегда будут под рукой в один клик.
+            Install the studio app on your device — access your booking, studio address, and appointments anytime with 1 tap.
           </p>
 
           <Button
@@ -369,7 +371,7 @@ export function BookingStatusPage() {
             onClick={() => setIsInstallModalOpen(true)}
           >
             <DeviceMobile size={16} weight="bold" />
-            <span>Добавить иконку на рабочий стол</span>
+            <span>Add Studio Icon to Home Screen</span>
           </Button>
         </div>
 
@@ -378,13 +380,13 @@ export function BookingStatusPage() {
           <div className="p-4 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-3 shadow-lg">
             <div className="flex items-center gap-2 text-sm font-semibold text-white">
               <Bell size={18} weight="duotone" className="text-white" />
-              <span>Напоминание о визите</span>
+              <span>Appointment Reminder</span>
             </div>
 
             {pushSupported ? (
               <div className="space-y-2.5">
                 <p className="text-xs text-[#8E8E93]">
-                  Включите уведомление, и мы напомним вам о процедуре за 24 часа.
+                  Enable alerts to receive a friendly notification 24 hours prior to your appointment.
                 </p>
                 <Button
                   variant={pushSubscribed ? 'secondary' : 'primary'}
@@ -394,12 +396,12 @@ export function BookingStatusPage() {
                   disabled={pushSubscribed}
                 >
                   <Bell size={16} weight="bold" />
-                  <span>{pushSubscribed ? 'Напоминание включено' : 'Включить напоминание за сутки'}</span>
+                  <span>{pushSubscribed ? 'Reminder Enabled' : 'Enable 24h Reminder'}</span>
                 </Button>
               </div>
             ) : (
               <p className="text-xs text-[#8E8E93]">
-                Ваше устройство не поддерживает системные push-уведомления. Добавьте событие в календарь, чтобы сработал встроенный будильник телефона.
+                Push alerts are unavailable on this browser. Add the event to your phone calendar to set automatic reminders.
               </p>
             )}
 
@@ -410,32 +412,32 @@ export function BookingStatusPage() {
               onClick={handleDownloadIcs}
             >
               <CalendarPlus size={16} />
-              <span>Добавить в календарь (.ics)</span>
+              <span>Add to Calendar (.ics)</span>
             </Button>
 
             {/* Quick messengers share */}
             <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/10">
               <a
                 href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(
-                  `Моя запись в ${tenant?.name || 'студию'}: ${booking.services[0]?.name} на ${formattedDate} в ${formattedTime}`
+                  `My appointment at ${tenant?.name || 'studio'}: ${booking.services[0]?.name} on ${formattedDate} at ${formattedTime}`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="h-10 px-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs text-neutral-300 hover:text-white flex items-center justify-center gap-1.5 transition-colors"
               >
                 <PaperPlaneTilt size={16} weight="bold" className="text-[#2AABEE]" />
-                <span>В Telegram</span>
+                <span>Share to Telegram</span>
               </a>
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(
-                  `Моя запись в ${tenant?.name || 'студию'}: ${booking.services[0]?.name} на ${formattedDate} в ${formattedTime}. Ссылка: ${window.location.href}`
+                  `My appointment at ${tenant?.name || 'studio'}: ${booking.services[0]?.name} on ${formattedDate} at ${formattedTime}. Link: ${window.location.href}`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="h-10 px-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs text-neutral-300 hover:text-white flex items-center justify-center gap-1.5 transition-colors"
               >
                 <ChatCircleDots size={16} weight="bold" className="text-[#25D366]" />
-                <span>В WhatsApp</span>
+                <span>Share to WhatsApp</span>
               </a>
             </div>
           </div>
@@ -443,7 +445,7 @@ export function BookingStatusPage() {
 
         {/* Studio Location & Address */}
         <Card className="space-y-3 text-xs text-neutral-300 border border-white/10 bg-neutral-900/40">
-          <div className="font-semibold text-white">Студия: {booking.studio.name}</div>
+          <div className="font-semibold text-white">Studio: {booking.studio.name}</div>
           <div className="flex items-start gap-2 text-neutral-300">
             <MapPin size={16} className="flex-shrink-0 text-neutral-400 mt-0.5" />
             <span>{booking.studio.address}</span>
@@ -472,7 +474,7 @@ export function BookingStatusPage() {
                 onClick={() => setIsRescheduleOpen(true)}
               >
                 <ArrowClockwise size={16} />
-                <span>Перенести</span>
+                <span>Reschedule</span>
               </Button>
 
               <Button
@@ -482,7 +484,7 @@ export function BookingStatusPage() {
                 className="cursor-pointer"
                 onClick={handleCancelBooking}
               >
-                <span>Отменить</span>
+                <span>Cancel</span>
               </Button>
             </div>
 
@@ -493,7 +495,7 @@ export function BookingStatusPage() {
               className="w-full py-2.5 rounded-xl border border-red-500/20 text-red-400 hover:bg-red-950/30 text-xs font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Trash size={14} />
-              <span>{isDeleting ? 'Удаление...' : 'Удалить запись'}</span>
+              <span>{isDeleting ? 'Deleting...' : 'Delete Booking'}</span>
             </button>
           </div>
         )}
@@ -507,13 +509,13 @@ export function BookingStatusPage() {
               className="w-full py-2.5 rounded-xl border border-red-500/30 bg-red-950/20 text-red-300 hover:bg-red-950/40 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Trash size={14} />
-              <span>{isDeleting ? 'Удаление...' : 'Удалить эту отмененную запись'}</span>
+              <span>{isDeleting ? 'Deleting...' : 'Delete Cancelled Booking'}</span>
             </button>
             <Link
               to={`/s/${slug}/`}
               className="w-full h-11 rounded-xl bg-white text-black font-bold text-xs flex items-center justify-center hover:bg-neutral-200 transition-colors shadow-md"
             >
-              Записаться заново
+              Book New Appointment
             </Link>
           </div>
         )}

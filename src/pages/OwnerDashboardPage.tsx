@@ -77,9 +77,9 @@ export function OwnerDashboardPage() {
   // Gallery management state
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => {
     return tenant?.assets?.galleryItems || [
-      { id: '1', imageUrl: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80', caption: 'Французский маникюр', displayOrder: 1 },
-      { id: '2', imageUrl: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80', caption: 'Японский эко-уход', displayOrder: 2 },
-      { id: '3', imageUrl: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80', caption: 'Авторский дизайн', displayOrder: 3 },
+      { id: '1', imageUrl: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80', caption: 'French Couture Manicure', displayOrder: 1 },
+      { id: '2', imageUrl: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80', caption: 'Japanese Eco-Nail Restoration', displayOrder: 2 },
+      { id: '3', imageUrl: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80', caption: 'Signature Haute Nail Art', displayOrder: 3 },
     ];
   });
   const [newWorkUrl, setNewWorkUrl] = useState('');
@@ -100,26 +100,26 @@ export function OwnerDashboardPage() {
       chatId: tgChatId.trim(),
       enabled: tgEnabled,
     });
-    setTgStatusMessage({ text: 'Настройки Telegram бота успешно сохранены!' });
+    setTgStatusMessage({ text: 'Telegram bot settings saved successfully!' });
     setTimeout(() => setTgStatusMessage(null), 4000);
   };
 
   const handleTestTelegram = async () => {
     if (!tgBotToken.trim() || !tgChatId.trim()) {
-      alert('Сначала укажите Токен бота и Chat ID');
+      alert('Please enter both Bot Token and Chat ID first.');
       return;
     }
     setIsTestingTg(true);
     setTgStatusMessage(null);
     try {
-      const res = await testTelegramNotification(tgBotToken, tgChatId, tenant?.name || 'Бьюти студия');
+      const res = await testTelegramNotification(tgBotToken, tgChatId, tenant?.name || 'Studio');
       if (res.success) {
-        setTgStatusMessage({ text: '✅ Тестовое сообщение успешно отправлено в ваш Telegram!' });
+        setTgStatusMessage({ text: '✅ Test notification sent successfully to your Telegram!' });
       } else {
-        setTgStatusMessage({ text: `❌ Ошибка отправки: ${res.error}`, isError: true });
+        setTgStatusMessage({ text: `❌ Send error: ${res.error}`, isError: true });
       }
     } catch (err) {
-      setTgStatusMessage({ text: `❌ Ошибка: ${(err as Error).message}`, isError: true });
+      setTgStatusMessage({ text: `❌ Error: ${(err as Error).message}`, isError: true });
     } finally {
       setIsTestingTg(false);
     }
@@ -157,13 +157,13 @@ export function OwnerDashboardPage() {
   };
 
   const handleDeleteBooking = async (bookingId: string) => {
-    if (!window.confirm('Вы действительно хотите удалить эту запись? Она будет стёрта из расписания.')) return;
+    if (!window.confirm('Are you sure you want to delete this appointment? It will be removed from the studio schedule.')) return;
     try {
       await BookingEngine.deleteBooking(bookingId, slug);
       setBookings((prev) => prev.filter((b) => b.id !== bookingId));
       loadData();
     } catch (err) {
-      alert((err as Error).message || 'Ошибка удаления записи');
+      alert((err as Error).message || 'Failed to delete appointment');
     }
   };
 
@@ -184,11 +184,11 @@ export function OwnerDashboardPage() {
         reason: blockReason,
       });
 
-      alert('Блокировка времени мастера успешно создана! Эти часы исключены из публичной записи.');
+      alert('Artist schedule blocked successfully! These hours are removed from client booking.');
       setIsBlockModalOpen(false);
       loadData();
     } catch (err) {
-      alert((err as Error).message || 'Ошибка блокировки времени');
+      alert((err as Error).message || 'Failed to block time');
     }
   };
 
@@ -204,16 +204,16 @@ export function OwnerDashboardPage() {
         optionIds: [],
         masterId: manualMasterId || null,
         startAt,
-        clientName: manualClientName.trim() || 'Клиент (звонок)',
+        clientName: manualClientName.trim() || 'Walk-in Client',
         clientPhone: manualClientPhone.trim(),
-        notes: 'Создано вручную администратором',
+        notes: 'Manually booked by administrator',
       });
 
-      alert('Запись успешно создана в базе студии!');
+      alert('Appointment created successfully!');
       setIsManualBookingOpen(false);
       loadData();
     } catch (err) {
-      alert((err as Error).message || 'Ошибка создания записи');
+      alert((err as Error).message || 'Failed to create appointment');
     }
   };
 
@@ -229,7 +229,7 @@ export function OwnerDashboardPage() {
     setGalleryItems((prev) => [...prev, newItem]);
     setNewWorkUrl('');
     setNewWorkCaption('');
-    alert('Новая работа добавлена! Остальные фото сохранены.');
+    alert('New portfolio item added successfully!');
   };
 
   const handleUpdateGalleryCaption = (id: string, newCaption: string) => {
@@ -255,7 +255,7 @@ export function OwnerDashboardPage() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
         <div className="w-10 h-10 rounded-full border-2 border-neutral-700 border-t-blue-500 animate-spin mb-3" />
-        <p className="text-xs text-neutral-400">Загрузка панели управления...</p>
+        <p className="text-xs text-neutral-400">Loading studio dashboard...</p>
       </div>
     );
   }
@@ -289,14 +289,14 @@ export function OwnerDashboardPage() {
               to={`/s/${slug}/`}
               className="text-xs text-neutral-400 hover:text-white transition-colors"
             >
-              ← Витрина
+              ← Storefront
             </Link>
             <div className="h-4 w-px bg-white/15" />
             <div>
               <h1 className="text-sm font-bold text-white flex items-center gap-1.5">
                 <span>{tenant.name}</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                  CRM
+                  Dashboard
                 </span>
               </h1>
             </div>
@@ -306,7 +306,7 @@ export function OwnerDashboardPage() {
             <button
               onClick={handleLogout}
               className="p-2 rounded-xl text-neutral-400 hover:text-red-400 hover:bg-neutral-800 transition-colors cursor-pointer"
-              title="Выйти"
+              title="Sign Out"
             >
               <SignOut size={16} />
             </button>
@@ -319,14 +319,14 @@ export function OwnerDashboardPage() {
         <div className="max-w-4xl mx-auto flex items-center gap-2">
           {(
             [
-              { id: 'today', label: 'Сегодня' },
-              { id: 'bookings', label: 'Все записи' },
-              { id: 'stats', label: 'Статистика' },
-              { id: 'telegram', label: 'Telegram Бот 🔔' },
-              { id: 'gallery', label: 'Фото работ' },
-              { id: 'masters', label: 'Мастера' },
-              { id: 'services', label: 'Услуги' },
-              { id: 'settings', label: 'Настройки' },
+              { id: 'today', label: 'Today' },
+              { id: 'bookings', label: 'All Bookings' },
+              { id: 'stats', label: 'Analytics' },
+              { id: 'telegram', label: 'Telegram Bot 🔔' },
+              { id: 'gallery', label: 'Portfolio' },
+              { id: 'masters', label: 'Artists' },
+              { id: 'services', label: 'Services' },
+              { id: 'settings', label: 'Settings' },
             ] as const
           ).map((t) => (
             <button
@@ -355,32 +355,32 @@ export function OwnerDashboardPage() {
             {/* KPI Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
-                <div className="text-[11px] text-neutral-400">Записей сегодня</div>
+                <div className="text-[11px] text-neutral-400">Today's Bookings</div>
                 <div className="text-xl font-bold text-white">{todayBookings.length}</div>
               </Card>
 
               <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
-                <div className="text-[11px] text-neutral-400">Выполнено</div>
+                <div className="text-[11px] text-neutral-400">Completed</div>
                 <div className="text-xl font-bold text-emerald-400">
                   {todayBookings.filter((b) => b.status === 'COMPLETED').length}
                 </div>
               </Card>
 
               <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
-                <div className="text-[11px] text-neutral-400">Отменено</div>
+                <div className="text-[11px] text-neutral-400">Cancelled</div>
                 <div className="text-xl font-bold text-red-400">
                   {todayBookings.filter((b) => b.status === 'CANCELLED').length}
                 </div>
               </Card>
 
               <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
-                <div className="text-[11px] text-neutral-400">Выручка сегодня</div>
+                <div className="text-[11px] text-neutral-400">Today's Revenue</div>
                 <div className="text-xl font-bold text-blue-400" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
+                  $
                   {todayBookings
                     .filter((b) => b.status === 'COMPLETED')
                     .reduce((sum, b) => sum + b.total_price, 0)
-                    .toLocaleString('ru-RU')}{' '}
-                  ₽
+                    .toLocaleString('en-US')}
                 </div>
               </Card>
             </div>
@@ -394,7 +394,7 @@ export function OwnerDashboardPage() {
                 onClick={() => setIsManualBookingOpen(true)}
               >
                 <Plus size={15} />
-                <span>Добавить запись вручную</span>
+                <span>New Manual Booking</span>
               </Button>
 
               <Button
@@ -404,19 +404,19 @@ export function OwnerDashboardPage() {
                 onClick={() => setIsBlockModalOpen(true)}
               >
                 <Prohibit size={15} />
-                <span>Заблокировать время мастера</span>
+                <span>Block Artist Schedule</span>
               </Button>
             </div>
 
             {/* Today Appointments List */}
             <div className="space-y-3">
               <h2 className="text-sm font-semibold text-neutral-300">
-                Расписание на сегодня ({todayBookings.length})
+                Today's Schedule ({todayBookings.length})
               </h2>
 
               {todayBookings.length === 0 ? (
                 <div className="p-8 text-center rounded-2xl bg-neutral-900/40 border border-white/10 text-neutral-500 text-xs">
-                  На сегодня записей нет. Нажмите «Добавить запись вручную» или ждите бронирований с витрины.
+                  No appointments scheduled for today. Click "New Manual Booking" or wait for client online bookings.
                 </div>
               ) : (
                 <div className="space-y-2.5">
@@ -434,7 +434,7 @@ export function OwnerDashboardPage() {
 
                         <div className="text-right">
                           <div className="text-sm font-bold text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                            {b.total_price.toLocaleString('ru-RU')} ₽
+                            ${b.total_price.toLocaleString('en-US')}
                           </div>
                           <Badge
                             variant={
@@ -453,33 +453,33 @@ export function OwnerDashboardPage() {
                           onClick={() => handleStatusChange(b.id, 'IN_PROGRESS')}
                           className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-colors cursor-pointer"
                         >
-                          Пришёл
+                          Arrived
                         </button>
                         <button
                           onClick={() => handleStatusChange(b.id, 'COMPLETED')}
                           className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors cursor-pointer"
                         >
-                          Завершено
+                          Completed
                         </button>
                         <button
                           onClick={() => handleStatusChange(b.id, 'NO_SHOW')}
                           className="px-2.5 py-1 rounded-lg bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30 transition-colors cursor-pointer"
                         >
-                          Неявка
+                          No-Show
                         </button>
                         <button
                           onClick={() => handleStatusChange(b.id, 'CANCELLED')}
                           className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors cursor-pointer"
                         >
-                          Отменить
+                          Cancel
                         </button>
                         <button
                           onClick={() => handleDeleteBooking(b.id)}
                           className="ml-auto px-2.5 py-1 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/50 transition-colors flex items-center gap-1 cursor-pointer"
-                          title="Удалить запись"
+                          title="Delete appointment"
                         >
                           <Trash size={12} />
-                          <span>Удалить</span>
+                          <span>Delete</span>
                         </button>
                       </div>
                     </Card>
@@ -499,7 +499,7 @@ export function OwnerDashboardPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Поиск по имени, телефону или номеру..."
+                  placeholder="Search by client name, phone or booking number..."
                   className="w-full h-10 px-3.5 rounded-xl bg-neutral-900 border border-white/10 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-400"
                 />
               </div>
@@ -508,10 +508,10 @@ export function OwnerDashboardPage() {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="h-10 px-3 rounded-xl bg-neutral-900 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-400 cursor-pointer"
               >
-                <option value="ALL">Все статусы</option>
-                <option value="CONFIRMED">Подтвержденные</option>
-                <option value="COMPLETED">Завершенные</option>
-                <option value="CANCELLED">Отмененные</option>
+                <option value="ALL">All Statuses</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
               </select>
             </div>
 
@@ -522,11 +522,11 @@ export function OwnerDashboardPage() {
                     <div>
                       <div className="text-xs font-semibold text-white">{b.client.name} · {b.client.phone}</div>
                       <div className="text-[11px] text-neutral-400">
-                        {b.start_at.slice(0, 10)} в {b.start_at.slice(11, 16)} · Мастер: {b.master.name}
+                        {b.start_at.slice(0, 10)} at {b.start_at.slice(11, 16)} · Artist: {b.master.name}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs font-bold text-white">{b.total_price.toLocaleString('ru-RU')} ₽</div>
+                      <div className="text-xs font-bold text-white">${b.total_price.toLocaleString('en-US')}</div>
                       <Badge
                         variant={
                           b.status === 'COMPLETED' ? 'success' : b.status === 'CANCELLED' ? 'destructive' : 'default'
@@ -553,10 +553,10 @@ export function OwnerDashboardPage() {
                     <button
                       onClick={() => handleDeleteBooking(b.id)}
                       className="ml-auto px-2.5 py-1 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/50 text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
-                      title="Удалить запись"
+                      title="Delete appointment"
                     >
                       <Trash size={12} />
-                      <span>Удалить</span>
+                      <span>Delete</span>
                     </button>
                   </div>
                 </Card>
@@ -569,34 +569,34 @@ export function OwnerDashboardPage() {
         {activeTab === 'stats' && (
           <div className="space-y-4">
             <h2 className="text-sm font-semibold text-neutral-200">
-              Сводная бизнес-аналитика студии
+              Studio Business Intelligence
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
-                <div className="text-xs text-neutral-400">Всего клиентов</div>
+                <div className="text-xs text-neutral-400">Total Unique Clients</div>
                 <div className="text-2xl font-bold text-white">{totalClientsCount}</div>
               </Card>
 
               <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
-                <div className="text-xs text-neutral-400">Всего записей</div>
+                <div className="text-xs text-neutral-400">Total Bookings</div>
                 <div className="text-2xl font-bold text-white">{bookings.length}</div>
               </Card>
 
               <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
-                <div className="text-xs text-neutral-400">Завершено процедур</div>
+                <div className="text-xs text-neutral-400">Completed Services</div>
                 <div className="text-2xl font-bold text-emerald-400">{completedCount}</div>
               </Card>
 
               <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1">
-                <div className="text-xs text-neutral-400">Отменено</div>
+                <div className="text-xs text-neutral-400">Cancelled</div>
                 <div className="text-2xl font-bold text-red-400">{cancelledCount}</div>
               </Card>
 
               <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1 sm:col-span-2">
-                <div className="text-xs text-neutral-400">Реально полученные деньги (оплаты)</div>
+                <div className="text-xs text-neutral-400">Total Realized Revenue</div>
                 <div className="text-2xl font-bold text-blue-400" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                  {actualRevenue.toLocaleString('ru-RU')} ₽
+                  ${actualRevenue.toLocaleString('en-US')}
                 </div>
               </Card>
             </div>
@@ -609,10 +609,10 @@ export function OwnerDashboardPage() {
             <div>
               <h2 className="text-sm font-semibold text-neutral-200 flex items-center gap-2">
                 <PaperPlaneTilt size={18} weight="bold" className="text-[#2AABEE]" />
-                <span>Уведомления в Telegram о новых записях</span>
+                <span>Telegram Instant Booking Notifications</span>
               </h2>
               <p className="text-xs text-neutral-400 mt-1">
-                Подключите Telegram бота студии, чтобы мгновенно получать полную информацию о каждой брони прямо в мессенджер.
+                Connect the studio Telegram bot to receive real-time reservation alerts with full client details directly on your phone.
               </p>
             </div>
 
@@ -631,9 +631,9 @@ export function OwnerDashboardPage() {
               <form onSubmit={handleSaveTelegram} className="space-y-4 text-xs">
                 <div className="flex items-center justify-between p-3.5 rounded-xl bg-black border border-white/10">
                   <div>
-                    <div className="font-semibold text-white">Включить оповещения в Telegram</div>
+                    <div className="font-semibold text-white">Enable Telegram Notifications</div>
                     <div className="text-[11px] text-neutral-400 mt-0.5">
-                      Отправлять сообщения при каждом подтверждении записи клиентом
+                      Send message alerts every time a client confirms an appointment
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -649,35 +649,35 @@ export function OwnerDashboardPage() {
 
                 <div>
                   <label className="text-neutral-300 font-medium mb-1 block">
-                    HTTP API Токен бота (от @BotFather) <span className="text-red-400">*</span>
+                    Bot HTTP API Token (from @BotFather) <span className="text-red-400">*</span>
                   </label>
                   <Input
                     type="password"
                     value={tgBotToken}
                     onChange={(e) => setTgBotToken(e.target.value)}
-                    placeholder="Например: 1234567890:AAH_XxXxXxXxXxXxXxXxXxXxXxXx"
+                    placeholder="e.g. 1234567890:AAH_XxXxXxXxXxXxXxXxXxXxXxXx"
                     required={tgEnabled}
                     className="font-mono text-xs"
                   />
                   <p className="text-[11px] text-neutral-500 mt-1">
-                    Получается бесплатно за 1 минуту в Telegram у бота @BotFather
+                    Free and takes 1 minute to create in Telegram via @BotFather
                   </p>
                 </div>
 
                 <div>
                   <label className="text-neutral-300 font-medium mb-1 block">
-                    Ваш Chat ID (куда отправлять уведомления) <span className="text-red-400">*</span>
+                    Your Chat ID (where alerts are sent) <span className="text-red-400">*</span>
                   </label>
                   <Input
                     type="text"
                     value={tgChatId}
                     onChange={(e) => setTgChatId(e.target.value)}
-                    placeholder="Например: 987654321"
+                    placeholder="e.g. 987654321"
                     required={tgEnabled}
                     className="font-mono text-xs"
                   />
                   <p className="text-[11px] text-neutral-500 mt-1">
-                    Узнать свой Chat ID можно у бота @userinfobot в Telegram
+                    Check your Chat ID instantly by messaging @userinfobot in Telegram
                   </p>
                 </div>
 
@@ -688,7 +688,7 @@ export function OwnerDashboardPage() {
                     size="md"
                     className="cursor-pointer font-bold bg-white text-black hover:bg-neutral-200"
                   >
-                    Сохранить настройки
+                    Save Settings
                   </Button>
 
                   <Button
@@ -700,7 +700,7 @@ export function OwnerDashboardPage() {
                     className="cursor-pointer flex items-center justify-center gap-1.5"
                   >
                     <Bell size={15} />
-                    <span>Отправить тестовое уведомление</span>
+                    <span>Send Test Notification</span>
                   </Button>
                 </div>
               </form>
@@ -709,26 +709,26 @@ export function OwnerDashboardPage() {
             {/* Step-by-Step Instructions */}
             <Card className="p-4 sm:p-5 border border-white/10 bg-neutral-900/40 space-y-3 text-xs">
               <h3 className="font-bold text-white text-sm">
-                Инструкция по настройке за 2 минуты:
+                2-Minute Quick Setup Guide:
               </h3>
               <ol className="list-decimal list-inside space-y-2 text-neutral-300 leading-relaxed">
                 <li>
-                  Откройте Telegram и перейдите к боту <a href="https://t.me/BotFather" target="_blank" rel="noreferrer" className="text-blue-400 underline underline-offset-2">@BotFather</a>.
+                  Open Telegram and search for <a href="https://t.me/BotFather" target="_blank" rel="noreferrer" className="text-blue-400 underline underline-offset-2">@BotFather</a>.
                 </li>
                 <li>
-                  Отправьте команду <code className="bg-black px-1.5 py-0.5 rounded border border-white/10 text-white font-mono">/newbot</code>, введите имя для бота студии и логин (например, <code className="text-white font-mono">lumi_booking_bot</code>).
+                  Send the command <code className="bg-black px-1.5 py-0.5 rounded border border-white/10 text-white font-mono">/newbot</code>, then specify a name and username for your studio bot (e.g., <code className="text-white font-mono">lumi_booking_bot</code>).
                 </li>
                 <li>
-                  Скопируйте выданный <b>API Token</b> и вставьте в поле выше.
+                  Copy the provided <b>API Token</b> and paste it into the field above.
                 </li>
                 <li>
-                  Найдите вашего созданного бота в Telegram и обязательно нажмите <b>/start</b>, чтобы разрешить ему отправлять вам сообщения.
+                  Open your newly created bot in Telegram and press <b>/start</b> to enable messaging.
                 </li>
                 <li>
-                  Откройте бота <a href="https://t.me/userinfobot" target="_blank" rel="noreferrer" className="text-blue-400 underline underline-offset-2">@userinfobot</a> — он пришлет ваш числовой <b>Id</b>. Вставьте его в поле Chat ID.
+                  Open <a href="https://t.me/userinfobot" target="_blank" rel="noreferrer" className="text-blue-400 underline underline-offset-2">@userinfobot</a> in Telegram — it will reply with your numeric <b>Id</b>. Paste it into the Chat ID field.
                 </li>
                 <li>
-                  Нажмите <b>«Сохранить настройки»</b> и проверьте кнопкой <b>«Отправить тестовое уведомление»</b>!
+                  Click <b>"Save Settings"</b> and verify with <b>"Send Test Notification"</b>!
                 </li>
               </ol>
             </Card>
@@ -740,30 +740,30 @@ export function OwnerDashboardPage() {
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-neutral-200">
-                Фотографии работ ({galleryItems.length})
+                Portfolio Showcase ({galleryItems.length})
               </h2>
             </div>
 
             {/* 1. Add new card */}
             <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-3">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                1. Добавить новую карточку работы
+                1. Add New Portfolio Item
               </h3>
               <form onSubmit={handleAddGalleryCard} className="space-y-3">
                 <Input
                   value={newWorkUrl}
                   onChange={(e) => setNewWorkUrl(e.target.value)}
-                  placeholder="URL фотографии (Supabase Storage / Unsplash)"
+                  placeholder="Photo URL (Supabase Storage / Unsplash)"
                   required
                 />
                 <Input
                   value={newWorkCaption}
                   onChange={(e) => setNewWorkCaption(e.target.value)}
-                  placeholder="Подпись под фото (например, Градиент и френч)"
+                  placeholder="Photo Caption (e.g. Ombré Gel Sculpture)"
                   required
                 />
                 <Button type="submit" variant="primary" size="sm" className="cursor-pointer">
-                  Добавить работу
+                  Add Portfolio Item
                 </Button>
               </form>
             </Card>
@@ -777,7 +777,7 @@ export function OwnerDashboardPage() {
                   </div>
                   <div className="space-y-2">
                     <div>
-                      <label className="text-[10px] text-neutral-400">Изменить подпись:</label>
+                      <label className="text-[10px] text-neutral-400">Edit Caption:</label>
                       <input
                         type="text"
                         value={item.caption}
@@ -786,7 +786,7 @@ export function OwnerDashboardPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-[10px] text-neutral-400">Заменить фото (URL):</label>
+                      <label className="text-[10px] text-neutral-400">Replace Photo (URL):</label>
                       <input
                         type="text"
                         value={item.imageUrl}
@@ -805,7 +805,7 @@ export function OwnerDashboardPage() {
         {activeTab === 'masters' && (
           <div className="space-y-4">
             <h2 className="text-sm font-semibold text-neutral-200">
-              Команда мастеров ({tenant.masters.length})
+              Artist Team ({tenant.masters.length})
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {tenant.masters.map((m) => (
@@ -819,8 +819,8 @@ export function OwnerDashboardPage() {
                   </div>
                   <p className="text-xs text-neutral-300 leading-relaxed">{m.bio}</p>
                   <div className="text-[11px] text-neutral-400 pt-2 border-t border-white/10 flex justify-between">
-                    <span>Рейтинг: {m.rating} ★</span>
-                    <span>Отзывов: {m.reviewsCount}</span>
+                    <span>Rating: {m.rating} ★</span>
+                    <span>Reviews: {m.reviewsCount}</span>
                   </div>
                 </Card>
               ))}
@@ -832,17 +832,17 @@ export function OwnerDashboardPage() {
         {activeTab === 'services' && (
           <div className="space-y-4">
             <h2 className="text-sm font-semibold text-neutral-200">
-              Услуги и прайс-лист ({tenant.services.length})
+              Services & Pricing ({tenant.services.length})
             </h2>
             <div className="space-y-2.5">
               {tenant.services.map((s) => (
                 <Card key={s.id} className="p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between">
                   <div>
                     <h4 className="text-xs sm:text-sm font-bold text-white">{s.name}</h4>
-                    <p className="text-[11px] text-neutral-400">{s.durationMin} мин · Буфер {s.bufferAfterMin} мин</p>
+                    <p className="text-[11px] text-neutral-400">{s.durationMin} min · Buffer {s.bufferAfterMin} min</p>
                   </div>
                   <div className="text-sm font-bold text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                    {s.price} ₽
+                    ${s.price}
                   </div>
                 </Card>
               ))}
@@ -854,20 +854,20 @@ export function OwnerDashboardPage() {
         {activeTab === 'settings' && (
           <div className="space-y-5">
             <h2 className="text-sm font-semibold text-neutral-200">
-              Параметры и брендинг студии
+              Studio Parameters & Branding
             </h2>
 
             <Card className="p-4 space-y-3 text-xs text-neutral-300 border border-white/10 bg-neutral-900/60">
               <div>
-                <div className="text-neutral-500">Название студии:</div>
+                <div className="text-neutral-500">Studio Name:</div>
                 <div className="font-semibold text-white text-sm">{tenant.name}</div>
               </div>
               <div>
-                <div className="text-neutral-500">Адрес и телефон:</div>
+                <div className="text-neutral-500">Address & Phone:</div>
                 <div>{tenant.address} • {tenant.phone}</div>
               </div>
               <div>
-                <div className="text-neutral-500">Акцентный цвет:</div>
+                <div className="text-neutral-500">Brand Accent Color:</div>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="w-5 h-5 rounded-full border border-white/20" style={{ backgroundColor: tenant.theme.accentColor }} />
                   <span className="font-mono">{tenant.theme.accentColor}</span>
@@ -878,12 +878,12 @@ export function OwnerDashboardPage() {
             {/* Info Cards Settings */}
             <Card className="p-4 space-y-3 border border-white/10 bg-neutral-900/60">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                Информационные карточки на главной
+                Storefront Highlights & Info Cards
               </h3>
               <div className="space-y-2.5">
                 {(tenant.infoCards || []).map((c, i) => (
                   <div key={c.id || i} className="p-3 rounded-xl bg-black border border-white/10 text-xs space-y-1">
-                    <div className="font-semibold text-white">Карточка {i + 1}: {c.title}</div>
+                    <div className="font-semibold text-white">Highlight {i + 1}: {c.title}</div>
                     <div className="text-neutral-400">{c.description}</div>
                   </div>
                 ))}
@@ -897,45 +897,45 @@ export function OwnerDashboardPage() {
       <BottomSheet
         open={isManualBookingOpen}
         onOpenChange={setIsManualBookingOpen}
-        title="Добавить запись вручную"
-        description="Внесите клиента, обратившегося по звонку или лично"
+        title="New Manual Booking"
+        description="Add a walk-in client or an appointment scheduled via phone"
       >
         <form onSubmit={handleManualBookingSubmit} className="space-y-3 text-xs">
           <div>
-            <label className="text-neutral-400 mb-1 block">Имя клиента</label>
-            <Input value={manualClientName} onChange={(e) => setManualClientName(e.target.value)} placeholder="Имя" required />
+            <label className="text-neutral-400 mb-1 block">Client Full Name</label>
+            <Input value={manualClientName} onChange={(e) => setManualClientName(e.target.value)} placeholder="e.g. Sarah Jenkins" required />
           </div>
           <div>
-            <label className="text-neutral-400 mb-1 block">Номер телефона</label>
+            <label className="text-neutral-400 mb-1 block">Phone Number</label>
             <Input
               value={manualClientPhone}
               onChange={(e) => setManualClientPhone(handlePhoneInput(e.target.value, manualClientPhone))}
-              placeholder="+7 (999) 000-00-00"
+              placeholder="+1 (310) 555-0199"
               required
             />
           </div>
           <div>
-            <label className="text-neutral-400 mb-1 block">Услуга</label>
+            <label className="text-neutral-400 mb-1 block">Service</label>
             <select
               value={manualServiceId}
               onChange={(e) => setManualServiceId(e.target.value)}
               className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-white"
               required
             >
-              <option value="">-- Выберите услугу --</option>
+              <option value="">-- Select Service --</option>
               {tenant.services.map((s) => (
-                <option key={s.id} value={s.id}>{s.name} ({s.price} ₽)</option>
+                <option key={s.id} value={s.id}>{s.name} (${s.price})</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="text-neutral-400 mb-1 block">Мастер</label>
+            <label className="text-neutral-400 mb-1 block">Artist</label>
             <select
               value={manualMasterId}
               onChange={(e) => setManualMasterId(e.target.value)}
               className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-white"
             >
-              <option value="">Любой свободный мастер</option>
+              <option value="">Any Available Artist</option>
               {tenant.masters.map((m) => (
                 <option key={m.id} value={m.id}>{m.name}</option>
               ))}
@@ -943,16 +943,16 @@ export function OwnerDashboardPage() {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-neutral-400 mb-1 block">Дата</label>
+              <label className="text-neutral-400 mb-1 block">Date</label>
               <Input type="date" value={manualDate} onChange={(e) => setManualDate(e.target.value)} required />
             </div>
             <div>
-              <label className="text-neutral-400 mb-1 block">Время</label>
+              <label className="text-neutral-400 mb-1 block">Time</label>
               <Input type="time" value={manualTime} onChange={(e) => setManualTime(e.target.value)} required />
             </div>
           </div>
           <Button type="submit" variant="primary" size="lg" className="w-full cursor-pointer mt-2">
-            Зафиксировать запись
+            Confirm Appointment
           </Button>
         </form>
       </BottomSheet>
@@ -961,13 +961,13 @@ export function OwnerDashboardPage() {
       <BottomSheet
         open={isBlockModalOpen}
         onOpenChange={setIsBlockModalOpen}
-        title="Блокировка времени мастера"
-        description="Исключите временной интервал из публичной онлайн-записи"
+        title="Block Artist Schedule"
+        description="Reserve time intervals to prevent online client bookings"
       >
         <form onSubmit={handleCreateBlock} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-neutral-400 mb-1.5">
-              Выберите мастера
+              Select Artist
             </label>
             <select
               value={blockMasterId}
@@ -975,7 +975,7 @@ export function OwnerDashboardPage() {
               className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-xs text-white focus:outline-none"
               required
             >
-              <option value="">-- Выберите мастера --</option>
+              <option value="">-- Select Artist --</option>
               {tenant.masters.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name} ({m.title})
@@ -986,14 +986,14 @@ export function OwnerDashboardPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label="Время начала"
+              label="Start Time"
               type="time"
               value={blockStartTime}
               onChange={(e) => setBlockStartTime(e.target.value)}
               required
             />
             <Input
-              label="Время окончания"
+              label="End Time"
               type="time"
               value={blockEndTime}
               onChange={(e) => setBlockEndTime(e.target.value)}
@@ -1003,21 +1003,21 @@ export function OwnerDashboardPage() {
 
           <div>
             <label className="block text-xs font-medium text-neutral-400 mb-1.5">
-              Причина блокировки
+              Block Reason
             </label>
             <select
               value={blockReason}
               onChange={(e) => setBlockReason(e.target.value as any)}
               className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-xs text-white focus:outline-none"
             >
-              <option value="BREAK">Обеденный перерыв</option>
-              <option value="VACATION">Отпуск / Отгул</option>
-              <option value="MAINTENANCE">Техническое обслуживание / Обучение</option>
+              <option value="BREAK">Meal Break / Personal</option>
+              <option value="VACATION">Vacation / Day Off</option>
+              <option value="MAINTENANCE">Training / Masterclass / Admin</option>
             </select>
           </div>
 
           <Button type="submit" variant="primary" size="lg" className="w-full cursor-pointer">
-            Создать блокировку
+            Block Time Interval
           </Button>
         </form>
       </BottomSheet>

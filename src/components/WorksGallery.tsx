@@ -11,7 +11,7 @@ export const WorksGallery: React.FC = () => {
     : (tenant.assets?.gallery || []).map((url, idx) => ({
         id: `legacy-${idx}`,
         imageUrl: url,
-        caption: `Работа студии #${idx + 1}`,
+        caption: `Studio Look #${idx + 1}`,
         displayOrder: idx,
       }));
 
@@ -23,11 +23,11 @@ export const WorksGallery: React.FC = () => {
         <div className="flex items-center gap-2">
           <Camera size={20} weight="bold" className="text-white" />
           <h3 className="text-lg font-serif font-bold text-white tracking-tight">
-            Примеры работ студии
+            Studio Portfolio
           </h3>
         </div>
         <span className="text-xs text-[#8E8E93]">
-          {items.length} фото
+          {items.length} looks
         </span>
       </div>
 

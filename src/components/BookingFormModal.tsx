@@ -45,12 +45,12 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const totalPrice = service.price + totalOptionsPrice;
   const totalDuration = service.durationMin + totalOptionsDuration;
 
-  // Format date readable in Russian
+  // Format date readable in US English
   const dateObj = new Date(`${dateStr}T${slot.time}:00`);
-  const formattedDate = dateObj.toLocaleDateString('ru-RU', {
-    weekday: 'long',
+  const formattedDate = dateObj.toLocaleDateString('en-US', {
+    weekday: 'short',
     day: 'numeric',
-    month: 'long',
+    month: 'short',
   });
 
   const handlePhoneChange = (val: string) => {
@@ -77,11 +77,11 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
     const errMap: { name?: string; phone?: string } = {};
 
     if (!trimmedName || trimmedName.length < 2) {
-      errMap.name = 'Пожалуйста, введите ваше имя (минимум 2 буквы)';
+      errMap.name = 'Please enter your name (at least 2 letters)';
     }
 
     if (!cleanDigits || cleanDigits.length < 10) {
-      errMap.phone = 'Пожалуйста, введите полный номер телефона (10 цифр)';
+      errMap.phone = 'Please enter a valid 10-digit phone number';
     }
 
     if (Object.keys(errMap).length > 0) {
@@ -111,7 +111,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
 
       const accessToken = res.accessToken || (res as any).token;
 
-      // 1. Save token for "Моя запись" in bottom navigation
+      // 1. Save token for "My Booking" in bottom navigation
       localStorage.setItem(`beauty_last_booking_token_${tenant.slug}`, accessToken);
       localStorage.setItem(`beauty_last_booking_phone_${tenant.slug}`, phone.trim());
 
@@ -141,7 +141,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
       // Navigate to direct booking status screen with crypto access token
       navigate(`/s/${tenant.slug}/b/${accessToken}`);
     } catch (err) {
-      setError((err as Error).message || 'Не удалось создать запись. Пожалуйста, попробуйте снова.');
+      setError((err as Error).message || 'Failed to create appointment. Please try again.');
       setIsSubmitting(false);
     }
   };
@@ -150,8 +150,8 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
-      title="Подтверждение записи"
-      description="Проверьте детали визита и укажите ваши данные"
+      title="Confirm Appointment"
+      description="Review your visit details and enter contact information"
     >
       <form onSubmit={handleSubmit} data-vaul-no-drag className="space-y-4">
         {/* Appointment Summary Card */}
@@ -160,24 +160,24 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
             <div>
               <h4 className="font-semibold text-sm text-white">{service.name}</h4>
               <p className="text-xs text-[#8E8E93] mt-0.5">
-                {master ? `Мастер: ${master.name}` : 'Любой свободный мастер'}
+                {master ? `Artist: ${master.name}` : 'Any Available Artist'}
               </p>
             </div>
             <div className="text-right">
               <span className="font-bold text-sm text-white">
-                {totalPrice.toLocaleString('ru-RU')} ₽
+                ${totalPrice}
               </span>
-              <p className="text-[11px] text-[#8E8E93] mt-0.5">{totalDuration} мин</p>
+              <p className="text-[11px] text-[#8E8E93] mt-0.5">{totalDuration} min</p>
             </div>
           </div>
 
           {options.length > 0 && (
             <div className="pt-2 border-t border-white/10 space-y-1">
-              <span className="text-[11px] text-[#8E8E93] font-medium">Дополнительно:</span>
+              <span className="text-[11px] text-[#8E8E93] font-medium">Add-ons:</span>
               {options.map((opt) => (
                 <div key={opt.id} className="flex justify-between text-xs text-neutral-300">
                   <span>+ {opt.name}</span>
-                  <span>+{opt.price} ₽</span>
+                  <span>+${opt.price}</span>
                 </div>
               ))}
             </div>
@@ -199,12 +199,12 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
         <div className="space-y-3">
           <div>
             <label className="block text-xs font-medium text-neutral-300 mb-1">
-              Ваше имя <span className="text-red-400">*</span>
+              Full Name <span className="text-red-400">*</span>
             </label>
             <Input
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
-              placeholder="Как к вам обращаться"
+              placeholder="e.g. Sarah Jenkins"
               required
               autoComplete="name"
               autoCapitalize="words"
@@ -217,12 +217,12 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
 
           <div>
             <label className="block text-xs font-medium text-neutral-300 mb-1">
-              Номер телефона <span className="text-red-400">*</span>
+              Phone Number <span className="text-red-400">*</span>
             </label>
             <Input
               value={phone}
               onChange={(e) => handlePhoneChange(e.target.value)}
-              placeholder="+7 (999) 000-00-00"
+              placeholder="+1 (310) 555-0199"
               required
               type="tel"
               inputMode="tel"
@@ -233,18 +233,18 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
               <p className="text-[11px] text-red-400 mt-1">{fieldErrors.phone}</p>
             )}
             <p className="text-[11px] text-neutral-500 mt-1">
-              Без паролей и спама. На этот номер придет ссылка на управление записью.
+              No passwords required. Your private link to manage your booking will be sent here.
             </p>
           </div>
 
           <div>
             <label className="block text-xs font-medium text-neutral-300 mb-1">
-              Пожелания или комментарий к записи
+              Special Requests or Notes (optional)
             </label>
             <Input
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Например: желаемый дизайн, аллергия, снятие"
+              placeholder="e.g. custom art, gel removal, allergies"
             />
           </div>
         </div>
@@ -261,12 +261,12 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
             disabled={isSubmitting}
             className="w-full h-12 text-sm font-bold rounded-xl cursor-pointer active:scale-98 transition-all bg-white text-black hover:bg-neutral-100 shadow-[0_4px_25px_rgba(255,255,255,0.25)]"
           >
-            {isSubmitting ? 'Бронирование...' : `Подтвердить запись за ${totalPrice.toLocaleString('ru-RU')} ₽`}
+            {isSubmitting ? 'Securing slot...' : `Confirm Booking ($${totalPrice})`}
           </Button>
 
           <p className="text-[10px] text-neutral-400 text-center mt-2.5 flex items-center justify-center gap-1">
             <ShieldCheck size={14} className="text-white" />
-            <span>Атомарная фиксация слота · Без двойных бронирований</span>
+            <span>Guaranteed atomic slot lock · No double bookings</span>
           </p>
         </div>
       </form>

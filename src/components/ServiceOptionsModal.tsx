@@ -29,8 +29,8 @@ export function ServiceOptionsModal({
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
-      title="Дополнительные опции"
-      description={`Настройте услугу «${service.name}»`}
+      title="Add-on Options"
+      description={`Customize «${service.name}»`}
     >
       <div className="space-y-3 mt-1">
         {availableOptions.map((opt) => {
@@ -57,12 +57,12 @@ export function ServiceOptionsModal({
                 )}
                 <div className="flex items-center gap-3 text-xs text-[#8E8E93]">
                   <span className="font-semibold text-white">
-                    +{opt.price.toLocaleString('ru-RU')} ₽
+                    +${opt.price}
                   </span>
                   {opt.durationMin > 0 && (
                     <span className="flex items-center gap-1 text-[11px] text-[#8E8E93]">
                       <Clock className="w-3 h-3 text-neutral-400" />
-                      +{opt.durationMin} мин
+                      +{opt.durationMin} min
                     </span>
                   )}
                 </div>
@@ -92,7 +92,7 @@ export function ServiceOptionsModal({
             else onOpenChange(false);
           }}
         >
-          Готово ({selectedOptions.length})
+          Done ({selectedOptions.length})
         </button>
       </div>
     </BottomSheet>

@@ -45,7 +45,7 @@ export async function sendTelegramMessage(
   text: string
 ): Promise<{ success: boolean; error?: string }> {
   if (!botToken.trim() || !chatId.trim()) {
-    return { success: false, error: 'Укажите токен бота и Chat ID' };
+    return { success: false, error: 'Please specify Bot Token and Chat ID' };
   }
 
   try {
@@ -63,13 +63,13 @@ export async function sendTelegramMessage(
 
     const data = await response.json();
     if (!response.ok || !data.ok) {
-      return { success: false, error: data.description || 'Не удалось отправить сообщение' };
+      return { success: false, error: data.description || 'Failed to send message' };
     }
     return { success: true };
   } catch (err) {
     return {
       success: false,
-      error: (err as Error).message || 'Сетевая ошибка при обращении к Telegram API',
+      error: (err as Error).message || 'Network error connecting to Telegram API',
     };
   }
 }
@@ -80,9 +80,9 @@ export async function testTelegramNotification(
   studioName: string
 ): Promise<{ success: boolean; error?: string }> {
   const text =
-    `🎉 <b>Тестовое уведомление из студии ${studioName}!</b>\n\n` +
-    `Бот успешно подключен к CRM онлайн-записи.\n` +
-    `Теперь при каждом новом бронировании клиентом вам мгновенно будет приходить детальное сообщение со временем, номером телефона и выбранной процедурой.`;
+    `🎉 <b>Test Notification from ${studioName}!</b>\n\n` +
+    `Your Telegram bot is successfully connected to the Online Booking CRM.\n` +
+    `Whenever a client books an appointment, you will receive an instant notification with their visit time, phone number, and selected service.`;
   return sendTelegramMessage(botToken, chatId, text);
 }
 
@@ -104,26 +104,28 @@ export async function notifyNewBookingTelegram(
   if (!config.enabled || !config.botToken || !config.chatId) return;
 
   const startDate = new Date(booking.startAt);
-  const formattedDate = startDate.toLocaleDateString('ru-RU', {
+  const formattedDate = startDate.toLocaleDateString('en-US', {
     weekday: 'short',
     day: 'numeric',
-    month: 'long',
+    month: 'short',
+    year: 'numeric',
   });
-  const formattedTime = startDate.toLocaleTimeString('ru-RU', {
-    hour: '2-digit',
+  const formattedTime = startDate.toLocaleTimeString('en-US', {
+    hour: 'numeric',
     minute: '2-digit',
+    hour12: true,
   });
 
   const text =
-    `🔔 <b>Новая запись в ${studioName}!</b>\n` +
-    `🔖 Номер брони: <code>#${booking.bookingNumber}</code>\n\n` +
-    `👤 <b>Клиент:</b> ${booking.clientName}\n` +
-    `📞 <b>Телефон:</b> ${booking.clientPhone}\n` +
-    `💅 <b>Услуга:</b> ${booking.serviceName}\n` +
-    `👩‍🎨 <b>Мастер:</b> ${booking.masterName || 'Любой свободный'}\n` +
-    `📅 <b>Дата и время:</b> ${formattedDate} в ${formattedTime}\n` +
-    `💰 <b>Стоимость:</b> ${booking.price.toLocaleString('ru-RU')} ₽\n` +
-    (booking.notes ? `💬 <b>Пожелания:</b> <i>${booking.notes}</i>\n` : '');
+    `🔔 <b>New Appointment at ${studioName}!</b>\n` +
+    `🔖 Confirmation #: <code>#${booking.bookingNumber}</code>\n\n` +
+    `👤 <b>Client:</b> ${booking.clientName}\n` +
+    `📞 <b>Phone:</b> ${booking.clientPhone}\n` +
+    `💅 <b>Service:</b> ${booking.serviceName}\n` +
+    `👩‍🎨 <b>Artist:</b> ${booking.masterName || 'Any Available'}\n` +
+    `📅 <b>Date & Time:</b> ${formattedDate} at ${formattedTime}\n` +
+    `💰 <b>Total Price:</b> $${booking.price}\n` +
+    (booking.notes ? `💬 <b>Notes:</b> <i>${booking.notes}</i>\n` : '');
 
   try {
     await sendTelegramMessage(config.botToken, config.chatId, text);

@@ -7,16 +7,16 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "slug": "aura-nail-bar",
     "name": "AURA NAIL BAR",
     "status": "sample",
-    "tagline": "Экспресс-студия маникюра и концептуальный нейл-бар",
-    "phone": "+7 (812) 330-99-44",
-    "address": "Невский проспект, 78",
-    "city": "Санкт-Петербург",
-    "timezone": "Europe/Moscow",
-    "currency": "RUB",
+    "tagline": "SoHo Express Luxury Manicure & Conceptual Nail Bar",
+    "phone": "+1 (212) 480-9944",
+    "address": "548 Broadway, SoHo",
+    "city": "New York, NY",
+    "timezone": "America/New_York",
+    "currency": "USD",
     "minBookingNoticeMin": 45,
     "maxBookingHorizonDays": 21,
     "cancellationDeadlineHours": 3,
-    "instructions": "Студия расположена на 2 этаже арт-пространства. Быстрая запись, высокоскоростной Wi-Fi, напитки to-go.",
+    "instructions": "Located on the 2nd floor of SoHo Creative Lofts. Express online booking, high-speed Wi-Fi, and complimentary artisanal iced drinks to-go.",
     "theme": {
       "accentColor": "#2DD4BF",
       "secondaryAccentColor": "#F5EBE0",
@@ -31,20 +31,20 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "infoCards": [
       {
         "id": "card-1",
-        "title": "Работаем каждый день",
-        "description": "С 10:00 до 22:00 без выходных и перерывов",
+        "title": "SoHo Open Daily",
+        "description": "Express manicure & pedicure appointments from 9:00 AM to 9:00 PM",
         "icon": "Clock"
       },
       {
         "id": "card-2",
-        "title": "Опытные мастера",
-        "description": "Сертифицированные специалисты с опытом от 5 лет",
+        "title": "Speed & Precision",
+        "description": "Top Manhattan nail technicians with high-durability builder gel overlays",
         "icon": "Star"
       },
       {
         "id": "card-3",
-        "title": "Материалы премиум-класса",
-        "description": "Безопасные составы, стерилизация по СанПиН в 3 этапа",
+        "title": "Hospital-Grade Hygiene",
+        "description": "100% sterilized instruments & individual disposable tool packs",
         "icon": "ShieldCheck"
       }
     ],
@@ -52,62 +52,62 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "dayOfWeek": 0,
         "openTime": "11:00",
-        "closeTime": "21:00",
+        "closeTime": "20:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 1,
         "openTime": "09:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 2,
         "openTime": "09:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 3,
         "openTime": "09:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 4,
         "openTime": "09:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 5,
         "openTime": "09:00",
-        "closeTime": "23:00",
+        "closeTime": "22:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 6,
         "openTime": "10:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       }
     ],
     "workplaces": [
       {
         "id": "20000000-0000-4000-8000-000000000001",
-        "name": "Барная стойка Aura 1",
+        "name": "Aura Bar Station 1",
         "type": "MANICURE_DESK",
         "isActive": true
       },
       {
         "id": "20000000-0000-4000-8000-000000000002",
-        "name": "Барная стойка Aura 2",
+        "name": "Aura Bar Station 2",
         "type": "MANICURE_DESK",
         "isActive": true
       },
       {
         "id": "20000000-0000-4000-8000-000000000003",
-        "name": "Педикюрная капсула Podology",
+        "name": "Podology Spa Capsule",
         "type": "PEDICURE_CHAIR",
         "isActive": true
       }
@@ -115,19 +115,19 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "categories": [
       {
         "id": "20000000-0000-4000-8000-000000000010",
-        "name": "Экспресс-маникюр",
+        "name": "Express Manicure",
         "displayOrder": 1,
         "isActive": true
       },
       {
         "id": "20000000-0000-4000-8000-000000000020",
-        "name": "Покрытие & Дизайн",
+        "name": "Gel & Flash Finish",
         "displayOrder": 2,
         "isActive": true
       },
       {
         "id": "20000000-0000-4000-8000-000000000030",
-        "name": "Подология & Педикюр",
+        "name": "Podology & Pedicure",
         "displayOrder": 3,
         "isActive": true
       }
@@ -136,9 +136,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "20000000-0000-4000-8000-000000000101",
         "categoryId": "20000000-0000-4000-8000-000000000010",
-        "name": "Скоростной экспресс-маникюр",
-        "description": "Чистая аппаратная обработка за 40 минут. Идеально для занятых девушек в обеденный перерыв.",
-        "price": 1800,
+        "name": "Express E-File Manicure",
+        "description": "Precision dry cuticle cleaning in 40 minutes. Perfect for busy professionals on lunch break.",
+        "price": 55,
         "durationMin": 40,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "MANICURE_DESK",
@@ -149,10 +149,10 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "20000000-0000-4000-8000-000000000102",
         "categoryId": "20000000-0000-4000-8000-000000000020",
-        "name": "Маникюр с сияющим покрытием Flash Gel",
-        "description": "Комби-обработка, светоотражающие трендовые базы Flash Disco с глубоким переливом.",
-        "price": 2600,
-        "durationMin": 70,
+        "name": "Flash Reflective Gel Manicure",
+        "description": "Clean cuticle detailing followed by hyper-reflective glitter flash gel with diamond gloss.",
+        "price": 75,
+        "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
         "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
@@ -162,9 +162,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "20000000-0000-4000-8000-000000000103",
         "categoryId": "20000000-0000-4000-8000-000000000030",
-        "name": "Кислотный экспресс-педикюр KART",
-        "description": "Фруктово-ферментативная обработка сложных стоп и натоптышей без лезвий и трещин.",
-        "price": 3500,
+        "name": "Aura Smart Podology Pedicure",
+        "description": "Disc podology smoothing treatment, calluses renewal, and long-wear gel coat.",
+        "price": 90,
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
@@ -176,9 +176,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "options": [
       {
         "id": "20000000-0000-4000-8000-000000000201",
-        "name": "Снятие гель-лака",
-        "description": "Быстрое снятие твердосплавной фрезой",
-        "price": 350,
+        "name": "Gel Removal",
+        "description": "Safe e-file polish removal",
+        "price": 15,
         "durationMin": 15,
         "bufferAfterMin": 0,
         "displayOrder": 1,
@@ -186,10 +186,10 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       },
       {
         "id": "20000000-0000-4000-8000-000000000202",
-        "name": "Глянцевый топ анти-царапины",
-        "description": "Сверхстойкий финиш с зеркальным блеском до 5 недель",
-        "price": 300,
-        "durationMin": 10,
+        "name": "French Tips Accent",
+        "description": "Minimalist white or colored French line",
+        "price": 25,
+        "durationMin": 15,
         "bufferAfterMin": 0,
         "displayOrder": 2,
         "isActive": true
@@ -198,12 +198,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "masters": [
       {
         "id": "20000000-0000-4000-8000-000000000301",
-        "name": "Диана Романова",
-        "title": "Мастер-эксперт Aura Bar",
-        "bio": "Опыт 4 года. Специалист по скоростному комбо-маникюру и ультра-глянцевому покрытию.",
-        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-        "rating": 4.96,
-        "reviewsCount": 112,
+        "name": "Maya Sterling",
+        "title": "Lead Speed Stylist",
+        "bio": "4+ years experience. Quick, meticulous, high durability builder overlays.",
+        "avatarUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+        "rating": 4.92,
+        "reviewsCount": 88,
         "serviceIds": [
           "20000000-0000-4000-8000-000000000101",
           "20000000-0000-4000-8000-000000000102"
@@ -212,35 +212,35 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
           {
             "dayOfWeek": 0,
             "startTime": "11:00",
-            "endTime": "21:00",
+            "endTime": "20:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 1,
             "startTime": "09:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 2,
             "startTime": "09:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 3,
             "startTime": "09:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 4,
             "startTime": "09:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
@@ -248,94 +248,28 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
             "dayOfWeek": 5,
             "startTime": "09:00",
             "endTime": "22:00",
-            "isDayOff": true,
+            "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 6,
             "startTime": "10:00",
-            "endTime": "22:00",
-            "isDayOff": true,
+            "endTime": "21:00",
+            "isDayOff": false,
             "breaks": []
           }
         ],
         "breaks": [],
         "displayOrder": 1,
         "isActive": true
-      },
-      {
-        "id": "20000000-0000-4000-8000-000000000302",
-        "name": "Мария Лазарева",
-        "title": "Подолог-эстетист",
-        "bio": "Опыт 8 лет. Сложный медицинский педикюр, обработка стопы KART, установка коррекционных систем.",
-        "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
-        "rating": 4.99,
-        "reviewsCount": 184,
-        "serviceIds": [
-          "20000000-0000-4000-8000-000000000101",
-          "20000000-0000-4000-8000-000000000103"
-        ],
-        "schedule": [
-          {
-            "dayOfWeek": 0,
-            "startTime": "11:00",
-            "endTime": "21:00",
-            "isDayOff": true,
-            "breaks": []
-          },
-          {
-            "dayOfWeek": 1,
-            "startTime": "10:00",
-            "endTime": "20:00",
-            "isDayOff": false,
-            "breaks": []
-          },
-          {
-            "dayOfWeek": 2,
-            "startTime": "10:00",
-            "endTime": "20:00",
-            "isDayOff": false,
-            "breaks": []
-          },
-          {
-            "dayOfWeek": 3,
-            "startTime": "10:00",
-            "endTime": "20:00",
-            "isDayOff": false,
-            "breaks": []
-          },
-          {
-            "dayOfWeek": 4,
-            "startTime": "10:00",
-            "endTime": "20:00",
-            "isDayOff": false,
-            "breaks": []
-          },
-          {
-            "dayOfWeek": 5,
-            "startTime": "09:00",
-            "endTime": "23:00",
-            "isDayOff": false,
-            "breaks": []
-          },
-          {
-            "dayOfWeek": 6,
-            "startTime": "10:00",
-            "endTime": "22:00",
-            "isDayOff": false,
-            "breaks": []
-          }
-        ],
-        "breaks": [],
-        "displayOrder": 2,
-        "isActive": true
       }
     ],
     "assets": {
-      "logo": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=150&q=80",
-      "hero": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80",
+      "hero": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=85",
       "gallery": [
-        "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+        "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
       ],
       "galleryItems": []
     }
@@ -343,18 +277,18 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
   "lumi-nail-studio": {
     "id": "11111111-1111-4111-8111-111111111111",
     "slug": "lumi-nail-studio",
-    "name": "DEMO BEAUTY STUDIO",
+    "name": "LUMI NAIL ATELIER",
     "status": "published",
-    "tagline": "Премиальная эстетика, безупречный маникюр и забота о деталях",
-    "phone": "+7 (495) 780-11-22",
-    "address": "ул. Большая Никитская, 14/2",
-    "city": "Москва",
-    "timezone": "Europe/Moscow",
-    "currency": "RUB",
+    "tagline": "Beverly Hills Haute Nail Atelier & Bespoke Care",
+    "phone": "+1 (310) 843-9820",
+    "address": "9520 Wilshire Blvd",
+    "city": "Beverly Hills, CA",
+    "timezone": "America/Los_Angeles",
+    "currency": "USD",
     "minBookingNoticeMin": 60,
     "maxBookingHorizonDays": 30,
     "cancellationDeadlineHours": 4,
-    "instructions": "В студии действует комплиментарный бар: specialty-кофе, матча и авторские лимонады. Пожалуйста, сообщите администратору о наличии аллергических реакций.",
+    "instructions": "Complimentary organic matcha, artisanal espresso, and sparkling rosé bar. Please inform your artist of any allergies or sensitivities upon arrival.",
     "theme": {
       "accentColor": "#FFFFFF",
       "secondaryAccentColor": "#E2E2E8",
@@ -369,20 +303,20 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "infoCards": [
       {
         "id": "card-1",
-        "title": "Студия сейчас открыта до 22:00",
-        "description": "Принимаем онлайн-записи на сегодня и завтра без выходных",
+        "title": "Open Today until 9:00 PM",
+        "description": "Accepting same-day & advance online bookings 7 days a week",
         "icon": "Clock"
       },
       {
         "id": "card-2",
-        "title": "100% Стерильно по СанПиН",
-        "description": "3-этапная стерилизация в сухожаре ГП-20, крафт-пакет вскрывается при вас",
+        "title": "Hospital-Grade Autoclave Sterilization",
+        "description": "100% sterile dry-heat & ultrasonic sanitation, sealed pouches opened in front of you",
         "icon": "ShieldCheck"
       },
       {
         "id": "card-3",
-        "title": "Гарантия 7 дней",
-        "description": "Бесплатная коррекция покрытия при любых сколах или отслойках",
+        "title": "7-Day Perfection Guarantee",
+        "description": "Complimentary touch-up & repair for any unexpected chip or peel",
         "icon": "Diamond"
       }
     ],
@@ -396,31 +330,31 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "dayOfWeek": 1,
         "openTime": "10:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 2,
         "openTime": "10:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 3,
         "openTime": "10:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 4,
         "openTime": "10:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
         "dayOfWeek": 5,
         "openTime": "10:00",
-        "closeTime": "22:00",
+        "closeTime": "21:00",
         "isClosed": false
       },
       {
@@ -433,19 +367,19 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "workplaces": [
       {
         "id": "10000000-0000-4000-8000-000000000001",
-        "name": "Маникюрный стол Lumi Gold",
+        "name": "Manicure Suite Lumi Gold",
         "type": "MANICURE_DESK",
         "isActive": true
       },
       {
         "id": "10000000-0000-4000-8000-000000000002",
-        "name": "Маникюрный стол Lumi Velvet",
+        "name": "Manicure Suite Lumi Velvet",
         "type": "MANICURE_DESK",
         "isActive": true
       },
       {
         "id": "10000000-0000-4000-8000-000000000003",
-        "name": "Педикюрный трон Lumi Spa",
+        "name": "Spa Pedicure Throne Lumi Private",
         "type": "PEDICURE_CHAIR",
         "isActive": true
       }
@@ -453,25 +387,25 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "categories": [
       {
         "id": "10000000-0000-4000-8000-000000000010",
-        "name": "Маникюр",
+        "name": "Manicure & Gel",
         "displayOrder": 1,
         "isActive": true
       },
       {
         "id": "10000000-0000-4000-8000-000000000020",
-        "name": "Педикюр",
+        "name": "Pedicure & Foot Care",
         "displayOrder": 2,
         "isActive": true
       },
       {
         "id": "10000000-0000-4000-8000-000000000030",
-        "name": "Укрепление & Наращивание",
+        "name": "Structure & Extensions",
         "displayOrder": 3,
         "isActive": true
       },
       {
         "id": "10000000-0000-4000-8000-000000000040",
-        "name": "Дизайн & Уход",
+        "name": "Nail Art & Spa Care",
         "displayOrder": 4,
         "isActive": true
       }
@@ -480,10 +414,10 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "10000000-0000-4000-8000-000000000101",
         "categoryId": "10000000-0000-4000-8000-000000000010",
-        "name": "Комплекс «Маникюр + гель-лак + выравнивание»",
-        "description": "Снятие старого покрытия, комбинированная обработка кутикулы, архитектурное выравнивание базой Luxio/Kodi, стойкое покрытие под кутикулу, увлажняющее масло.",
-        "price": 3200,
-        "durationMin": 90,
+        "name": "Signature Russian Gel Manicure",
+        "description": "Meticulous e-file dry cuticle detailing, architectural builder base alignment with Japanese gels, long-wear high gloss finish under cuticle.",
+        "price": 95,
+        "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
         "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
@@ -493,10 +427,10 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "10000000-0000-4000-8000-000000000102",
         "categoryId": "10000000-0000-4000-8000-000000000010",
-        "name": "Атравматичный пилочный маникюр без покрытия",
-        "description": "Мягкая безаппаратная техника с использованием индивидуальных одноразовых пилок. Идеальная бархатная кутикула без риска пропилов.",
-        "price": 2500,
-        "durationMin": 60,
+        "name": "Clean Bare Nail E-File Manicure",
+        "description": "Non-toxic bare nail rejuvenation, gentle e-file dry cuticle contouring, organic keratin strengthener, warm botanical oil massage.",
+        "price": 75,
+        "durationMin": 50,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
         "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
@@ -506,9 +440,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "10000000-0000-4000-8000-000000000103",
         "categoryId": "10000000-0000-4000-8000-000000000010",
-        "name": "Японский эко-маникюр Masura",
-        "description": "Оздоравливающая процедура для натуральных ногтей: полировка минеральной пастой с жемчужной крошкой и запечатывание пчелиным воском.",
-        "price": 2800,
+        "name": "Japanese Eco-Gloss Manicure (P.Shine)",
+        "description": "Holistic organic detox ritual with sea pearl minerals, diatomaceous clay paste, and organic beeswax sealing for brilliant healthy shine.",
+        "price": 85,
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
@@ -519,11 +453,11 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "10000000-0000-4000-8000-000000000104",
         "categoryId": "10000000-0000-4000-8000-000000000020",
-        "name": "Эстетический Smart-педикюр с гель-лаком",
-        "description": "Инновационная обработка стоп с молекулярным smart-маслом, идеальная гладкость пяток до 4 недель, обработка пальчиков и покрытие гель-лаком.",
-        "price": 4200,
-        "durationMin": 100,
-        "bufferAfterMin": 20,
+        "name": "Smart Wellness Spa Pedicure & Gel",
+        "description": "Smart podological disc heel smoothing with molecular oils, exfoliating peel, warm hydration treatment, and long-wear gel color.",
+        "price": 115,
+        "durationMin": 90,
+        "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
         "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 4,
@@ -532,10 +466,10 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       {
         "id": "10000000-0000-4000-8000-000000000105",
         "categoryId": "10000000-0000-4000-8000-000000000030",
-        "name": "Моделирование ногтей гелем / акригелем (длина 1-2)",
-        "description": "Создание идеальной миндальной или квадратной формы на нижние/верхние формы с архитектурой натурального ногтя.",
-        "price": 4800,
-        "durationMin": 120,
+        "name": "Aprés Gel-X / Sculpted Hard Gel Extensions",
+        "description": "Custom-sculpted lightweight length with premium durability, bespoke shape (almond, square, or coffin), and high-gloss gel finish.",
+        "price": 145,
+        "durationMin": 105,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
         "imageUrl": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
@@ -546,9 +480,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "options": [
       {
         "id": "10000000-0000-4000-8000-000000000201",
-        "name": "Снятие покрытия другого мастера",
-        "description": "Бережное фрезерное снятие без повреждения дорсального слоя",
-        "price": 400,
+        "name": "Foreign Gel Removal",
+        "description": "Gentle e-file removal of gel or acrylic from another salon without damaging the nail bed",
+        "price": 15,
         "durationMin": 15,
         "bufferAfterMin": 0,
         "displayOrder": 1,
@@ -556,29 +490,29 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       },
       {
         "id": "10000000-0000-4000-8000-000000000202",
-        "name": "Укрепление гелем / акриловой пудрой",
-        "description": "Создание жесткого каркаса для предотвращения сколов и отслоек на мягких ногтях",
-        "price": 700,
-        "durationMin": 20,
+        "name": "Hard Gel / Structure Reinforcement",
+        "description": "Reinforced apex architecture for soft or brittle nails to prevent breaking",
+        "price": 25,
+        "durationMin": 15,
         "bufferAfterMin": 0,
         "displayOrder": 2,
         "isActive": true
       },
       {
         "id": "10000000-0000-4000-8000-000000000203",
-        "name": "Френч / Лунный дизайн (все пальцы)",
-        "description": "Идеально выверенная улыбка французского покрытия",
-        "price": 900,
-        "durationMin": 30,
+        "name": "French / Glazed Donut Chrome Finish",
+        "description": "Precision French smile line, pearl chrome glaze, or cat-eye magnetic velvet finish",
+        "price": 30,
+        "durationMin": 25,
         "bufferAfterMin": 0,
         "displayOrder": 3,
         "isActive": true
       },
       {
         "id": "10000000-0000-4000-8000-000000000204",
-        "name": "Авторский nail-дизайн (1 ноготь)",
-        "description": "Градиент, стемпинг, инкрустация кристаллами Swarovski или ручная роспись",
-        "price": 250,
+        "name": "Bespoke Accent Nail Art (per nail)",
+        "description": "Hand-painted minimalist line art, 3D chrome accents, or Swarovski crystal placement",
+        "price": 10,
         "durationMin": 10,
         "bufferAfterMin": 0,
         "displayOrder": 4,
@@ -586,10 +520,10 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       },
       {
         "id": "10000000-0000-4000-8000-000000000205",
-        "name": "Ремонт / донаращивание треснувшего ногтя (1 шт)",
-        "description": "Восстановление параллелей или угла шелком/полигелем",
-        "price": 300,
-        "durationMin": 15,
+        "name": "Single Nail Repair / Rebuild",
+        "description": "Seamless repair of a chipped edge or broken corner using polygel or silk",
+        "price": 12,
+        "durationMin": 10,
         "bufferAfterMin": 0,
         "displayOrder": 5,
         "isActive": true
@@ -598,9 +532,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "masters": [
       {
         "id": "10000000-0000-4000-8000-000000000301",
-        "name": "Алёна Смирнова",
-        "title": "Топ-мастер, инструктор Lumi",
-        "bio": "Опыт 7 лет. Победитель чемпионата Nail Aesthetic Pro. Мастер тонких торцов и безукоризненной формы.",
+        "name": "Alena Vance",
+        "title": "Master Artist & Lead Educator",
+        "bio": "7+ years experience. International Nail Aesthetic Pro winner. Renowned for impeccable micro-cuticle precision and architectural builder gels.",
         "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
         "rating": 5,
         "reviewsCount": 214,
@@ -667,9 +601,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       },
       {
         "id": "10000000-0000-4000-8000-000000000302",
-        "name": "Виктория Ким",
-        "title": "Ведущий стилист ногтевого сервиса",
-        "bio": "Опыт 5 лет. Скоростной премиум-маникюр за 60 минут без потери качества. Эксперт по сложным дизайнам.",
+        "name": "Victoria Kim",
+        "title": "Senior Editorial Nail Stylist",
+        "bio": "5+ years experience. Runway & editorial specialist. Flawless 60-min Russian manicure and intricate hand-painted nail art.",
         "avatarUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
         "rating": 4.97,
         "reviewsCount": 168,
@@ -682,49 +616,49 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
           {
             "dayOfWeek": 0,
             "startTime": "11:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 1,
             "startTime": "11:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": true,
             "breaks": []
           },
           {
             "dayOfWeek": 2,
             "startTime": "11:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 3,
             "startTime": "11:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 4,
             "startTime": "11:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 5,
             "startTime": "11:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           },
           {
             "dayOfWeek": 6,
             "startTime": "11:00",
-            "endTime": "22:00",
+            "endTime": "21:00",
             "isDayOff": false,
             "breaks": []
           }
@@ -735,9 +669,9 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       },
       {
         "id": "10000000-0000-4000-8000-000000000303",
-        "name": "Екатерина Морозова",
-        "title": "Мастер маникюра и эстетической подологии",
-        "bio": "Опыт 6 лет. Медицинское образование. Деликатное решение проблем онихолизиса, трещин и врастающих углов.",
+        "name": "Catherine Moreau",
+        "title": "Aesthetic Podology Specialist",
+        "bio": "6+ years experience with medical podology certification. Expert in restorative foot care, onycholysis, and holistic rejuvenation.",
         "avatarUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
         "rating": 4.95,
         "reviewsCount": 139,
@@ -817,37 +751,37 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         {
           "id": "work-1",
           "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
-          "caption": "Chanel Noire — глянец глубокого черного",
+          "caption": "Chanel Noire — High Gloss Jet Black",
           "displayOrder": 1
         },
         {
           "id": "work-2",
           "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
-          "caption": "Французский маникюр с молочным камуфляжем",
+          "caption": "Milky Glaze French Manicure",
           "displayOrder": 2
         },
         {
           "id": "work-3",
           "imageUrl": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80",
-          "caption": "Японский эко-уход Masura и зеркальный блеск",
+          "caption": "Japanese Eco-Shine Organic Detox",
           "displayOrder": 3
         },
         {
           "id": "work-4",
           "imageUrl": "https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?auto=format&fit=crop&w=800&q=80",
-          "caption": "Микро-френч и серебряные линии",
+          "caption": "Micro-French with Chrome Accents",
           "displayOrder": 4
         },
         {
           "id": "work-5",
           "imageUrl": "https://images.unsplash.com/photo-1566113519662-7807a42cc50d?auto=format&fit=crop&w=800&q=80",
-          "caption": "Haute Couture — подиумный минимализм",
+          "caption": "Haute Couture Runway Minimalism",
           "displayOrder": 5
         },
         {
           "id": "work-6",
           "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80",
-          "caption": "Эстетический Smart-педикюр СПА",
+          "caption": "Smart Spa Wellness Pedicure",
           "displayOrder": 6
         }
       ]

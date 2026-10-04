@@ -29,7 +29,7 @@ export function BottomSheet({ open, onOpenChange, title, description, children }
               type="button"
               onClick={() => onOpenChange(false)}
               className="absolute top-3 right-4 w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-              aria-label="Закрыть"
+              aria-label="Close"
             >
               <X size={15} weight="bold" />
             </button>

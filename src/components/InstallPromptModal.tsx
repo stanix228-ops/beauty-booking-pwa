@@ -59,7 +59,7 @@ export const InstallPromptModal: React.FC<{
           type="button"
           onClick={onClose}
           className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-          aria-label="Закрыть"
+          aria-label="Close"
         >
           <X size={15} weight="bold" />
         </button>
@@ -69,40 +69,40 @@ export const InstallPromptModal: React.FC<{
             <DeviceMobile size={26} weight="bold" />
           </div>
           <div>
-            <h3 className="font-serif font-bold text-base text-white">Иконка на рабочий стол</h3>
-            <p className="text-xs text-[#8E8E93]">Быстрый доступ к студии и вашей записи</p>
+            <h3 className="font-serif font-bold text-base text-white">Add to Home Screen</h3>
+            <p className="text-xs text-[#8E8E93]">Instant 1-tap booking from your phone</p>
           </div>
         </div>
 
         {isStandalone ? (
           <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-center space-y-2">
             <CheckCircle size={32} weight="fill" className="text-emerald-400 mx-auto" />
-            <p className="text-xs font-semibold text-white">Приложение уже установлено на вашем экране!</p>
-            <p className="text-[11px] text-[#8E8E93]">Открывайте студию прямо с рабочего стола без адресной строки.</p>
+            <p className="text-xs font-semibold text-white">App is already installed on your device!</p>
+            <p className="text-[11px] text-[#8E8E93]">Launch directly from your home screen without browser bars.</p>
           </div>
         ) : isIOS ? (
           <div className="space-y-3 pt-1">
             <p className="text-xs text-neutral-300 leading-relaxed">
-              На iPhone и iPad для установки иконки в 2 простых шага:
+              Install on iPhone or iPad in 2 simple steps:
             </p>
             <div className="space-y-2 text-xs">
               <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5 border border-white/10">
                 <Share size={18} weight="bold" className="text-white flex-shrink-0 mt-0.5" />
-                <span className="text-neutral-200">1. Нажмите кнопку <strong>«Поделиться»</strong> в нижнем меню браузера Safari</span>
+                <span className="text-neutral-200">1. Tap the <strong>Share</strong> button in the Safari bottom toolbar</span>
               </div>
               <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5 border border-white/10">
                 <PlusSquare size={18} weight="bold" className="text-white flex-shrink-0 mt-0.5" />
-                <span className="text-neutral-200">2. Выберите пункт <strong>«На экран „Домой“»</strong> и нажмите «Добавить»</span>
+                <span className="text-neutral-200">2. Select <strong>«Add to Home Screen»</strong> and tap Add</span>
               </div>
             </div>
             <p className="text-[11px] text-[#8E8E93] text-center pt-1">
-              Иконка {tenant?.name || 'студии'} появится на экране вашего телефона.
+              {tenant?.name || 'Lumi'} app icon will appear directly on your home screen.
             </p>
           </div>
         ) : (
           <div className="space-y-3 pt-1">
             <p className="text-xs text-neutral-300">
-              Установите PWA-приложение студии: мгновенный запуск, офлайн-доступ и иконка на рабочем столе.
+              Install the studio PWA: lightning-fast launch, offline support, and 1-tap home screen access.
             </p>
             <button
               type="button"
@@ -110,7 +110,7 @@ export const InstallPromptModal: React.FC<{
               className="w-full h-12 rounded-xl bg-white text-black font-bold text-sm cursor-pointer hover:bg-neutral-100 shadow-[0_4px_25px_rgba(255,255,255,0.25)] transition-all flex items-center justify-center gap-2"
             >
               <DeviceMobile size={18} weight="bold" />
-              <span>Добавить на рабочий стол</span>
+              <span>Add to Home Screen</span>
             </button>
           </div>
         )}
@@ -120,7 +120,7 @@ export const InstallPromptModal: React.FC<{
           onClick={onClose}
           className="w-full py-2 text-xs text-neutral-400 hover:text-white transition-colors cursor-pointer text-center"
         >
-          Закрыть
+          Close
         </button>
       </div>
     </div>

@@ -2,16 +2,16 @@
   "id": "22222222-2222-4222-8222-222222222222",
   "slug": "aura-nail-bar",
   "name": "AURA NAIL BAR",
-  "tagline": "Экспресс-студия маникюра и концептуальный нейл-бар",
-  "phone": "+7 (812) 330-99-44",
-  "address": "Невский проспект, 78",
-  "city": "Санкт-Петербург",
-  "timezone": "Europe/Moscow",
-  "currency": "RUB",
+  "tagline": "SoHo Express Luxury Manicure & Conceptual Nail Bar",
+  "phone": "+1 (212) 480-9944",
+  "address": "548 Broadway, SoHo",
+  "city": "New York, NY",
+  "timezone": "America/New_York",
+  "currency": "USD",
   "minBookingNoticeMin": 45,
   "maxBookingHorizonDays": 21,
   "cancellationDeadlineHours": 3,
-  "instructions": "Студия расположена на 2 этаже арт-пространства. Быстрая запись, высокоскоростной Wi-Fi, напитки to-go.",
+  "instructions": "Located on the 2nd floor of SoHo Creative Lofts. Express online booking, high-speed Wi-Fi, and complimentary artisanal iced drinks to-go.",
   "theme": {
     "accentColor": "#2DD4BF",
     "bgColor": "#0F172A",
@@ -21,32 +21,37 @@
     "fontHeading": "Inter, sans-serif",
     "fontBody": "Inter, sans-serif"
   },
+  "infoCards": [
+    { "id": "card-1", "title": "SoHo Open Daily", "description": "Express manicure & pedicure appointments from 9:00 AM to 9:00 PM", "icon": "Clock" },
+    { "id": "card-2", "title": "Speed & Precision", "description": "Top Manhattan nail technicians with high-durability builder gel overlays", "icon": "Star" },
+    { "id": "card-3", "title": "Hospital-Grade Hygiene", "description": "100% sterilized instruments & individual disposable tool packs", "icon": "ShieldCheck" }
+  ],
   "businessHours": [
-    { "dayOfWeek": 0, "openTime": "11:00", "closeTime": "21:00", "isClosed": false },
-    { "dayOfWeek": 1, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
-    { "dayOfWeek": 2, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
-    { "dayOfWeek": 3, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
-    { "dayOfWeek": 4, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
-    { "dayOfWeek": 5, "openTime": "09:00", "closeTime": "23:00", "isClosed": false },
-    { "dayOfWeek": 6, "openTime": "10:00", "closeTime": "22:00", "isClosed": false }
+    { "dayOfWeek": 0, "openTime": "11:00", "closeTime": "20:00", "isClosed": false },
+    { "dayOfWeek": 1, "openTime": "09:00", "closeTime": "21:00", "isClosed": false },
+    { "dayOfWeek": 2, "openTime": "09:00", "closeTime": "21:00", "isClosed": false },
+    { "dayOfWeek": 3, "openTime": "09:00", "closeTime": "21:00", "isClosed": false },
+    { "dayOfWeek": 4, "openTime": "09:00", "closeTime": "21:00", "isClosed": false },
+    { "dayOfWeek": 5, "openTime": "09:00", "closeTime": "22:00", "isClosed": false },
+    { "dayOfWeek": 6, "openTime": "10:00", "closeTime": "21:00", "isClosed": false }
   ],
   "workplaces": [
-    { "id": "20000000-0000-4000-8000-000000000001", "name": "Барная стойка Aura 1", "type": "MANICURE_DESK", "isActive": true },
-    { "id": "20000000-0000-4000-8000-000000000002", "name": "Барная стойка Aura 2", "type": "MANICURE_DESK", "isActive": true },
-    { "id": "20000000-0000-4000-8000-000000000003", "name": "Педикюрная капсула Podology", "type": "PEDICURE_CHAIR", "isActive": true }
+    { "id": "20000000-0000-4000-8000-000000000001", "name": "Aura Bar Station 1", "type": "MANICURE_DESK", "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000002", "name": "Aura Bar Station 2", "type": "MANICURE_DESK", "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000003", "name": "Podology Spa Capsule", "type": "PEDICURE_CHAIR", "isActive": true }
   ],
   "categories": [
-    { "id": "20000000-0000-4000-8000-000000000010", "name": "Экспресс-маникюр", "displayOrder": 1, "isActive": true },
-    { "id": "20000000-0000-4000-8000-000000000020", "name": "Покрытие & Дизайн", "displayOrder": 2, "isActive": true },
-    { "id": "20000000-0000-4000-8000-000000000030", "name": "Подология & Педикюр", "displayOrder": 3, "isActive": true }
+    { "id": "20000000-0000-4000-8000-000000000010", "name": "Express Manicure", "displayOrder": 1, "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000020", "name": "Gel & Flash Finish", "displayOrder": 2, "isActive": true },
+    { "id": "20000000-0000-4000-8000-000000000030", "name": "Podology & Pedicure", "displayOrder": 3, "isActive": true }
   ],
   "services": [
     {
       "id": "20000000-0000-4000-8000-000000000101",
       "categoryId": "20000000-0000-4000-8000-000000000010",
-      "name": "Скоростной экспресс-маникюр",
-      "description": "Чистая аппаратная обработка за 40 минут. Идеально для занятых девушек в обеденный перерыв.",
-      "price": 1800,
+      "name": "Express E-File Manicure",
+      "description": "Precision dry cuticle cleaning in 40 minutes. Perfect for busy professionals on lunch break.",
+      "price": 55,
       "durationMin": 40,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "MANICURE_DESK",
@@ -57,10 +62,10 @@
     {
       "id": "20000000-0000-4000-8000-000000000102",
       "categoryId": "20000000-0000-4000-8000-000000000020",
-      "name": "Маникюр с сияющим покрытием Flash Gel",
-      "description": "Комби-обработка, светоотражающие трендовые базы Flash Disco с глубоким переливом.",
-      "price": 2600,
-      "durationMin": 70,
+      "name": "Flash Reflective Gel Manicure",
+      "description": "Clean cuticle detailing followed by hyper-reflective glitter flash gel with diamond gloss.",
+      "price": 75,
+      "durationMin": 60,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "MANICURE_DESK",
       "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
@@ -70,9 +75,9 @@
     {
       "id": "20000000-0000-4000-8000-000000000103",
       "categoryId": "20000000-0000-4000-8000-000000000030",
-      "name": "Кислотный экспресс-педикюр KART",
-      "description": "Фруктово-ферментативная обработка сложных стоп и натоптышей без лезвий и трещин.",
-      "price": 3500,
+      "name": "Aura Smart Podology Pedicure",
+      "description": "Disc podology smoothing treatment, calluses renewal, and long-wear gel coat.",
+      "price": 90,
       "durationMin": 75,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "PEDICURE_CHAIR",
@@ -84,9 +89,9 @@
   "options": [
     {
       "id": "20000000-0000-4000-8000-000000000201",
-      "name": "Снятие гель-лака",
-      "description": "Быстрое снятие твердосплавной фрезой",
-      "price": 350,
+      "name": "Gel Removal",
+      "description": "Safe e-file polish removal",
+      "price": 15,
       "durationMin": 15,
       "bufferAfterMin": 0,
       "displayOrder": 1,
@@ -94,10 +99,10 @@
     },
     {
       "id": "20000000-0000-4000-8000-000000000202",
-      "name": "Глянцевый топ анти-царапины",
-      "description": "Сверхстойкий финиш с зеркальным блеском до 5 недель",
-      "price": 300,
-      "durationMin": 10,
+      "name": "French Tips Accent",
+      "description": "Minimalist white or colored French line",
+      "price": 25,
+      "durationMin": 15,
       "bufferAfterMin": 0,
       "displayOrder": 2,
       "isActive": true
@@ -106,58 +111,35 @@
   "masters": [
     {
       "id": "20000000-0000-4000-8000-000000000301",
-      "name": "Диана Романова",
-      "title": "Мастер-эксперт Aura Bar",
-      "bio": "Опыт 4 года. Специалист по скоростному комбо-маникюру и ультра-глянцевому покрытию.",
-      "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-      "rating": 4.96,
-      "reviewsCount": 112,
+      "name": "Maya Sterling",
+      "title": "Lead Speed Stylist",
+      "bio": "4+ years experience. Quick, meticulous, high durability builder overlays.",
+      "avatarUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+      "rating": 4.92,
+      "reviewsCount": 88,
       "serviceIds": [
         "20000000-0000-4000-8000-000000000101",
         "20000000-0000-4000-8000-000000000102"
       ],
       "schedule": [
-        { "dayOfWeek": 0, "startTime": "11:00", "endTime": "21:00", "isDayOff": false },
-        { "dayOfWeek": 1, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
-        { "dayOfWeek": 2, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
-        { "dayOfWeek": 3, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
-        { "dayOfWeek": 4, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
-        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "22:00", "isDayOff": true },
-        { "dayOfWeek": 6, "startTime": "10:00", "endTime": "22:00", "isDayOff": true }
+        { "dayOfWeek": 0, "startTime": "11:00", "endTime": "20:00", "isDayOff": false },
+        { "dayOfWeek": 1, "startTime": "09:00", "endTime": "21:00", "isDayOff": false },
+        { "dayOfWeek": 2, "startTime": "09:00", "endTime": "21:00", "isDayOff": false },
+        { "dayOfWeek": 3, "startTime": "09:00", "endTime": "21:00", "isDayOff": false },
+        { "dayOfWeek": 4, "startTime": "09:00", "endTime": "21:00", "isDayOff": false },
+        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "22:00", "isDayOff": false },
+        { "dayOfWeek": 6, "startTime": "10:00", "endTime": "21:00", "isDayOff": false }
       ],
       "displayOrder": 1,
-      "isActive": true
-    },
-    {
-      "id": "20000000-0000-4000-8000-000000000302",
-      "name": "Мария Лазарева",
-      "title": "Подолог-эстетист",
-      "bio": "Опыт 8 лет. Сложный медицинский педикюр, обработка стопы KART, установка коррекционных систем.",
-      "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
-      "rating": 4.99,
-      "reviewsCount": 184,
-      "serviceIds": [
-        "20000000-0000-4000-8000-000000000101",
-        "20000000-0000-4000-8000-000000000103"
-      ],
-      "schedule": [
-        { "dayOfWeek": 0, "startTime": "11:00", "endTime": "21:00", "isDayOff": true },
-        { "dayOfWeek": 1, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 2, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 3, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 4, "startTime": "10:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "23:00", "isDayOff": false },
-        { "dayOfWeek": 6, "startTime": "10:00", "endTime": "22:00", "isDayOff": false }
-      ],
-      "displayOrder": 2,
       "isActive": true
     }
   ],
   "assets": {
-    "logo": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=150&q=80",
-    "hero": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=1200&q=80",
+    "logo": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80",
+    "hero": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=85",
     "gallery": [
-      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
     ]
   }
 }

@@ -69,7 +69,7 @@ export function ServiceCard({
             {/* Duration badge */}
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider bg-white/5 text-neutral-300 border border-white/10">
               <Clock className="w-3 h-3 text-neutral-400" />
-              <span>{displayDuration} мин</span>
+              <span>{displayDuration} min</span>
             </div>
           </div>
 
@@ -77,7 +77,7 @@ export function ServiceCard({
             {/* Price Typography */}
             <div className="shrink-0 whitespace-nowrap">
               <span className="text-base sm:text-lg font-bold font-mono tracking-tight text-white whitespace-nowrap">
-                {displayPrice.toLocaleString('ru-RU')}&nbsp;₽
+                ${displayPrice}
               </span>
             </div>
 
@@ -93,7 +93,7 @@ export function ServiceCard({
                   className="px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-medium bg-white/5 hover:bg-white/10 text-neutral-200 border border-white/15 transition-all flex items-center gap-1 cursor-pointer active:scale-95 whitespace-nowrap"
                 >
                   <Plus className="w-3 h-3 text-white" />
-                  <span>Опции {selectedOptions.length > 0 && `(${selectedOptions.length})`}</span>
+                  <span>Options {selectedOptions.length > 0 && `(${selectedOptions.length})`}</span>
                 </button>
               )}
 
@@ -105,7 +105,7 @@ export function ServiceCard({
                     : 'bg-white/10 hover:bg-white/20 text-white border-white/15 active:scale-95'
                 }`}
               >
-                {isSelected ? '✓ Выбрано' : 'Выбрать'}
+                {isSelected ? '✓ Selected' : 'Select'}
               </button>
             </div>
           </div>

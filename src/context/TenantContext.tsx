@@ -32,14 +32,14 @@ export function TenantProvider({
 
   useEffect(() => {
     if (!effectiveSlug) {
-      setError('Не указан идентификатор студии (slug)');
+      setError('Studio identifier (slug) not specified');
       setIsLoading(false);
       return;
     }
 
     const found = getTenantBySlug(effectiveSlug);
     if (!found) {
-      setError(`Студия "${effectiveSlug}" не найдена`);
+      setError(`Studio "${effectiveSlug}" not found`);
       setTenant(null);
       setIsLoading(false);
       return;
@@ -50,7 +50,7 @@ export function TenantProvider({
     setIsLoading(false);
 
     // Dynamic Title & Meta
-    document.title = `${found.name} — Онлайн-запись`;
+    document.title = `${found.name} — Luxury Online Booking`;
 
     // Dynamic PWA Manifest link
     let manifestLink = document.querySelector<HTMLLinkElement>('link[rel="manifest"]');
