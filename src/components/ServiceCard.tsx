@@ -73,16 +73,16 @@ export function ServiceCard({
             </div>
           </div>
 
-          <div className="pt-2.5 flex items-center justify-between border-t border-white/10 mt-2">
+          <div className="pt-2.5 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 border-t border-white/10 mt-2">
             {/* Price Typography */}
-            <div>
-              <div className="text-lg sm:text-xl font-bold font-mono tracking-tight text-white">
-                {displayPrice.toLocaleString('ru-RU')} ₽
-              </div>
+            <div className="shrink-0 whitespace-nowrap">
+              <span className="text-base sm:text-lg font-bold font-mono tracking-tight text-white whitespace-nowrap">
+                {displayPrice.toLocaleString('ru-RU')}&nbsp;₽
+              </span>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-1.5 shrink-0 ml-auto">
               {hasOptions && (
                 <button
                   type="button"
@@ -90,7 +90,7 @@ export function ServiceCard({
                     e.stopPropagation();
                     onOpenOptions(service);
                   }}
-                  className="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-white/5 hover:bg-white/10 text-neutral-200 border border-white/15 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                  className="px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-medium bg-white/5 hover:bg-white/10 text-neutral-200 border border-white/15 transition-all flex items-center gap-1 cursor-pointer active:scale-95 whitespace-nowrap"
                 >
                   <Plus className="w-3 h-3 text-white" />
                   <span>Опции {selectedOptions.length > 0 && `(${selectedOptions.length})`}</span>
@@ -99,7 +99,7 @@ export function ServiceCard({
 
               <button
                 type="button"
-                className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border whitespace-nowrap ${
                   isSelected
                     ? 'bg-white text-black border-white shadow-[0_2px_14px_rgba(255,255,255,0.25)] scale-[1.02]'
                     : 'bg-white/10 hover:bg-white/20 text-white border-white/15 active:scale-95'

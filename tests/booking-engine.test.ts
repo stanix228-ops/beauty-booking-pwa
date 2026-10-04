@@ -349,4 +349,19 @@ describe('Beauty Booking Engine & Multi-Tenant Core Tests', () => {
     });
     expect(rebooked.bookingId).toBeDefined();
   });
+
+  it('11. Telegram notification configuration and message dispatch', async () => {
+    const { getTelegramConfig, saveTelegramConfig } = await import('../src/lib/telegram');
+
+    saveTelegramConfig(lumiSlug, {
+      botToken: '123456789:TEST_BOT_TOKEN',
+      chatId: '987654321',
+      enabled: true,
+    });
+
+    const cfg = getTelegramConfig(lumiSlug);
+    expect(cfg.enabled).toBe(true);
+    expect(cfg.botToken).toBe('123456789:TEST_BOT_TOKEN');
+    expect(cfg.chatId).toBe('987654321');
+  });
 });

@@ -1,6 +1,7 @@
 import { supabase, isLiveSupabaseConfigured } from './supabase';
 import { getTenantBySlug } from '../data/tenants';
 import { hashTokenSha256 } from './crypto';
+import { notifyNewBookingTelegram } from './telegram';
 
 export interface BookingDetails {
   id: string;
@@ -189,6 +190,7 @@ class MemoryBookingStore {
     masterId: string | null,
     dateString: string
   ): Promise<AvailableSlot[]> {
+    this.loadFromStorage();
     const tenant = getTenantBySlug(tenantSlug);
     if (!tenant) throw new Error(`Tenant ${tenantSlug} not found`);
 
@@ -203,7 +205,8 @@ class MemoryBookingStore {
       }
     }
 
-    const targetDate = new Date(`${dateString}T00:00:00`);
+    const [year, month, day] = dateString.split('-').map(Number);
+    const targetDate = new Date(year, month - 1, day, 0, 0, 0);
     const dayOfWeek = targetDate.getDay();
 
     const studioHours = tenant.businessHours.find((bh) => bh.dayOfWeek === dayOfWeek);
@@ -221,8 +224,8 @@ class MemoryBookingStore {
     const [openH, openM] = studioHours.openTime.split(':').map(Number);
     const [closeH, closeM] = studioHours.closeTime.split(':').map(Number);
 
-    const studioOpenTime = new Date(`${dateString}T${String(openH).padStart(2, '0')}:${String(openM).padStart(2, '0')}:00`);
-    const studioCloseTime = new Date(`${dateString}T${String(closeH).padStart(2, '0')}:${String(closeM).padStart(2, '0')}:00`);
+    const studioOpenTime = new Date(year, month - 1, day, openH, openM, 0);
+    const studioCloseTime = new Date(year, month - 1, day, closeH, closeM, 0);
 
     const slots: AvailableSlot[] = [];
     const slotStepMinutes = 30;
@@ -243,8 +246,8 @@ class MemoryBookingStore {
 
           const [mStartH, mStartM] = mSched.startTime.split(':').map(Number);
           const [mEndH, mEndM] = mSched.endTime.split(':').map(Number);
-          const masterStart = new Date(`${dateString}T${String(mStartH).padStart(2, '0')}:${String(mStartM).padStart(2, '0')}:00`);
-          const masterEnd = new Date(`${dateString}T${String(mEndH).padStart(2, '0')}:${String(mEndM).padStart(2, '0')}:00`);
+          const masterStart = new Date(year, month - 1, day, mStartH, mStartM, 0);
+          const masterEnd = new Date(year, month - 1, day, mEndH, mEndM, 0);
 
           if (slotStart >= masterStart && slotEnd <= masterEnd) {
             // Check EXCLUDE occupancy
@@ -412,6 +415,18 @@ class MemoryBookingStore {
 
     this.bookings.push(newBooking);
     this.saveToStorage();
+
+    // Send Telegram alert if bot is configured
+    notifyNewBookingTelegram(tenant.slug, tenant.name, {
+      bookingNumber,
+      clientName: params.clientName,
+      clientPhone: params.clientPhone,
+      serviceName: service.name,
+      masterName: master ? master.name : undefined,
+      startAt: startAtDate.toISOString(),
+      price: totalPrice,
+      notes: params.notes,
+    });
 
     if (typeof localStorage !== 'undefined') {
       try {
