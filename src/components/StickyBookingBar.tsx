@@ -30,14 +30,14 @@ export function StickyBookingBar({
         <div className="min-w-0 flex-1">
           <div className="text-xs text-[#8E8E93] truncate">
             {selectedService.name}
-            {selectedOptions.length > 0 && ` (+${selectedOptions.length} add-ons)`}
+            {selectedOptions.length > 0 && ` (+${selectedOptions.length} опц.)`}
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-lg font-bold tracking-tight text-white">
-              ${totalPrice}
+              {totalPrice.toLocaleString('ru-RU')} ₽
             </span>
             <span className="text-xs text-[#8E8E93] font-medium">
-              ~{totalDuration} min
+              ~{totalDuration} мин
             </span>
           </div>
         </div>
@@ -47,7 +47,7 @@ export function StickyBookingBar({
           onClick={onOpenSlotPicker}
           className="h-12 px-6 rounded-2xl font-bold text-sm flex items-center gap-2 bg-white text-black shadow-[0_4px_25px_rgba(255,255,255,0.25)] hover:bg-neutral-100 active:scale-95 transition-all cursor-pointer flex-shrink-0"
         >
-          <span>Select Time</span>
+          <span>Выбрать время</span>
           <ArrowRight className="w-4 h-4 stroke-[2.5]" />
         </button>
       </div>

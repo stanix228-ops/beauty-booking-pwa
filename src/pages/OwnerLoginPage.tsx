@@ -12,13 +12,13 @@ export function OwnerLoginPage() {
   const { tenant } = useTenant();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('admin@lumi-atelier.com');
+  const [email, setEmail] = useState('admin@beauty-studio.ru');
   const [password, setPassword] = useState('admin');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleQuickDemoLogin = () => {
-    localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email: 'admin@lumi-atelier.com', role: 'owner' }));
+    localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email: 'admin@beauty-studio.ru', role: 'owner' }));
     navigate(`/s/${slug}/owner/`);
   };
 
@@ -46,13 +46,13 @@ export function OwnerLoginPage() {
 
         if (memError || !membership) {
           await supabase.auth.signOut();
-          throw new Error('You do not have administrative access to this studio.');
+          throw new Error('У вас нет прав доступа к этой студии.');
         }
 
         localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email, role: membership.role }));
         navigate(`/s/${slug}/owner/`);
       } catch (err) {
-        setError((err as Error).message || 'Authentication failed');
+        setError((err as Error).message || 'Ошибка авторизации');
         setIsLoading(false);
       }
       return;
@@ -64,7 +64,7 @@ export function OwnerLoginPage() {
         localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email, role: 'owner' }));
         navigate(`/s/${slug}/owner/`);
       } else {
-        setError('Please enter a valid email and password (min 4 characters).');
+        setError('Введите корректный email и пароль (минимум 4 символа).');
         setIsLoading(false);
       }
     }, 300);
@@ -78,7 +78,7 @@ export function OwnerLoginPage() {
           className="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition-colors"
         >
           <ArrowLeft size={16} />
-          <span>Back to Studio Storefront</span>
+          <span>Вернуться на витрину студии</span>
         </Link>
 
         <div className="text-center space-y-2">
@@ -87,34 +87,34 @@ export function OwnerLoginPage() {
           </div>
 
           <h1 className="text-2xl font-serif font-bold text-white tracking-tight">
-            Owner Portal
+            Кабинет студии
           </h1>
           <p className="text-xs text-[#8E8E93]">
-            {tenant?.name || 'Studio Management & Schedule'}
+            {tenant?.name || 'Управление записями и расписанием'}
           </p>
         </div>
 
         {/* 1-Click Demo Login Banner */}
         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2.5 shadow-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-white">1-Click Demo Access</span>
+            <span className="text-xs font-semibold text-white">Быстрый демо-доступ</span>
             <span className="text-[10px] text-emerald-400 uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-800">
-              Active
+              Активен
             </span>
           </div>
           <p className="text-[11px] text-[#8E8E93] leading-relaxed">
-            Instant administrator access with prefilled demo credentials:
+            В демо-режиме можно использовать готовые данные администратора:
           </p>
           <div className="text-[11px] text-neutral-300 font-mono bg-black/60 px-3 py-2 rounded-xl border border-white/10 space-y-0.5">
-            <div>Email: <strong className="text-white">admin@lumi-atelier.com</strong></div>
-            <div>Password: <strong className="text-white">admin</strong> <span className="text-neutral-500 font-sans text-[10px]">(or any 4+ chars)</span></div>
+            <div>Email: <strong className="text-white">admin@beauty-studio.ru</strong></div>
+            <div>Пароль: <strong className="text-white">admin</strong> <span className="text-neutral-500 font-sans text-[10px]">(или любой от 4 символов)</span></div>
           </div>
           <button
             type="button"
             onClick={handleQuickDemoLogin}
             className="w-full h-10 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-all cursor-pointer shadow-[0_2px_15px_rgba(255,255,255,0.2)] flex items-center justify-center gap-1.5"
           >
-            <span>Sign In in 1-Click (as Owner) →</span>
+            <span>Войти в 1 клик (как владелец) →</span>
           </button>
         </div>
 
@@ -122,13 +122,13 @@ export function OwnerLoginPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1">
-                Email Address
+                Электронная почта
               </label>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@lumi-atelier.com"
+                placeholder="admin@beauty-studio.ru"
                 required
                 autoComplete="email"
               />
@@ -136,7 +136,7 @@ export function OwnerLoginPage() {
 
             <div>
               <label className="block text-xs font-medium text-neutral-300 mb-1">
-                Password
+                Пароль
               </label>
               <Input
                 type="password"
@@ -159,14 +159,14 @@ export function OwnerLoginPage() {
               disabled={isLoading}
               className="w-full h-11 text-sm font-bold rounded-xl bg-white text-black hover:bg-neutral-200 cursor-pointer shadow-[0_4px_20px_rgba(255,255,255,0.2)] transition-all"
             >
-              {isLoading ? 'Verifying...' : 'Sign In with Password'}
+              {isLoading ? 'Проверка прав...' : 'Войти по паролю'}
             </Button>
           </form>
 
           <div className="pt-2 border-t border-white/10 text-center">
             <p className="text-[11px] text-[#8E8E93] flex items-center justify-center gap-1">
               <ShieldCheck size={14} className="text-white" />
-              <span>Multi-Tenant Security · End-to-End Encrypted</span>
+              <span>Мультитенантная изоляция · Закрытый доступ</span>
             </p>
           </div>
         </Card>

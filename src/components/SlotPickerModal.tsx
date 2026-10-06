@@ -40,9 +40,9 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
     const d = new Date();
     d.setDate(d.getDate() + i);
     const dateStr = formatLocalDate(d);
-    const dayLabel = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d.toLocaleDateString('en-US', { weekday: 'short' });
+    const dayLabel = i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : d.toLocaleDateString('ru-RU', { weekday: 'short' });
     const dayNumber = d.getDate();
-    const monthName = d.toLocaleDateString('en-US', { month: 'short' });
+    const monthName = d.toLocaleDateString('ru-RU', { month: 'short' });
     return { dateStr, dayLabel, dayNumber, monthName, isToday: i === 0, isTomorrow: i === 1 };
   });
 
@@ -118,17 +118,17 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
   });
 
   const slotGroups = [
-    { id: 'morning', label: 'Morning (10:00 AM – 12:00 PM)', icon: '🌅', slots: morningSlots },
-    { id: 'afternoon', label: 'Afternoon (12:00 PM – 5:00 PM)', icon: '☀️', slots: afternoonSlots },
-    { id: 'evening', label: 'Evening (5:00 PM – 9:00 PM)', icon: '🌙', slots: eveningSlots },
+    { id: 'morning', label: 'Утро (10:00 – 12:00)', icon: '🌅', slots: morningSlots },
+    { id: 'afternoon', label: 'День (12:00 – 17:00)', icon: '☀️', slots: afternoonSlots },
+    { id: 'evening', label: 'Вечер (17:00 – 22:00)', icon: '🌙', slots: eveningSlots },
   ].filter((g) => g.slots.length > 0);
 
   return (
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
-      title="Select Date & Time"
-      description={`Service: ${service.name} (${service.durationMin} min)`}
+      title="Выбор даты и времени"
+      description={`Услуга: ${service.name} (${service.durationMin} мин)`}
     >
       <div className="space-y-6 pt-2 pb-6">
         {/* Date Selector */}
@@ -136,7 +136,7 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
           <div className="flex items-center justify-between mb-2.5">
             <span className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
               <Calendar size={16} weight="duotone" className="text-white" />
-              Appointment Date
+              Дата записи
             </span>
           </div>
 
@@ -183,10 +183,10 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
               <Clock size={16} weight="duotone" className="text-white" />
-              Daily Schedule
+              Расписание на день
             </span>
             <span className="text-[11px] text-neutral-400">
-              30-min intervals · Occupied slots locked
+              Шаг 30 минут · Занятое время заблокировано
             </span>
           </div>
 
@@ -194,14 +194,14 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
           {selectedDate === dateOptions[0]?.dateStr && availableSlots.length === 0 && !isLoading && (
             <div className="p-3 mb-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between text-xs animate-in fade-in">
               <span className="text-neutral-300">
-                All slots for today are fully booked.
+                На сегодня все свободные слоты завершены.
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedDate(dateOptions[1].dateStr)}
                 className="px-3 py-1.5 rounded-xl bg-white text-black font-bold text-xs hover:bg-neutral-200 transition-colors cursor-pointer shrink-0 ml-2"
               >
-                Book for Tomorrow →
+                Запись на завтра →
               </button>
             </div>
           )}
@@ -219,10 +219,10 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
           ) : allDaySlots.length === 0 ? (
             <div className="py-8 text-center px-4 rounded-2xl border border-white/10 bg-[#0D0D11]">
               <div className="text-sm font-medium text-neutral-300 mb-1">
-                Studio is closed on this day
+                Студия закрыта в этот день
               </div>
               <p className="text-xs text-neutral-500">
-                Please select another date.
+                Пожалуйста, выберите другую дату.
               </p>
             </div>
           ) : (
@@ -259,9 +259,10 @@ export const SlotPickerModal: React.FC<SlotPickerModalProps> = ({
                       return (
                         <button
                           key={timeStr}
+                          type="button"
                           disabled
                           aria-disabled="true"
-                          title="This slot is occupied or unavailable"
+                          title="Это время уже занято или недоступно"
                           className="h-11 rounded-xl border border-white/5 bg-[#08080A] text-[#52525B] font-normal text-xs transition-none flex items-center justify-center gap-1 cursor-not-allowed line-through opacity-40"
                         >
                           <LockKey size={12} weight="fill" />

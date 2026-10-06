@@ -14,15 +14,15 @@ export function HomePage() {
         <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium text-neutral-300">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Multi-Tenant PWA Online Booking</span>
+            <span>Multi-Tenant PWA Онлайн-Записи</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-extrabold font-heading text-neutral-100 tracking-tight">
-            Haute Nail Ateliers & Salons
+            Студии Маникюра & Nail-Бары
           </h1>
 
           <p className="text-xs sm:text-sm text-neutral-400 max-w-md mx-auto leading-relaxed">
-            Unified luxury platform with independent branded spaces. Each studio operates under its own route, custom branding, artists, and live schedule.
+            Единое приложение, полностью независимые студии. Каждая студия работает по персональному маршруту со своим брендингом, мастерами и ценами.
           </p>
         </div>
 
@@ -78,9 +78,9 @@ export function HomePage() {
                 </div>
 
                 <div className="pt-1 flex items-center gap-2 text-[11px] text-neutral-400">
-                  <span className="font-semibold text-neutral-200">{t.services.length} services</span>
+                  <span className="font-semibold text-neutral-200">{t.services.length} услуг</span>
                   <span>•</span>
-                  <span className="font-semibold text-neutral-200">{t.masters.length} artists</span>
+                  <span className="font-semibold text-neutral-200">{t.masters.length} мастеров</span>
                 </div>
               </div>
 
@@ -94,17 +94,17 @@ export function HomePage() {
                   }}
                   className="flex-1 h-10 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-md hover:brightness-105 transition-all cursor-pointer"
                 >
-                  <span>Book Appointment</span>
+                  <span>Клиентская запись</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
 
                 <Link
                   to={`/s/${t.slug}/owner/`}
                   className="h-10 px-3.5 rounded-xl text-xs font-medium bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700/60 flex items-center gap-1.5 transition-colors cursor-pointer"
-                  title="Owner Portal"
+                  title="Кабинет владельца"
                 >
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Owner</span>
+                  <span className="hidden sm:inline">Кабинет</span>
                 </Link>
               </div>
             </Card>

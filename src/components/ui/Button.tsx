@@ -51,7 +51,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading ? (
           <span className="flex items-center gap-2">
             <Spinner size="sm" shade="inherit" />
-            <span>Loading...</span>
+            <span>Загрузка...</span>
           </span>
         ) : (
           children

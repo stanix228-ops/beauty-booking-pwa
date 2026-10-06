@@ -25,7 +25,7 @@ export function CategoryFilter({ selectedCategoryId, onSelectCategory }: Categor
               : 'bg-[#0D0D11] text-[#8E8E93] hover:text-white border-white/10 hover:border-white/25 font-medium'
           }`}
         >
-          All Services
+          Все услуги
         </button>
 
         {categories.map((cat) => {

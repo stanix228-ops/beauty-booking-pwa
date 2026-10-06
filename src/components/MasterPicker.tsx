@@ -24,16 +24,16 @@ export function MasterPicker({
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-            Artist & Specialist
+            Специалист
           </h3>
-          <p className="text-xs text-[#8E8E93]">Choose a specific artist or let us pair you with the earliest opening</p>
+          <p className="text-xs text-[#8E8E93]">Выберите мастера или доверьте подбор студии</p>
         </div>
         {selectedMasterId && (
           <button
             onClick={() => onSelectMaster(null)}
             className="text-xs text-neutral-400 hover:text-white underline cursor-pointer"
           >
-            Reset selection
+            Сбросить выбор
           </button>
         )}
       </div>
@@ -53,10 +53,10 @@ export function MasterPicker({
           </div>
           <div>
             <div className="text-sm font-semibold text-white">
-              Any Available Artist
+              Любой мастер
             </div>
             <div className="text-xs text-[#8E8E93]">
-              We'll assign the best available artist for your slot
+              Сервер выберет ближайшее свободное окно
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export function MasterPicker({
                   </h4>
                   {isTopMaster && (
                     <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-white text-black flex-shrink-0">
-                      TOP ARTIST
+                      TOP MASTER
                     </span>
                   )}
                 </div>

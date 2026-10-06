@@ -21,7 +21,7 @@ export const InfoCards: React.FC = () => {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
                 <span className="text-[11px] font-medium tracking-wider uppercase text-emerald-400">
-                  Open Now
+                  Открыто сейчас
                 </span>
               </div>
               <h4 className="text-sm sm:text-base font-semibold text-white tracking-tight pt-0.5">

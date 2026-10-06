@@ -58,7 +58,7 @@ export const BottomNavigation: React.FC<BottomNavProps> = ({
 
   return (
     <nav
-      aria-label="Bottom navigation"
+      aria-label="Нижняя навигация"
       className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pb-[env(safe-area-inset-bottom,16px)] pt-2 pointer-events-none"
     >
       <div className="relative pointer-events-auto rounded-full p-1.5 flex items-center justify-between shadow-[0_12px_40px_rgba(0,0,0,0.85)] border border-white/15 bg-[#0D0D11]/90 backdrop-blur-2xl max-w-xs sm:max-w-sm w-full overflow-hidden">
@@ -75,7 +75,7 @@ export const BottomNavigation: React.FC<BottomNavProps> = ({
           }`}
         >
           <House size={17} weight={activeTab === 'home' ? 'fill' : 'regular'} className={activeTab === 'home' ? 'text-black' : 'text-neutral-300'} />
-          <span>Home</span>
+          <span>Главная</span>
         </button>
 
         <button
@@ -88,7 +88,7 @@ export const BottomNavigation: React.FC<BottomNavProps> = ({
           }`}
         >
           <Sparkle size={17} weight={activeTab === 'services' ? 'fill' : 'regular'} className={activeTab === 'services' ? 'text-black' : 'text-neutral-300'} />
-          <span>Services</span>
+          <span>Услуги</span>
         </button>
 
         <button
@@ -101,7 +101,7 @@ export const BottomNavigation: React.FC<BottomNavProps> = ({
           }`}
         >
           <CalendarCheck size={17} weight={activeTab === 'my-booking' ? 'fill' : 'regular'} className={activeTab === 'my-booking' ? 'text-black' : 'text-neutral-300'} />
-          <span>My Booking</span>
+          <span>Моя запись</span>
         </button>
       </div>
     </nav>

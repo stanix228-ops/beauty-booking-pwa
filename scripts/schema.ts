@@ -45,7 +45,7 @@ export const ServiceSchema = z.object({
 export const BreakPeriodSchema = z.object({
   startTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Format HH:MM'),
   endTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Format HH:MM'),
-  reason: z.string().default('Break'),
+  reason: z.string().default('Перерыв'),
 });
 
 export const DayScheduleSchema = z.object({
@@ -115,18 +115,18 @@ export const BusinessConfigSchema = z.object({
   tagline: z.string().optional(),
   phone: z.string().min(7),
   address: z.string().min(3),
-  city: z.string().default('Los Angeles, CA'),
-  timezone: z.string().default('America/Los_Angeles'),
-  currency: z.string().default('USD'),
+  city: z.string().default('Москва'),
+  timezone: z.string().default('Europe/Moscow'),
+  currency: z.string().default('RUB'),
   minBookingNoticeMin: z.number().int().nonnegative().default(60),
   maxBookingHorizonDays: z.number().int().positive().default(30),
   cancellationDeadlineHours: z.number().int().nonnegative().default(4),
   instructions: z.string().optional(),
   theme: BusinessThemeSchema,
   infoCards: z.array(InfoCardSchema).default([
-    { id: 'card-1', title: 'Open Daily', description: 'From 10:00 AM to 9:00 PM without interruptions', icon: 'Clock' },
-    { id: 'card-2', title: 'Top-Tier Artists', description: 'Certified specialists with 5+ years of luxury salon expertise', icon: 'Star' },
-    { id: 'card-3', title: 'Hospital-Grade Sterilization', description: 'Autoclave 3-step hygiene standards & hypoallergenic gel coats', icon: 'ShieldCheck' }
+    { id: 'card-1', title: 'Работаем каждый день', description: 'С 10:00 до 22:00 без выходных и перерывов', icon: 'Clock' },
+    { id: 'card-2', title: 'Опытные мастера', description: 'Сертифицированные специалисты с опытом от 5 лет', icon: 'Star' },
+    { id: 'card-3', title: 'Материалы премиум-класса', description: 'Безопасные составы, стерилизация по СанПиН в 3 этапа', icon: 'ShieldCheck' }
   ]),
   businessHours: z.array(BusinessHoursSchema).min(7),
   workplaces: z.array(WorkplaceSchema).min(1),

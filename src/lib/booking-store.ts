@@ -128,8 +128,8 @@ class MemoryBookingStore {
         token_hash: 'seed_hash_1',
         client: {
           id: 'c-1',
-          name: 'Sarah Vance',
-          phone: '+1 (310) 555-0199',
+          name: 'Елена Васильева',
+          phone: '+7 (916) 123-45-67',
         },
         master: {
           id: master.id,
@@ -326,7 +326,7 @@ class MemoryBookingStore {
     }
 
     if (!master) {
-      throw new Error('Artist is not available for the selected time slot (Overlapping occupancy error)');
+      throw new Error('Мастер не доступен на выбранное время (Overlapping occupancy error)');
     }
 
     // Verify master conflict (PostgreSQL EXCLUDE constraint emulation)
@@ -510,7 +510,7 @@ class MemoryBookingStore {
     newStartAt: string;
   }): Promise<{ success: boolean; newStartAt: string; newEndAt: string }> {
     const booking = this.bookings.find((b) => b.id === params.bookingId && b.token_hash === params.tokenHash);
-    if (!booking) throw new Error('Booking not found or invalid token');
+    if (!booking) throw new Error('Запись не найдена или неверный токен');
 
     const durationMs = new Date(booking.end_at).getTime() - new Date(booking.start_at).getTime();
     const newStart = new Date(params.newStartAt);
@@ -523,7 +523,7 @@ class MemoryBookingStore {
     // Test master overlap
     if (this.hasOverlap(booking.tenant_id, booking.master.id, newStart.toISOString(), newEnd.toISOString())) {
       this.occupancies = backupOccupancies; // rollback
-      throw new Error('Selected time slot is already booked for this artist');
+      throw new Error('Выбранное новое время уже занято у этого мастера');
     }
 
     // Lock new master occupancy
@@ -556,12 +556,12 @@ class MemoryBookingStore {
     reason?: string;
   }): Promise<{ success: boolean; status: string }> {
     const booking = this.bookings.find((b) => b.id === params.bookingId && b.token_hash === params.tokenHash);
-    if (!booking) throw new Error('Booking not found or invalid token');
+    if (!booking) throw new Error('Запись не найдена или неверный токен');
 
     // Free resources
     this.occupancies = this.occupancies.filter((o) => o.booking_id !== booking.id);
     booking.status = 'CANCELLED';
-    booking.cancellation_reason = params.reason || 'Cancelled by client';
+    booking.cancellation_reason = params.reason || 'Отменено клиентом';
     this.saveToStorage();
 
     // Sync cancelled status in localStorage
@@ -667,7 +667,7 @@ class MemoryBookingStore {
     reason?: 'BREAK' | 'VACATION' | 'MAINTENANCE';
   }): Promise<{ success: boolean; occupancyId: string }> {
     if (this.hasOverlap(params.tenantId, params.masterId, params.startAt, params.endAt)) {
-      throw new Error('Cannot block time interval: slot already occupied by a booking');
+      throw new Error('Невозможно заблокировать время: в этом интервале уже есть запись');
     }
 
     const occId = `block-${Date.now()}`;

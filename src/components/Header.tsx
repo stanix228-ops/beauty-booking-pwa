@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
       {isSample && (
         <div className="bg-neutral-900/90 border-b border-white/15 px-4 py-1.5 text-center text-xs text-neutral-300 flex items-center justify-center gap-2">
           <Sparkle size={14} className="text-white" />
-          <span className="tracking-wide">Preview Mode: Interactive Studio Demo</span>
+          <span className="tracking-wide">Режим образца: демонстрационный прототип студии</span>
         </div>
       )}
 
@@ -60,10 +60,10 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
               type="button"
               onClick={onInstallClick}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-black border border-white/20 transition-all hover:bg-neutral-200 cursor-pointer shadow-[0_2px_12px_rgba(255,255,255,0.25)]"
-              title="Add studio icon to home screen"
+              title="Добавить иконку студии на рабочий стол"
             >
               <DeviceMobile size={13} weight="bold" />
-              <span>📱 Install App</span>
+              <span>📱 На экран</span>
             </button>
           )}
           <Link
@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-black/60 backdrop-blur-md text-neutral-300 hover:text-white border border-white/15 transition-all hover:border-white/30"
           >
             <ShieldCheck size={14} className="text-white" />
-            <span>Owner Portal</span>
+            <span>Кабинет студии</span>
           </Link>
         </div>
 
@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
               className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] group-hover:scale-110 transition-transform"
             />
             <span className="relative z-10 text-white font-semibold tracking-wider text-xs sm:text-sm uppercase drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]">
-              Book Appointment
+              Записаться онлайн
             </span>
           </button>
         </div>
@@ -120,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
           </div>
           <div className="flex items-center gap-1.5">
             <Clock size={15} className="text-neutral-400" />
-            <span>10:00 AM – 9:00 PM</span>
+            <span>10:00 – 22:00</span>
           </div>
         </div>
       </div>
