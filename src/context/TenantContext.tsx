@@ -19,7 +19,7 @@ const TenantContext = createContext<TenantContextValue>({
 
 export function TenantProvider({
   children,
-  defaultSlug = 'lumi-nail-studio',
+  defaultSlug = 'ayza-beauty-space',
 }: {
   children: React.ReactNode;
   defaultSlug?: string;

@@ -1,17 +1,24 @@
 import { ArrowRight } from 'lucide-react';
 import type { Service, ServiceOption } from '../../scripts/schema';
+import { useTenant } from '../context/TenantContext';
+import { formatPrice } from '../lib/currency';
 
 interface StickyBookingBarProps {
   selectedService: Service | null;
   selectedOptions: ServiceOption[];
   onOpenSlotPicker: () => void;
+  currency?: string;
 }
 
 export function StickyBookingBar({
   selectedService,
   selectedOptions,
   onOpenSlotPicker,
+  currency,
 }: StickyBookingBarProps) {
+  const { tenant } = useTenant();
+  const currentCurrency = currency || tenant?.currency || 'KZT';
+
   if (!selectedService) {
     return null;
   }
@@ -34,7 +41,7 @@ export function StickyBookingBar({
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-lg font-bold tracking-tight text-white">
-              {totalPrice.toLocaleString('ru-RU')} ₽
+              {formatPrice(totalPrice, currentCurrency)}
             </span>
             <span className="text-xs text-[#8E8E93] font-medium">
               ~{totalDuration} мин

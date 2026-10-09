@@ -21,7 +21,7 @@ export function App() {
       <Route
         path="/"
         element={
-          <TenantProvider defaultSlug="lumi-nail-studio">
+          <TenantProvider defaultSlug="ayza-beauty-space">
             <ClientBookingPage />
           </TenantProvider>
         }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookingEngine, type BookingDetails, type AvailableSlot } from '../lib/booking-store';
 import { useTenant } from '../context/TenantContext';
+import { formatPrice } from '../lib/currency';
 import { downloadIcsFile } from '../lib/ics';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -326,21 +327,21 @@ export function BookingStatusPage() {
                   <Scissors size={14} className="text-neutral-400" />
                   {s.name}
                 </span>
-                <span>{s.price.toLocaleString('ru-RU')} ₽</span>
+                <span>{formatPrice(s.price, tenant?.currency)}</span>
               </div>
             ))}
 
             {booking.options.map((opt) => (
               <div key={opt.id} className="flex justify-between text-xs text-neutral-400 pl-5">
                 <span>+ {opt.name}</span>
-                <span>+{opt.price} ₽</span>
+                <span>+{formatPrice(opt.price, tenant?.currency)}</span>
               </div>
             ))}
 
             <div className="pt-2 border-t border-white/10 flex justify-between items-baseline font-bold text-base text-white">
               <span>Итого к оплате:</span>
               <span style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                {booking.total_price.toLocaleString('ru-RU')} ₽
+                {formatPrice(booking.total_price, tenant?.currency)}
               </span>
             </div>
           </div>

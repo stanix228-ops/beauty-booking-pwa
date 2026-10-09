@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTenant } from '../context/TenantContext';
 import { BookingEngine, type BookingDetails } from '../lib/booking-store';
+import { formatPrice } from '../lib/currency';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
@@ -376,11 +377,12 @@ export function OwnerDashboardPage() {
               <Card className="p-3.5 space-y-1 border border-white/10 bg-neutral-900/60">
                 <div className="text-[11px] text-neutral-400">Выручка сегодня</div>
                 <div className="text-xl font-bold text-blue-400" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                  {todayBookings
-                    .filter((b) => b.status === 'COMPLETED')
-                    .reduce((sum, b) => sum + b.total_price, 0)
-                    .toLocaleString('ru-RU')}{' '}
-                  ₽
+                  {formatPrice(
+                    todayBookings
+                      .filter((b) => b.status === 'COMPLETED')
+                      .reduce((sum, b) => sum + b.total_price, 0),
+                    tenant?.currency
+                  )}
                 </div>
               </Card>
             </div>
@@ -434,7 +436,7 @@ export function OwnerDashboardPage() {
 
                         <div className="text-right">
                           <div className="text-sm font-bold text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                            {b.total_price.toLocaleString('ru-RU')} ₽
+                            {formatPrice(b.total_price, tenant?.currency)}
                           </div>
                           <Badge
                             variant={
@@ -526,7 +528,7 @@ export function OwnerDashboardPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs font-bold text-white">{b.total_price.toLocaleString('ru-RU')} ₽</div>
+                      <div className="text-xs font-bold text-white">{formatPrice(b.total_price, tenant?.currency)}</div>
                       <Badge
                         variant={
                           b.status === 'COMPLETED' ? 'success' : b.status === 'CANCELLED' ? 'destructive' : 'default'
@@ -596,7 +598,7 @@ export function OwnerDashboardPage() {
               <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-1 sm:col-span-2">
                 <div className="text-xs text-neutral-400">Реально полученные деньги (оплаты)</div>
                 <div className="text-2xl font-bold text-blue-400" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                  {actualRevenue.toLocaleString('ru-RU')} ₽
+                  {formatPrice(actualRevenue, tenant?.currency)}
                 </div>
               </Card>
             </div>
@@ -842,7 +844,7 @@ export function OwnerDashboardPage() {
                     <p className="text-[11px] text-neutral-400">{s.durationMin} мин · Буфер {s.bufferAfterMin} мин</p>
                   </div>
                   <div className="text-sm font-bold text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                    {s.price} ₽
+                    {formatPrice(s.price, tenant?.currency)}
                   </div>
                 </Card>
               ))}
@@ -924,7 +926,7 @@ export function OwnerDashboardPage() {
             >
               <option value="">-- Выберите услугу --</option>
               {tenant.services.map((s) => (
-                <option key={s.id} value={s.id}>{s.name} ({s.price} ₽)</option>
+                <option key={s.id} value={s.id}>{s.name} ({formatPrice(s.price, tenant?.currency)})</option>
               ))}
             </select>
           </div>

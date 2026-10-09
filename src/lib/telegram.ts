@@ -3,6 +3,8 @@
  * Sends instant messages when clients create appointments.
  */
 
+import { formatPrice } from './currency';
+
 export interface TelegramConfig {
   botToken: string;
   chatId: string;
@@ -97,6 +99,7 @@ export async function notifyNewBookingTelegram(
     masterName?: string;
     startAt: string;
     price: number;
+    currency?: string;
     notes?: string;
   }
 ): Promise<void> {
@@ -122,7 +125,7 @@ export async function notifyNewBookingTelegram(
     `💅 <b>Услуга:</b> ${booking.serviceName}\n` +
     `👩‍🎨 <b>Мастер:</b> ${booking.masterName || 'Любой свободный'}\n` +
     `📅 <b>Дата и время:</b> ${formattedDate} в ${formattedTime}\n` +
-    `💰 <b>Стоимость:</b> ${booking.price.toLocaleString('ru-RU')} ₽\n` +
+    `💰 <b>Стоимость:</b> ${formatPrice(booking.price, booking.currency)}\n` +
     (booking.notes ? `💬 <b>Пожелания:</b> <i>${booking.notes}</i>\n` : '');
 
   try {
@@ -131,3 +134,4 @@ export async function notifyNewBookingTelegram(
     console.warn('Telegram notification note:', err);
   }
 }
+

@@ -425,6 +425,7 @@ class MemoryBookingStore {
       masterName: master ? master.name : undefined,
       startAt: startAtDate.toISOString(),
       price: totalPrice,
+      currency: tenant.currency,
       notes: params.notes,
     });
 

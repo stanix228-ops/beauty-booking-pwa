@@ -1,5 +1,7 @@
 import { Clock, Plus, Check } from 'lucide-react';
 import type { Service, ServiceOption } from '../../scripts/schema';
+import { useTenant } from '../context/TenantContext';
+import { formatPrice } from '../lib/currency';
 
 interface ServiceCardProps {
   service: Service;
@@ -8,6 +10,7 @@ interface ServiceCardProps {
   onSelectService: (service: Service) => void;
   onOpenOptions: (service: Service) => void;
   hasOptions: boolean;
+  currency?: string;
 }
 
 export function ServiceCard({
@@ -17,7 +20,10 @@ export function ServiceCard({
   onSelectService,
   onOpenOptions,
   hasOptions,
+  currency,
 }: ServiceCardProps) {
+  const { tenant } = useTenant();
+  const currentCurrency = currency || tenant?.currency || 'KZT';
   const optionsSum = selectedOptions.reduce((sum, opt) => sum + opt.price, 0);
   const optionsDuration = selectedOptions.reduce((sum, opt) => sum + opt.durationMin, 0);
 
@@ -77,7 +83,7 @@ export function ServiceCard({
             {/* Price Typography */}
             <div className="shrink-0 whitespace-nowrap">
               <span className="text-base sm:text-lg font-bold font-mono tracking-tight text-white whitespace-nowrap">
-                {displayPrice.toLocaleString('ru-RU')}&nbsp;₽
+                {formatPrice(displayPrice, currentCurrency)}
               </span>
             </div>
 

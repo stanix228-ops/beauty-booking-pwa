@@ -5,6 +5,7 @@ import { Input } from './ui/Input';
 import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
 import { handlePhoneInput } from '../lib/phone';
 import { useTenant } from '../context/TenantContext';
+import { formatPrice } from '../lib/currency';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ShieldCheck } from '@phosphor-icons/react';
 import type { Service, ServiceOption, Master } from '../../scripts/schema';
@@ -165,7 +166,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
             </div>
             <div className="text-right">
               <span className="font-bold text-sm text-white">
-                {totalPrice.toLocaleString('ru-RU')} ₽
+                {formatPrice(totalPrice, tenant?.currency)}
               </span>
               <p className="text-[11px] text-[#8E8E93] mt-0.5">{totalDuration} мин</p>
             </div>
@@ -177,7 +178,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
               {options.map((opt) => (
                 <div key={opt.id} className="flex justify-between text-xs text-neutral-300">
                   <span>+ {opt.name}</span>
-                  <span>+{opt.price} ₽</span>
+                  <span>+{formatPrice(opt.price, tenant?.currency)}</span>
                 </div>
               ))}
             </div>
@@ -261,7 +262,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
             disabled={isSubmitting}
             className="w-full h-12 text-sm font-bold rounded-xl cursor-pointer active:scale-98 transition-all bg-white text-black hover:bg-neutral-100 shadow-[0_4px_25px_rgba(255,255,255,0.25)]"
           >
-            {isSubmitting ? 'Бронирование...' : `Подтвердить запись за ${totalPrice.toLocaleString('ru-RU')} ₽`}
+            {isSubmitting ? 'Бронирование...' : `Подтвердить запись за ${formatPrice(totalPrice, tenant?.currency)}`}
           </Button>
 
           <p className="text-[10px] text-neutral-400 text-center mt-2.5 flex items-center justify-center gap-1">

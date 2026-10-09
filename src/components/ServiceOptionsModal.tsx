@@ -1,6 +1,8 @@
 import { BottomSheet } from './ui/BottomSheet';
 import { Check, Clock } from 'lucide-react';
 import type { Service, ServiceOption } from '../../scripts/schema';
+import { useTenant } from '../context/TenantContext';
+import { formatPrice } from '../lib/currency';
 
 interface ServiceOptionsModalProps {
   open: boolean;
@@ -10,6 +12,7 @@ interface ServiceOptionsModalProps {
   selectedOptions: ServiceOption[];
   onToggleOption: (option: ServiceOption) => void;
   onConfirm?: () => void;
+  currency?: string;
 }
 
 export function ServiceOptionsModal({
@@ -20,7 +23,10 @@ export function ServiceOptionsModal({
   selectedOptions,
   onToggleOption,
   onConfirm,
+  currency,
 }: ServiceOptionsModalProps) {
+  const { tenant } = useTenant();
+  const currentCurrency = currency || tenant?.currency || 'KZT';
   if (!service) return null;
 
   const selectedIds = new Set(selectedOptions.map((o) => o.id));
@@ -57,7 +63,7 @@ export function ServiceOptionsModal({
                 )}
                 <div className="flex items-center gap-3 text-xs text-[#8E8E93]">
                   <span className="font-semibold text-white">
-                    +{opt.price.toLocaleString('ru-RU')} ₽
+                    +{formatPrice(opt.price, currentCurrency)}
                   </span>
                   {opt.durationMin > 0 && (
                     <span className="flex items-center gap-1 text-[11px] text-[#8E8E93]">
