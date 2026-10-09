@@ -1,0 +1,26 @@
+{
+  "id": "/s/ayza-beauty-space/",
+  "name": "AYZA BEAUTY SPACE",
+  "short_name": "AYZA BEAUTY ",
+  "description": "Премиальное пространство красоты в Шымкенте · Макияж, волосы, ногти, ресницы и брови",
+  "start_url": "/s/ayza-beauty-space/",
+  "scope": "/s/ayza-beauty-space/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080608",
+  "theme_color": "#8E283E",
+  "icons": [
+    {
+      "src": "/tenants/ayza-beauty-space/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/tenants/ayza-beauty-space/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}
