@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTenant } from '../context/TenantContext';
 import { BookingEngine, type BookingDetails } from '../lib/booking-store';
 import { formatPrice } from '../lib/currency';
+import { getAssetUrl } from '../lib/assets';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
@@ -775,7 +776,7 @@ export function OwnerDashboardPage() {
               {galleryItems.map((item) => (
                 <Card key={item.id} className="p-3.5 border border-white/10 bg-neutral-900/60 space-y-2.5">
                   <div className="h-36 rounded-xl overflow-hidden bg-neutral-950">
-                    <img src={item.imageUrl} alt={item.caption} className="w-full h-full object-cover" />
+                    <img src={getAssetUrl(item.imageUrl)} alt={item.caption} className="w-full h-full object-cover" />
                   </div>
                   <div className="space-y-2">
                     <div>
@@ -813,7 +814,7 @@ export function OwnerDashboardPage() {
               {tenant.masters.map((m) => (
                 <Card key={m.id} className="p-4 border border-white/10 bg-neutral-900/60 space-y-2">
                   <div className="flex items-center gap-3">
-                    <img src={m.avatarUrl} alt={m.name} className="w-12 h-12 rounded-xl object-cover" />
+                    <img src={getAssetUrl(m.avatarUrl)} alt={m.name} className="w-12 h-12 rounded-xl object-cover" />
                     <div>
                       <h4 className="text-sm font-bold text-white">{m.name}</h4>
                       <p className="text-xs text-neutral-400">{m.title}</p>

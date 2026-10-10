@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTenant } from '../context/TenantContext';
+import { getAssetUrl } from '../lib/assets';
 import { Camera } from '@phosphor-icons/react';
 
 export const WorksGallery: React.FC = () => {
@@ -39,7 +40,7 @@ export const WorksGallery: React.FC = () => {
           >
             <div className="aspect-square w-full overflow-hidden">
               <img
-                src={item.imageUrl}
+                src={getAssetUrl(item.imageUrl)}
                 alt={item.caption}
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"

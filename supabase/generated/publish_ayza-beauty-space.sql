@@ -1,6 +1,6 @@
 -- ========================================================
 -- PUBLISH TENANT: AYZA BEAUTY SPACE (ayza-beauty-space)
--- Generated automatically at: 2026-10-09T13:21:14.256Z
+-- Generated automatically at: 2026-10-10T13:01:15.922Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 
@@ -119,7 +119,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000101', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Образ от Top Master Ayza Ertaeva', 
         'Эксклюзивный полный образ от основательницы студии: авторский макияж и вечерняя прическа/укладка.', 
         20000, 90, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80', 1, true, now()
+        '/tenants/ayza-beauty-space/images/work-makeup-1.jpg', 1, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -135,7 +135,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000102', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Дневной макияж', 
         'Естественный сияющий макияж, деликатно подчеркивающий природную красоту.', 
         9000, 60, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', 2, true, now()
+        '/tenants/ayza-beauty-space/images/work-makeup-2.jpg', 2, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -151,7 +151,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000103', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Вечерний макияж', 
         'Стойкий выразительный макияж для праздников, торжеств и фотосессий.', 
         10000, 60, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80', 3, true, now()
+        '/tenants/ayza-beauty-space/images/work-makeup-1.jpg', 3, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -231,7 +231,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000108', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Прическа', 
         'Торжественная собранная прическа, текстурный пучок или хвост.', 
         8000, 60, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80', 8, true, now()
+        '/tenants/ayza-beauty-space/images/work-hair.jpg', 8, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -247,7 +247,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000109', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Свадебная прическа', 
         'Королевская прическа невесты с надежной фиксацией фаты и аксессуаров.', 
         15000, 90, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', 9, true, now()
+        '/tenants/ayza-beauty-space/images/work-hair.jpg', 9, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -311,7 +311,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000201', v_tenant_id, '30000000-0000-4000-8000-000000000020', 'Маникюр', 
         'Аппаратная или комбинированная обработка кутикулы и формы ногтей.', 
         5000, 45, 15, 'MANICURE_DESK', 
-        'https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80', 1, true, now()
+        '/tenants/ayza-beauty-space/images/work-manicure-1.jpg', 1, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -327,7 +327,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000202', v_tenant_id, '30000000-0000-4000-8000-000000000020', 'Маникюр + лак покрытие', 
         'Чистый гигиенический маникюр со стойким глянцевым лаковым покрытием.', 
         8000, 60, 15, 'MANICURE_DESK', 
-        'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80', 2, true, now()
+        '/tenants/ayza-beauty-space/images/work-manicure-trend.jpg', 2, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -343,7 +343,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000203', v_tenant_id, '30000000-0000-4000-8000-000000000020', 'Наращивание ногтей на верхних формах', 
         'Современное моделирование: идеальная форма и тонкий натуральный торец.', 
         10000, 120, 15, 'MANICURE_DESK', 
-        'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80', 3, true, now()
+        '/tenants/ayza-beauty-space/images/work-manicure-3.jpg', 3, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -519,7 +519,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000401', v_tenant_id, '30000000-0000-4000-8000-000000000040', 'Классика', 
         'Наращивание одной искусственной ресницы на каждую свою (1D).', 
         8000, 90, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=600&q=80', 1, true, now()
+        '/tenants/ayza-beauty-space/images/work-lashes.jpg', 1, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -535,7 +535,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000402', v_tenant_id, '30000000-0000-4000-8000-000000000040', 'Объем 2D-3D', 
         'Пышный бархатный объем, подчеркивающий глубину взгляда.', 
         9000, 120, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80', 2, true, now()
+        '/tenants/ayza-beauty-space/images/work-lashes.jpg', 2, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,

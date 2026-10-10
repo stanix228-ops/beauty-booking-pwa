@@ -1,5 +1,6 @@
 import { Star, Sparkles } from 'lucide-react';
 import type { Master, Service } from '../../scripts/schema';
+import { getAssetUrl } from '../lib/assets';
 
 interface MasterPickerProps {
   masters: Master[];
@@ -80,7 +81,7 @@ export function MasterPicker({
               <div className="relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 bg-neutral-900 border border-white/10">
                 {master.avatarUrl ? (
                   <img
-                    src={master.avatarUrl}
+                    src={getAssetUrl(master.avatarUrl)}
                     alt={master.name}
                     className="w-full h-full object-cover"
                   />

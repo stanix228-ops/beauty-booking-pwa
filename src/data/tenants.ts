@@ -510,7 +510,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -523,7 +523,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-2.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -536,7 +536,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -601,7 +601,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-hair.jpg",
         "displayOrder": 8,
         "isActive": true
       },
@@ -614,7 +614,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-hair.jpg",
         "displayOrder": 9,
         "isActive": true
       },
@@ -666,7 +666,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 45,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-1.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -679,7 +679,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-trend.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -692,7 +692,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-3.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -835,7 +835,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-lashes.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -848,7 +848,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/work-lashes.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -1497,50 +1497,59 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       }
     ],
     "assets": {
-      "logo": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80",
-      "hero": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=85",
+      "logo": "/tenants/ayza-beauty-space/images/logo.jpg",
+      "hero": "/tenants/ayza-beauty-space/images/hero.jpg",
       "gallery": [
-        "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80"
+        "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
+        "/tenants/ayza-beauty-space/images/work-hair.jpg",
+        "/tenants/ayza-beauty-space/images/work-manicure-trend.jpg",
+        "/tenants/ayza-beauty-space/images/work-manicure-1.jpg",
+        "/tenants/ayza-beauty-space/images/work-makeup-2.jpg",
+        "/tenants/ayza-beauty-space/images/work-lashes.jpg",
+        "/tenants/ayza-beauty-space/images/work-manicure-3.jpg"
       ],
       "galleryItems": [
         {
           "id": "work-1",
-          "imageUrl": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
-          "caption": "Вечерний макияж и текстурные локоны от Ayza Ertaeva",
+          "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
+          "caption": "Вечерний макияж от Ayza Ertaeva",
           "displayOrder": 1
         },
         {
           "id": "work-2",
-          "imageUrl": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80",
-          "caption": "Бархатное наращивание ресниц 2D с эффектом Kylie",
+          "imageUrl": "/tenants/ayza-beauty-space/images/work-hair.jpg",
+          "caption": "Свадебная прическа и текстурные локоны",
           "displayOrder": 2
         },
         {
           "id": "work-3",
-          "imageUrl": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
-          "caption": "Комбинированный маникюр с молочным выравниванием",
+          "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-trend.jpg",
+          "caption": "Трендовый маникюр и авторский дизайн",
           "displayOrder": 3
         },
         {
           "id": "work-4",
-          "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80",
-          "caption": "Smart-педикюр СПА с молекулярным маслом",
+          "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-1.jpg",
+          "caption": "Аппаратный маникюр с идеальным бликом",
           "displayOrder": 4
         },
         {
           "id": "work-5",
-          "imageUrl": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=800&q=80",
-          "caption": "Архитектура и ламинирование бровей",
+          "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-2.jpg",
+          "caption": "Дневной макияж и естественное сияние",
           "displayOrder": 5
         },
         {
           "id": "work-6",
-          "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-          "caption": "Свадебный образ невесты — стойкость 24 часа",
+          "imageUrl": "/tenants/ayza-beauty-space/images/work-lashes.jpg",
+          "caption": "Эффектное наращивание ресниц и взгляд Kylie",
           "displayOrder": 6
+        },
+        {
+          "id": "work-7",
+          "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-3.jpg",
+          "caption": "Наращивание ногтей на верхние формы",
+          "displayOrder": 7
         }
       ]
     }

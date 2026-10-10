@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useTenant } from '../context/TenantContext';
+import { getAssetUrl } from '../lib/assets';
 import { MapPin, Phone, Clock, CalendarPlus, Sparkle, ShieldCheck, DeviceMobile } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
@@ -41,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
       <div ref={heroRef} className="relative h-68 sm:h-84 w-full overflow-hidden select-none">
         {tenant.assets.hero ? (
           <img
-            src={tenant.assets.hero}
+            src={getAssetUrl(tenant.assets.hero)}
             alt={tenant.name}
             className="w-full h-full object-cover object-center filter brightness-[0.6] transition-transform duration-700"
           />
@@ -96,6 +97,16 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
 
       {/* Studio Header Card */}
       <div className="relative px-4 pb-6 pt-2 max-w-lg mx-auto text-center">
+        {tenant.assets.logo && (
+          <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto -mt-12 sm:-mt-14 mb-3 rounded-full overflow-hidden border-2 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.8)] bg-[#0D0D11] relative z-20">
+            <img
+              src={getAssetUrl(tenant.assets.logo)}
+              alt={tenant.name}
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        )}
+
         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight text-center">
           {tenant.name}
         </h1>

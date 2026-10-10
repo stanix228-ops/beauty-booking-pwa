@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookingEngine, type BookingDetails, type AvailableSlot } from '../lib/booking-store';
 import { useTenant } from '../context/TenantContext';
 import { formatPrice } from '../lib/currency';
+import { getAssetUrl } from '../lib/assets';
 import { downloadIcsFile } from '../lib/ics';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -301,7 +302,7 @@ export function BookingStatusPage() {
             <div className="w-12 h-12 rounded-xl overflow-hidden bg-neutral-800 border border-white/10 flex-shrink-0">
               {booking.master.avatar_url ? (
                 <img
-                  src={booking.master.avatar_url}
+                  src={getAssetUrl(booking.master.avatar_url)}
                   alt={booking.master.name}
                   className="w-full h-full object-cover"
                 />

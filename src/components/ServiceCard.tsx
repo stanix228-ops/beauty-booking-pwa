@@ -2,6 +2,7 @@ import { Clock, Plus, Check } from 'lucide-react';
 import type { Service, ServiceOption } from '../../scripts/schema';
 import { useTenant } from '../context/TenantContext';
 import { formatPrice } from '../lib/currency';
+import { getAssetUrl } from '../lib/assets';
 
 interface ServiceCardProps {
   service: Service;
@@ -44,7 +45,7 @@ export function ServiceCard({
         {service.imageUrl && (
           <div className="relative aspect-square w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden flex-shrink-0 bg-neutral-900 border border-white/10">
             <img
-              src={service.imageUrl}
+              src={getAssetUrl(service.imageUrl)}
               alt={service.name}
               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
