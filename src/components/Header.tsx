@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
         </div>
 
         {/* Wide Monochrome Glass Capsule Booking Button Moving With The Photo */}
-        <div className="absolute bottom-18 sm:bottom-22 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-20 max-w-sm sm:w-80 mx-auto">
+        <div className="absolute bottom-[54px] sm:bottom-[62px] inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-20 max-w-sm sm:w-80 mx-auto">
           <button
             type="button"
             onClick={handleHeroBookClick}

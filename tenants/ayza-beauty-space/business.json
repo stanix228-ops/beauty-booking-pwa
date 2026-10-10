@@ -899,17 +899,7 @@
       "/tenants/ayza-beauty-space/images/service-makeup-bridal.jpg",
       "/tenants/ayza-beauty-space/images/service-hair-bridal.jpg",
       "/tenants/ayza-beauty-space/images/service-manicure-extension.jpg",
-      "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg",
-      "/tenants/ayza-beauty-space/images/service-makeup-evening.jpg",
-      "/tenants/ayza-beauty-space/images/service-hair-evening.jpg",
-      "/tenants/ayza-beauty-space/images/service-brows.png",
-      "/tenants/ayza-beauty-space/images/service-hair-styling.jpg",
-      "/tenants/ayza-beauty-space/images/service-manicure-polish.jpg",
-      "/tenants/ayza-beauty-space/images/service-pedicure-classic.jpg",
-      "/tenants/ayza-beauty-space/images/service-lashes-classic.jpg",
-      "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
-      "/tenants/ayza-beauty-space/images/service-manicure-classic.jpg",
-      "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg"
+      "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg"
     ],
     "galleryItems": [
       {
@@ -935,66 +925,6 @@
         "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg",
         "caption": "Педикюр с гелевым покрытием",
         "displayOrder": 4
-      },
-      {
-        "id": "work-5",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-evening.jpg",
-        "caption": "Вечерний макияж и выразительный взгляд",
-        "displayOrder": 5
-      },
-      {
-        "id": "work-6",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-evening.jpg",
-        "caption": "Вечерняя укладка и локоны",
-        "displayOrder": 6
-      },
-      {
-        "id": "work-7",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
-        "caption": "Архитектура и окрашивание бровей",
-        "displayOrder": 7
-      },
-      {
-        "id": "work-8",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-styling.jpg",
-        "caption": "Объемная укладка волос",
-        "displayOrder": 8
-      },
-      {
-        "id": "work-9",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-polish.jpg",
-        "caption": "Маникюр со стойким покрытием",
-        "displayOrder": 9
-      },
-      {
-        "id": "work-10",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-classic.jpg",
-        "caption": "Аппаратная обработка стоп и пальчиков",
-        "displayOrder": 10
-      },
-      {
-        "id": "work-11",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-classic.jpg",
-        "caption": "Классическое наращивание ресниц",
-        "displayOrder": 11
-      },
-      {
-        "id": "work-12",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
-        "caption": "Дневной макияж и естественное сияние",
-        "displayOrder": 12
-      },
-      {
-        "id": "work-13",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-classic.jpg",
-        "caption": "Чистый гигиенический маникюр",
-        "displayOrder": 13
-      },
-      {
-        "id": "work-14",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
-        "caption": "СПА-уход для ног и парафинотерапия",
-        "displayOrder": 14
       }
     ]
   }
