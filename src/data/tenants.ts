@@ -510,7 +510,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-bridal.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -523,7 +523,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-2.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -536,7 +536,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-evening.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -549,7 +549,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 4,
         "isActive": true
       },
@@ -588,7 +588,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 45,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-styling.jpg",
         "displayOrder": 7,
         "isActive": true
       },
@@ -601,7 +601,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-hair.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-evening.jpg",
         "displayOrder": 8,
         "isActive": true
       },
@@ -614,7 +614,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-hair.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-bridal.jpg",
         "displayOrder": 9,
         "isActive": true
       },
@@ -666,7 +666,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 45,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-1.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-classic.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -679,7 +679,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-trend.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-polish.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -692,7 +692,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-3.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-extension.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -731,7 +731,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-classic.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -744,7 +744,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -770,7 +770,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1508746829417-e6f548d8d6ed?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 4,
         "isActive": true
       },
@@ -783,7 +783,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 5,
         "isActive": true
       },
@@ -796,7 +796,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 6,
         "isActive": true
       },
@@ -809,7 +809,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 7,
         "isActive": true
       },
@@ -822,7 +822,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
         "displayOrder": 8,
         "isActive": true
       },
@@ -835,7 +835,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-lashes.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-classic.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -848,7 +848,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/work-lashes.jpg",
+        "imageUrl": "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 2,
         "isActive": true
       },
@@ -861,7 +861,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 3,
         "isActive": true
       },
@@ -874,7 +874,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 4,
         "isActive": true
       },
@@ -887,7 +887,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
         "displayOrder": 1,
         "isActive": true
       },
@@ -913,7 +913,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 3,
         "isActive": true
       },
@@ -926,7 +926,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1588510849445-4795b277a454?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 4,
         "isActive": true
       },
@@ -939,7 +939,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 5,
         "isActive": true
       },
@@ -965,7 +965,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 15,
         "bufferAfterMin": 5,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 2,
         "isActive": true
       },
@@ -978,7 +978,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 15,
         "bufferAfterMin": 5,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 3,
         "isActive": true
       },
@@ -991,7 +991,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 4,
         "isActive": true
       },
@@ -1004,7 +1004,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 5,
         "isActive": true
       },
@@ -1017,7 +1017,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 6,
         "isActive": true
       },
@@ -1030,7 +1030,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 7,
         "isActive": true
       },
@@ -1043,7 +1043,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 25,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1513094735237-8f2714d57c13?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 8,
         "isActive": true
       },
@@ -1056,7 +1056,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 40,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1498842812179-c81beecf902c?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 9,
         "isActive": true
       },
@@ -1069,7 +1069,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1519735777090-ec97162dc266?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 10,
         "isActive": true
       },
@@ -1082,7 +1082,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80",
         "displayOrder": 11,
         "isActive": true
       }
@@ -1500,56 +1500,105 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       "logo": "/tenants/ayza-beauty-space/images/logo.jpg",
       "hero": "/tenants/ayza-beauty-space/images/hero.jpg",
       "gallery": [
-        "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
-        "/tenants/ayza-beauty-space/images/work-hair.jpg",
-        "/tenants/ayza-beauty-space/images/work-manicure-trend.jpg",
-        "/tenants/ayza-beauty-space/images/work-manicure-1.jpg",
-        "/tenants/ayza-beauty-space/images/work-makeup-2.jpg",
-        "/tenants/ayza-beauty-space/images/work-lashes.jpg",
-        "/tenants/ayza-beauty-space/images/work-manicure-3.jpg"
+        "/tenants/ayza-beauty-space/images/service-makeup-bridal.jpg",
+        "/tenants/ayza-beauty-space/images/service-hair-bridal.jpg",
+        "/tenants/ayza-beauty-space/images/service-manicure-extension.jpg",
+        "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg",
+        "/tenants/ayza-beauty-space/images/service-makeup-evening.jpg",
+        "/tenants/ayza-beauty-space/images/service-hair-evening.jpg",
+        "/tenants/ayza-beauty-space/images/service-brows.png",
+        "/tenants/ayza-beauty-space/images/service-hair-styling.jpg",
+        "/tenants/ayza-beauty-space/images/service-manicure-polish.jpg",
+        "/tenants/ayza-beauty-space/images/service-pedicure-classic.jpg",
+        "/tenants/ayza-beauty-space/images/service-lashes-classic.jpg",
+        "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
+        "/tenants/ayza-beauty-space/images/service-manicure-classic.jpg",
+        "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg"
       ],
       "galleryItems": [
         {
           "id": "work-1",
-          "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-1.jpg",
-          "caption": "Вечерний макияж от Ayza Ertaeva",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-bridal.jpg",
+          "caption": "Свадебный образ от Top Master Ayza Ertaeva",
           "displayOrder": 1
         },
         {
           "id": "work-2",
-          "imageUrl": "/tenants/ayza-beauty-space/images/work-hair.jpg",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-bridal.jpg",
           "caption": "Свадебная прическа и текстурные локоны",
           "displayOrder": 2
         },
         {
           "id": "work-3",
-          "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-trend.jpg",
-          "caption": "Трендовый маникюр и авторский дизайн",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-extension.jpg",
+          "caption": "Наращивание ногтей на верхних формах",
           "displayOrder": 3
         },
         {
           "id": "work-4",
-          "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-1.jpg",
-          "caption": "Аппаратный маникюр с идеальным бликом",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg",
+          "caption": "Педикюр с гелевым покрытием",
           "displayOrder": 4
         },
         {
           "id": "work-5",
-          "imageUrl": "/tenants/ayza-beauty-space/images/work-makeup-2.jpg",
-          "caption": "Дневной макияж и естественное сияние",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-evening.jpg",
+          "caption": "Вечерний макияж и выразительный взгляд",
           "displayOrder": 5
         },
         {
           "id": "work-6",
-          "imageUrl": "/tenants/ayza-beauty-space/images/work-lashes.jpg",
-          "caption": "Эффектное наращивание ресниц и взгляд Kylie",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-evening.jpg",
+          "caption": "Вечерняя укладка и локоны",
           "displayOrder": 6
         },
         {
           "id": "work-7",
-          "imageUrl": "/tenants/ayza-beauty-space/images/work-manicure-3.jpg",
-          "caption": "Наращивание ногтей на верхние формы",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
+          "caption": "Архитектура и окрашивание бровей",
           "displayOrder": 7
+        },
+        {
+          "id": "work-8",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-styling.jpg",
+          "caption": "Объемная укладка волос",
+          "displayOrder": 8
+        },
+        {
+          "id": "work-9",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-polish.jpg",
+          "caption": "Маникюр со стойким покрытием",
+          "displayOrder": 9
+        },
+        {
+          "id": "work-10",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-classic.jpg",
+          "caption": "Аппаратная обработка стоп и пальчиков",
+          "displayOrder": 10
+        },
+        {
+          "id": "work-11",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-classic.jpg",
+          "caption": "Классическое наращивание ресниц",
+          "displayOrder": 11
+        },
+        {
+          "id": "work-12",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
+          "caption": "Дневной макияж и естественное сияние",
+          "displayOrder": 12
+        },
+        {
+          "id": "work-13",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-classic.jpg",
+          "caption": "Чистый гигиенический маникюр",
+          "displayOrder": 13
+        },
+        {
+          "id": "work-14",
+          "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+          "caption": "СПА-уход для ног и парафинотерапия",
+          "displayOrder": 14
         }
       ]
     }

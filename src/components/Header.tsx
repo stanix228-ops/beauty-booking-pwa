@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
         </div>
 
         {/* Wide Monochrome Glass Capsule Booking Button Moving With The Photo */}
-        <div className="absolute bottom-5 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-20 max-w-sm sm:w-80 mx-auto">
+        <div className="absolute bottom-18 sm:bottom-22 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-20 max-w-sm sm:w-80 mx-auto">
           <button
             type="button"
             onClick={handleHeroBookClick}
@@ -131,7 +131,9 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick, onInstallClick }) =
           </div>
           <div className="flex items-center gap-1.5">
             <Clock size={15} className="text-neutral-400" />
-            <span>10:00 – 22:00</span>
+            <span>
+              {tenant.businessHours?.[1]?.openTime || '09:00'} – {tenant.businessHours?.[1]?.closeTime || '20:00'}
+            </span>
           </div>
         </div>
       </div>
