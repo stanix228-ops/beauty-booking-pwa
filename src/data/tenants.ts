@@ -809,7 +809,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-japanese-pedicure.jpg",
         "displayOrder": 7,
         "isActive": true
       },
@@ -848,7 +848,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-classic.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-2d3d.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -861,7 +861,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-evening.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-mega-volume.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -874,7 +874,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-lamination.jpg",
         "displayOrder": 4,
         "isActive": true
       },
@@ -900,7 +900,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 45,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-tinting.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -913,7 +913,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-lamination.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -926,7 +926,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-lamination-tint.jpg",
         "displayOrder": 4,
         "isActive": true
       },
@@ -939,7 +939,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-wedding-makeup.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-halal.jpg",
         "displayOrder": 5,
         "isActive": true
       },
@@ -952,7 +952,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-face.jpg",
         "displayOrder": 1,
         "isActive": true
       },
@@ -965,7 +965,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 15,
         "bufferAfterMin": 5,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-wedding-makeup.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-upper-lip.jpg",
         "displayOrder": 2,
         "isActive": true
       },
@@ -978,7 +978,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 15,
         "bufferAfterMin": 5,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-bangs-trim.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-sideburns.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -991,7 +991,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-underarms.jpg",
         "displayOrder": 4,
         "isActive": true
       },
@@ -1004,7 +1004,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-bikini.jpg",
         "displayOrder": 5,
         "isActive": true
       },
@@ -1017,7 +1017,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-japanese-manicure.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-arms-half.jpg",
         "displayOrder": 6,
         "isActive": true
       },
@@ -1030,7 +1030,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-classic.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-arms-full.jpg",
         "displayOrder": 7,
         "isActive": true
       },
@@ -1043,7 +1043,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 25,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-half.jpg",
         "displayOrder": 8,
         "isActive": true
       },
@@ -1056,7 +1056,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 40,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-combi-pedicure-gel.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-full.jpg",
         "displayOrder": 9,
         "isActive": true
       },
@@ -1069,7 +1069,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-stomach.jpg",
         "displayOrder": 10,
         "isActive": true
       },
@@ -1082,7 +1082,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 30,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-back.jpg",
         "displayOrder": 11,
         "isActive": true
       }

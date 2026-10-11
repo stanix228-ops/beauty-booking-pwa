@@ -160,9 +160,6 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
           <div className="flex items-start justify-between">
             <div>
               <h4 className="font-semibold text-sm text-white">{service.name}</h4>
-              <p className="text-xs text-[#8E8E93] mt-0.5">
-                {master ? `Мастер: ${master.name}` : 'Любой свободный мастер'}
-              </p>
             </div>
             <div className="text-right">
               <span className="font-bold text-sm text-white">

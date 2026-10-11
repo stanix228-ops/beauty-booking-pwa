@@ -5,7 +5,6 @@ import { InfoCards } from '../components/InfoCards';
 import { WorksGallery } from '../components/WorksGallery';
 import { CategoryFilter } from '../components/CategoryFilter';
 import { ServiceCard } from '../components/ServiceCard';
-import { MasterPicker } from '../components/MasterPicker';
 import { ServiceOptionsModal } from '../components/ServiceOptionsModal';
 import { SlotPickerModal } from '../components/SlotPickerModal';
 import { BookingFormModal } from '../components/BookingFormModal';
@@ -26,7 +25,7 @@ export function ClientBookingPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<ServiceOption[]>([]);
-  const [selectedMasterId, setSelectedMasterId] = useState<string | null>(null);
+  const selectedMasterId: string | null = null;
 
   // Modals state
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
@@ -208,17 +207,7 @@ export function ClientBookingPage() {
           </div>
         </section>
 
-        {/* 5. Master Stylists Section */}
-        <section className="reveal-section pt-4 border-t border-white/10">
-          <MasterPicker
-            masters={tenant.masters}
-            selectedService={selectedService}
-            selectedMasterId={selectedMasterId}
-            onSelectMaster={setSelectedMasterId}
-          />
-        </section>
-
-        {/* 6. Studio Amenities & Atmosphere */}
+        {/* Studio Amenities & Atmosphere */}
         <section className="reveal-section p-4 rounded-2xl border border-white/10 bg-[#0D0D11] backdrop-blur-md space-y-3 shadow-lg">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
             О сервисе и комфорте студии

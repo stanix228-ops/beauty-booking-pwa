@@ -45,28 +45,118 @@
     "fontBody": "'Inter', -apple-system, sans-serif"
   },
   "businessHours": [
-    { "dayOfWeek": 0, "openTime": "09:00", "closeTime": "20:00", "isClosed": false },
-    { "dayOfWeek": 1, "openTime": "09:00", "closeTime": "20:00", "isClosed": false },
-    { "dayOfWeek": 2, "openTime": "09:00", "closeTime": "20:00", "isClosed": false },
-    { "dayOfWeek": 3, "openTime": "09:00", "closeTime": "20:00", "isClosed": false },
-    { "dayOfWeek": 4, "openTime": "09:00", "closeTime": "20:00", "isClosed": false },
-    { "dayOfWeek": 5, "openTime": "09:00", "closeTime": "20:00", "isClosed": false },
-    { "dayOfWeek": 6, "openTime": "09:00", "closeTime": "20:00", "isClosed": false }
+    {
+      "dayOfWeek": 0,
+      "openTime": "09:00",
+      "closeTime": "20:00",
+      "isClosed": false
+    },
+    {
+      "dayOfWeek": 1,
+      "openTime": "09:00",
+      "closeTime": "20:00",
+      "isClosed": false
+    },
+    {
+      "dayOfWeek": 2,
+      "openTime": "09:00",
+      "closeTime": "20:00",
+      "isClosed": false
+    },
+    {
+      "dayOfWeek": 3,
+      "openTime": "09:00",
+      "closeTime": "20:00",
+      "isClosed": false
+    },
+    {
+      "dayOfWeek": 4,
+      "openTime": "09:00",
+      "closeTime": "20:00",
+      "isClosed": false
+    },
+    {
+      "dayOfWeek": 5,
+      "openTime": "09:00",
+      "closeTime": "20:00",
+      "isClosed": false
+    },
+    {
+      "dayOfWeek": 6,
+      "openTime": "09:00",
+      "closeTime": "20:00",
+      "isClosed": false
+    }
   ],
   "workplaces": [
-    { "id": "30000000-0000-4000-8000-000000000001", "name": "Студия визажа и укладок", "type": "UNIVERSAL", "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000002", "name": "Маникюрная станция Ayza", "type": "MANICURE_DESK", "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000003", "name": "Smart СПА-кресло педикюра", "type": "PEDICURE_CHAIR", "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000004", "name": "Lash & Brow зона", "type": "UNIVERSAL", "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000005", "name": "Кабинет шугаринга и депиляции", "type": "UNIVERSAL", "isActive": true }
+    {
+      "id": "30000000-0000-4000-8000-000000000001",
+      "name": "Студия визажа и укладок",
+      "type": "UNIVERSAL",
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000002",
+      "name": "Маникюрная станция Ayza",
+      "type": "MANICURE_DESK",
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000003",
+      "name": "Smart СПА-кресло педикюра",
+      "type": "PEDICURE_CHAIR",
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000004",
+      "name": "Lash & Brow зона",
+      "type": "UNIVERSAL",
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000005",
+      "name": "Кабинет шугаринга и депиляции",
+      "type": "UNIVERSAL",
+      "isActive": true
+    }
   ],
   "categories": [
-    { "id": "30000000-0000-4000-8000-000000000010", "name": "Make-Up & Hair", "displayOrder": 1, "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000020", "name": "Nail (Маникюр)", "displayOrder": 2, "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000030", "name": "Pedicure (Педикюр)", "displayOrder": 3, "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000040", "name": "Lashes (Ресницы)", "displayOrder": 4, "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000050", "name": "Brows (Брови)", "displayOrder": 5, "isActive": true },
-    { "id": "30000000-0000-4000-8000-000000000060", "name": "Sugaring (Шугаринг)", "displayOrder": 6, "isActive": true }
+    {
+      "id": "30000000-0000-4000-8000-000000000010",
+      "name": "Make-Up & Hair",
+      "displayOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000020",
+      "name": "Nail (Маникюр)",
+      "displayOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000030",
+      "name": "Pedicure (Педикюр)",
+      "displayOrder": 3,
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000040",
+      "name": "Lashes (Ресницы)",
+      "displayOrder": 4,
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000050",
+      "name": "Brows (Брови)",
+      "displayOrder": 5,
+      "isActive": true
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000060",
+      "name": "Sugaring (Шугаринг)",
+      "displayOrder": 6,
+      "isActive": true
+    }
   ],
   "services": [
     {
@@ -377,7 +467,7 @@
       "durationMin": 75,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "PEDICURE_CHAIR",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-japanese-pedicure.jpg",
       "displayOrder": 7,
       "isActive": true
     },
@@ -416,7 +506,7 @@
       "durationMin": 120,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-classic.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-2d3d.jpg",
       "displayOrder": 2,
       "isActive": true
     },
@@ -429,7 +519,7 @@
       "durationMin": 120,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-evening.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-mega-volume.jpg",
       "displayOrder": 3,
       "isActive": true
     },
@@ -442,7 +532,7 @@
       "durationMin": 60,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-lashes-lamination.jpg",
       "displayOrder": 4,
       "isActive": true
     },
@@ -468,7 +558,7 @@
       "durationMin": 45,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-tinting.jpg",
       "displayOrder": 2,
       "isActive": true
     },
@@ -481,7 +571,7 @@
       "durationMin": 60,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-lamination.jpg",
       "displayOrder": 3,
       "isActive": true
     },
@@ -494,7 +584,7 @@
       "durationMin": 60,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-brows.png",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-lamination-tint.jpg",
       "displayOrder": 4,
       "isActive": true
     },
@@ -507,7 +597,7 @@
       "durationMin": 30,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-wedding-makeup.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-brows-halal.jpg",
       "displayOrder": 5,
       "isActive": true
     },
@@ -520,7 +610,7 @@
       "durationMin": 20,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-day.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-face.jpg",
       "displayOrder": 1,
       "isActive": true
     },
@@ -533,7 +623,7 @@
       "durationMin": 15,
       "bufferAfterMin": 5,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-wedding-makeup.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-upper-lip.jpg",
       "displayOrder": 2,
       "isActive": true
     },
@@ -546,7 +636,7 @@
       "durationMin": 15,
       "bufferAfterMin": 5,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-bangs-trim.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-sideburns.jpg",
       "displayOrder": 3,
       "isActive": true
     },
@@ -559,7 +649,7 @@
       "durationMin": 20,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-underarms.jpg",
       "displayOrder": 4,
       "isActive": true
     },
@@ -572,7 +662,7 @@
       "durationMin": 30,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-bikini.jpg",
       "displayOrder": 5,
       "isActive": true
     },
@@ -585,7 +675,7 @@
       "durationMin": 20,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-japanese-manicure.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-arms-half.jpg",
       "displayOrder": 6,
       "isActive": true
     },
@@ -598,7 +688,7 @@
       "durationMin": 30,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-classic.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-arms-full.jpg",
       "displayOrder": 7,
       "isActive": true
     },
@@ -611,7 +701,7 @@
       "durationMin": 25,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-half.jpg",
       "displayOrder": 8,
       "isActive": true
     },
@@ -624,7 +714,7 @@
       "durationMin": 40,
       "bufferAfterMin": 15,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-combi-pedicure-gel.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-full.jpg",
       "displayOrder": 9,
       "isActive": true
     },
@@ -637,7 +727,7 @@
       "durationMin": 20,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-stomach.jpg",
       "displayOrder": 10,
       "isActive": true
     },
@@ -650,7 +740,7 @@
       "durationMin": 30,
       "bufferAfterMin": 10,
       "requiredWorkplaceType": "UNIVERSAL",
-      "imageUrl": "/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg",
+      "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-back.jpg",
       "displayOrder": 11,
       "isActive": true
     }
@@ -764,7 +854,7 @@
       "title": "Основательница & Top Master",
       "bio": "Создательница пространства Ayza Beauty Space. Эксперт по свадебным и вечерним образам, сложным прическам и премиальному визажу.",
       "avatarUrl": "/tenants/ayza-beauty-space/images/master-ayza.jpg",
-      "rating": 5.0,
+      "rating": 5,
       "reviewsCount": 164,
       "serviceIds": [
         "30000000-0000-4000-8000-000000000101",
@@ -781,13 +871,48 @@
         "30000000-0000-4000-8000-000000000112"
       ],
       "schedule": [
-        { "dayOfWeek": 0, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 1, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 2, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 3, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 4, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 6, "startTime": "09:00", "endTime": "20:00", "isDayOff": false }
+        {
+          "dayOfWeek": 0,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 1,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 2,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 3,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 4,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 5,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 6,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        }
       ],
       "displayOrder": 1,
       "isActive": true
@@ -816,13 +941,48 @@
         "30000000-0000-4000-8000-000000000308"
       ],
       "schedule": [
-        { "dayOfWeek": 0, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 1, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 2, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 3, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 4, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 6, "startTime": "09:00", "endTime": "20:00", "isDayOff": false }
+        {
+          "dayOfWeek": 0,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 1,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 2,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 3,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 4,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 5,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 6,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        }
       ],
       "displayOrder": 2,
       "isActive": true
@@ -847,13 +1007,48 @@
         "30000000-0000-4000-8000-000000000505"
       ],
       "schedule": [
-        { "dayOfWeek": 0, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 1, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 2, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 3, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 4, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 6, "startTime": "09:00", "endTime": "20:00", "isDayOff": false }
+        {
+          "dayOfWeek": 0,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 1,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 2,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 3,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 4,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 5,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 6,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        }
       ],
       "displayOrder": 3,
       "isActive": true
@@ -880,13 +1075,48 @@
         "30000000-0000-4000-8000-000000000611"
       ],
       "schedule": [
-        { "dayOfWeek": 0, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 1, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 2, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 3, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 4, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 5, "startTime": "09:00", "endTime": "20:00", "isDayOff": false },
-        { "dayOfWeek": 6, "startTime": "09:00", "endTime": "20:00", "isDayOff": false }
+        {
+          "dayOfWeek": 0,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 1,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 2,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 3,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 4,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 5,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        },
+        {
+          "dayOfWeek": 6,
+          "startTime": "09:00",
+          "endTime": "20:00",
+          "isDayOff": false
+        }
       ],
       "displayOrder": 4,
       "isActive": true

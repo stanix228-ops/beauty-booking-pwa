@@ -22,7 +22,7 @@ import {
   Key,
   UploadSimple,
 } from '@phosphor-icons/react';
-import type { GalleryItem, Service, Master } from '../../scripts/schema';
+import type { GalleryItem, Service } from '../../scripts/schema';
 import { handlePhoneInput } from '../lib/phone';
 import {
   getTelegramConfig,
@@ -52,20 +52,43 @@ const STUDIO_PHOTO_PRESETS = [
   { label: 'Японский эко-маникюр', url: '/tenants/ayza-beauty-space/images/service-japanese-manicure.jpg' },
   { label: 'Педикюр классический', url: '/tenants/ayza-beauty-space/images/service-pedicure-classic.jpg' },
   { label: 'Педикюр с гель-лаком', url: '/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg' },
+  // Педикюр
   { label: 'Smart педикюр', url: '/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg' },
   { label: 'Smart педикюр с гель-лаком', url: '/tenants/ayza-beauty-space/images/service-smart-pedicure-gel.jpg' },
   { label: 'Комби педикюр', url: '/tenants/ayza-beauty-space/images/service-combi-pedicure.jpg' },
   { label: 'Комби педикюр с гель-лаком', url: '/tenants/ayza-beauty-space/images/service-combi-pedicure-gel.jpg' },
+  { label: 'Японский эко-педикюр', url: '/tenants/ayza-beauty-space/images/service-japanese-pedicure.jpg' },
   { label: 'Спа уход / парафинотерапия', url: '/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg' },
-  { label: 'Наращивание ресниц', url: '/tenants/ayza-beauty-space/images/service-lashes-classic.jpg' },
-  { label: 'Брови / ламинирование', url: '/tenants/ayza-beauty-space/images/service-brows.png' },
+  // Ресницы
+  { label: 'Ресницы Классика', url: '/tenants/ayza-beauty-space/images/service-lashes-classic.jpg' },
+  { label: 'Ресницы Объем 2D-3D', url: '/tenants/ayza-beauty-space/images/service-lashes-2d3d.jpg' },
+  { label: 'Ресницы Объем 4D-5D', url: '/tenants/ayza-beauty-space/images/service-lashes-mega-volume.jpg' },
+  { label: 'Ламинирование ресниц', url: '/tenants/ayza-beauty-space/images/service-lashes-lamination.jpg' },
+  // Брови
+  { label: 'Коррекция бровей', url: '/tenants/ayza-beauty-space/images/service-brows.png' },
+  { label: 'Коррекция бровей + окрашивание', url: '/tenants/ayza-beauty-space/images/service-brows-tinting.jpg' },
+  { label: 'Ламинирование бровей', url: '/tenants/ayza-beauty-space/images/service-brows-lamination.jpg' },
+  { label: 'Ламинирование + окрашивание', url: '/tenants/ayza-beauty-space/images/service-brows-lamination-tint.jpg' },
+  { label: 'Халал коррекция бровей', url: '/tenants/ayza-beauty-space/images/service-brows-halal.jpg' },
+  // Депиляция / Шугаринг
+  { label: 'Депиляция Лицо', url: '/tenants/ayza-beauty-space/images/service-wax-face.jpg' },
+  { label: 'Депиляция Усики', url: '/tenants/ayza-beauty-space/images/service-wax-upper-lip.jpg' },
+  { label: 'Депиляция Баки', url: '/tenants/ayza-beauty-space/images/service-wax-sideburns.jpg' },
+  { label: 'Депиляция Подмышки', url: '/tenants/ayza-beauty-space/images/service-wax-underarms.jpg' },
+  { label: 'Депиляция Глубокое бикини', url: '/tenants/ayza-beauty-space/images/service-wax-bikini.jpg' },
+  { label: 'Депиляция Руки до локтя', url: '/tenants/ayza-beauty-space/images/service-wax-arms-half.jpg' },
+  { label: 'Депиляция Руки полностью', url: '/tenants/ayza-beauty-space/images/service-wax-arms-full.jpg' },
+  { label: 'Депиляция Ноги до колен', url: '/tenants/ayza-beauty-space/images/service-wax-legs-half.jpg' },
+  { label: 'Депиляция Ноги полностью', url: '/tenants/ayza-beauty-space/images/service-wax-legs-full.jpg' },
+  { label: 'Депиляция Живот', url: '/tenants/ayza-beauty-space/images/service-wax-stomach.jpg' },
+  { label: 'Депиляция Спина', url: '/tenants/ayza-beauty-space/images/service-wax-back.jpg' },
 ];
 
-type Tab = 'today' | 'bookings' | 'calendar' | 'stats' | 'telegram' | 'gallery' | 'masters' | 'services' | 'settings';
+type Tab = 'today' | 'bookings' | 'calendar' | 'stats' | 'telegram' | 'gallery' | 'services' | 'settings';
 
 export function OwnerDashboardPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { tenant, updateServices, updateMasters } = useTenant();
+  const { tenant, updateServices } = useTenant();
   const navigate = useNavigate();
 
   // Strict Auth Guard
@@ -276,90 +299,7 @@ export function OwnerDashboardPage() {
     }
   };
 
-  // Masters CRUD state
-  const [isMasterModalOpen, setIsMasterModalOpen] = useState(false);
-  const [editingMasterId, setEditingMasterId] = useState<string | null>(null);
-  const [masterFormName, setMasterFormName] = useState('');
-  const [masterFormTitle, setMasterFormTitle] = useState('');
-  const [masterFormBio, setMasterFormBio] = useState('');
-  const [masterFormAvatar, setMasterFormAvatar] = useState('');
-  const [masterFormServices, setMasterFormServices] = useState<string[]>([]);
 
-  const handleOpenAddMaster = () => {
-    setEditingMasterId(null);
-    setMasterFormName('');
-    setMasterFormTitle('Мастер студии');
-    setMasterFormBio('Профессиональный сертифицированный мастер.');
-    setMasterFormAvatar('/tenants/ayza-beauty-space/images/master-ayza.jpg');
-    setMasterFormServices(tenant?.services.map((s) => s.id) || []);
-    setIsMasterModalOpen(true);
-  };
-
-  const handleOpenEditMaster = (m: Master) => {
-    setEditingMasterId(m.id);
-    setMasterFormName(m.name);
-    setMasterFormTitle(m.title);
-    setMasterFormBio(m.bio || '');
-    setMasterFormAvatar(m.avatarUrl || '/tenants/ayza-beauty-space/images/master-ayza.jpg');
-    setMasterFormServices(m.serviceIds || []);
-    setIsMasterModalOpen(true);
-  };
-
-  const handleSaveMaster = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!tenant || !masterFormName.trim()) return;
-
-    if (editingMasterId) {
-      const updated = tenant.masters.map((m) =>
-        m.id === editingMasterId
-          ? {
-              ...m,
-              name: masterFormName.trim(),
-              title: masterFormTitle.trim(),
-              bio: masterFormBio.trim(),
-              avatarUrl: masterFormAvatar.trim() || undefined,
-              serviceIds: masterFormServices.length > 0 ? masterFormServices : tenant.services.map((s) => s.id),
-            }
-          : m
-      );
-      updateMasters(updated);
-    } else {
-      const newMaster: Master = {
-        id: crypto.randomUUID ? crypto.randomUUID() : `mst-${Date.now()}`,
-        name: masterFormName.trim(),
-        title: masterFormTitle.trim() || 'Мастер студии',
-        bio: masterFormBio.trim(),
-        avatarUrl: masterFormAvatar.trim() || '/tenants/ayza-beauty-space/images/master-ayza.jpg',
-        rating: 5.0,
-        reviewsCount: 1,
-        serviceIds: masterFormServices.length > 0 ? masterFormServices : tenant.services.map((s) => s.id),
-        schedule: [0, 1, 2, 3, 4, 5, 6].map((day) => ({
-          dayOfWeek: day,
-          startTime: '09:00',
-          endTime: '20:00',
-          isDayOff: false,
-          breaks: [],
-        })),
-        breaks: [],
-        displayOrder: tenant.masters.length + 1,
-        isActive: true,
-      };
-      updateMasters([...tenant.masters, newMaster]);
-    }
-    setIsMasterModalOpen(false);
-  };
-
-  const handleDeleteMaster = (id: string, name: string) => {
-    if (!tenant) return;
-    if (tenant.masters.length <= 1) {
-      alert('В студии должен оставаться минимум один мастер!');
-      return;
-    }
-    if (window.confirm(`Вы уверены, что хотите удалить мастера "${name}"?`)) {
-      const updated = tenant.masters.filter((m) => m.id !== id);
-      updateMasters(updated);
-    }
-  };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (url: string) => void) => {
     const file = e.target.files?.[0];
@@ -572,7 +512,6 @@ export function OwnerDashboardPage() {
               { id: 'stats', label: 'Статистика' },
               { id: 'telegram', label: 'Telegram Бот 🔔' },
               { id: 'gallery', label: 'Фото работ' },
-              { id: 'masters', label: 'Мастера' },
               { id: 'services', label: 'Услуги' },
               { id: 'settings', label: 'Настройки' },
             ] as const
@@ -988,140 +927,112 @@ export function OwnerDashboardPage() {
         {activeTab === 'gallery' && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-neutral-200">
-                Фотографии работ ({galleryItems.length})
-              </h2>
+              <div>
+                <h2 className="text-sm font-semibold text-neutral-200">
+                  Фотографии работ портфолио ({galleryItems.length})
+                </h2>
+                <p className="text-xs text-neutral-400">
+                  Загружайте фотографии прямо с телефона или компьютера
+                </p>
+              </div>
             </div>
 
-            {/* 1. Add new card */}
-            <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-3">
+            {/* 1. Add new card via direct file upload */}
+            <Card className="p-4 border border-white/10 bg-neutral-900/60 space-y-3.5">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                1. Добавить новую карточку работы
+                Добавить новую работу в галерею
               </h3>
+
               <form onSubmit={handleAddGalleryCard} className="space-y-3">
-                <Input
-                  value={newWorkUrl}
-                  onChange={(e) => setNewWorkUrl(e.target.value)}
-                  placeholder="URL фотографии (Supabase Storage / Unsplash)"
-                  required
-                />
+                {/* File Upload Zone */}
+                {newWorkUrl ? (
+                  <div className="relative h-44 rounded-2xl overflow-hidden bg-black border border-white/20">
+                    <img src={getAssetUrl(newWorkUrl)} alt="Превью работы" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setNewWorkUrl('')}
+                      className="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-white text-xs hover:bg-black transition-colors cursor-pointer border border-white/20"
+                    >
+                      ✕ Удалить фото
+                    </button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-white/25 hover:border-white/50 bg-white/5 hover:bg-white/10 cursor-pointer transition-all text-center">
+                    <UploadSimple size={26} className="text-white mb-2" />
+                    <span className="text-xs font-semibold text-white">
+                      Загрузить фото работы с устройства
+                    </span>
+                    <span className="text-[10px] text-neutral-400 mt-1">
+                      Нажмите здесь, чтобы выбрать фото из галереи телефона или файлов компьютера
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handlePhotoUpload(e, setNewWorkUrl)}
+                    />
+                  </label>
+                )}
+
                 <Input
                   value={newWorkCaption}
                   onChange={(e) => setNewWorkCaption(e.target.value)}
-                  placeholder="Подпись под фото (например, Градиент и френч)"
+                  placeholder="Подпись к фото (например: Французский маникюр / Авторский дизайн)"
                   required
                 />
-                <Button type="submit" variant="primary" size="sm" className="cursor-pointer">
-                  Добавить работу
+
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="md"
+                  disabled={!newWorkUrl}
+                  className="w-full cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold disabled:opacity-50"
+                >
+                  Опубликовать работу в галерее
                 </Button>
               </form>
             </Card>
 
-            {/* 2 & 3. Change photo or caption */}
+            {/* Existing works list */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {galleryItems.map((item) => (
-                <Card key={item.id} className="p-3.5 border border-white/10 bg-neutral-900/60 space-y-2.5">
-                  <div className="h-36 rounded-xl overflow-hidden bg-neutral-950">
+                <Card key={item.id} className="p-3.5 border border-white/10 bg-neutral-900/60 space-y-3">
+                  <div className="h-44 rounded-xl overflow-hidden bg-neutral-950 relative group">
                     <img src={getAssetUrl(item.imageUrl)} alt={item.caption} className="w-full h-full object-cover" />
                   </div>
+
                   <div className="space-y-2">
                     <div>
-                      <label className="text-[10px] text-neutral-400">Изменить подпись:</label>
+                      <label className="text-[10px] text-neutral-400 block mb-1">Подпись к работе:</label>
                       <input
                         type="text"
                         value={item.caption}
                         onChange={(e) => handleUpdateGalleryCaption(item.id, e.target.value)}
-                        className="w-full h-8 px-2 rounded-lg bg-black border border-white/10 text-xs text-white mt-1"
+                        className="w-full h-8 px-2.5 rounded-lg bg-black border border-white/10 text-xs text-white focus:outline-none focus:border-white"
                       />
                     </div>
-                    <div>
-                      <label className="text-[10px] text-neutral-400">Заменить фото (URL):</label>
-                      <input
-                        type="text"
-                        value={item.imageUrl}
-                        onChange={(e) => handleUpdateGalleryPhoto(item.id, e.target.value)}
-                        className="w-full h-8 px-2 rounded-lg bg-black border border-white/10 text-xs text-white mt-1 font-mono text-[11px]"
-                      />
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
 
-        {/* TAB 5: MASTERS */}
-        {activeTab === 'masters' && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-semibold text-neutral-200">
-                  Команда мастеров ({tenant.masters.length})
-                </h2>
-                <p className="text-xs text-neutral-400">
-                  Управление специалистами, их должностями и прикрепленными услугами
-                </p>
-              </div>
-              <Button
-                onClick={handleOpenAddMaster}
-                variant="primary"
-                size="sm"
-                className="gap-1.5 cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold shadow-md"
-              >
-                <Plus size={14} weight="bold" />
-                <span>Добавить мастера</span>
-              </Button>
-            </div>
+                    <div className="flex items-center gap-2 pt-1">
+                      <label className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs cursor-pointer transition-all border border-white/15">
+                        <UploadSimple size={13} />
+                        <span>Заменить фото</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handlePhotoUpload(e, (url) => handleUpdateGalleryPhoto(item.id, url))}
+                        />
+                      </label>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {tenant.masters.map((m) => (
-                <Card key={m.id} className="p-4 border border-white/10 bg-neutral-900/60 space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={getAssetUrl(m.avatarUrl || '/tenants/ayza-beauty-space/images/master-ayza.jpg')}
-                        alt={m.name}
-                        className="w-13 h-13 rounded-2xl object-cover border border-white/10 bg-neutral-950"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/master-ayza.jpg');
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm('Удалить эту работу из портфолио?')) {
+                            setGalleryItems((prev) => prev.filter((g) => g.id !== item.id));
+                          }
                         }}
-                      />
-                      <div>
-                        <h4 className="text-sm font-bold text-white">{m.name}</h4>
-                        <p className="text-xs text-neutral-400">{m.title}</p>
-                        <div className="flex items-center gap-2 mt-0.5 text-[11px] text-amber-400">
-                          <span>{m.rating || 5.0} ★</span>
-                          <span className="text-neutral-500">·</span>
-                          <span className="text-neutral-400">{m.reviewsCount || 0} отзывов</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {m.bio && (
-                    <p className="text-xs text-neutral-300 leading-relaxed font-light line-clamp-2">
-                      {m.bio}
-                    </p>
-                  )}
-
-                  <div className="text-[11px] text-neutral-400 pt-2 border-t border-white/10 flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-300">
-                      Услуг: {m.serviceIds?.length || tenant.services.length}
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenEditMaster(m)}
-                        className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center gap-1 cursor-pointer"
-                      >
-                        <PencilSimple size={13} />
-                        <span>Изменить</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteMaster(m.id, m.name)}
-                        className="p-1 rounded-lg text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-500/30 transition-colors cursor-pointer"
-                        title="Удалить мастера"
+                        className="p-1.5 rounded-xl text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-500/20 transition-colors cursor-pointer"
+                        title="Удалить работу"
                       >
                         <Trash size={15} />
                       </button>
@@ -1636,16 +1547,6 @@ export function OwnerDashboardPage() {
                 ))}
               </select>
             </div>
-
-            <div>
-              <Input
-                type="text"
-                value={serviceFormImage}
-                onChange={(e) => setServiceFormImage(e.target.value)}
-                placeholder="Или прямая ссылка на фото (URL)"
-                className="text-[11px] font-mono h-8"
-              />
-            </div>
           </div>
 
           <div className="flex gap-2 pt-2">
@@ -1665,194 +1566,6 @@ export function OwnerDashboardPage() {
               className="flex-1 cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold"
             >
               {editingServiceId ? 'Сохранить изменения' : 'Добавить услугу'}
-            </Button>
-          </div>
-        </form>
-      </BottomSheet>
-
-      {/* Master Add/Edit Modal */}
-      <BottomSheet
-        open={isMasterModalOpen}
-        onOpenChange={setIsMasterModalOpen}
-        title={editingMasterId ? 'Редактировать мастера' : 'Добавить нового мастера'}
-        description="Укажите имя, должность, прикрепите фото и выберите оказываемые услуги"
-      >
-        <form onSubmit={handleSaveMaster} className="space-y-4 text-xs pb-4">
-          <div>
-            <label className="text-neutral-300 mb-1 block font-medium">Имя мастера</label>
-            <Input
-              value={masterFormName}
-              onChange={(e) => setMasterFormName(e.target.value)}
-              placeholder="Например: Камила"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-neutral-300 mb-1 block font-medium">Должность / Специализация</label>
-            <Input
-              value={masterFormTitle}
-              onChange={(e) => setMasterFormTitle(e.target.value)}
-              placeholder="Например: Top Master / Подолог"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-neutral-300 mb-1 block font-medium">О мастере (опыт, квалификация)</label>
-            <textarea
-              rows={2}
-              value={masterFormBio}
-              onChange={(e) => setMasterFormBio(e.target.value)}
-              placeholder="Опыт более 4 лет. Эксперт по сложному моделированию..."
-              className="w-full p-2.5 rounded-xl bg-black border border-white/15 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-white transition-colors"
-            />
-          </div>
-
-          {/* Master Photo / Avatar */}
-          <div className="space-y-2 p-3 rounded-2xl bg-white/5 border border-white/10">
-            <label className="text-neutral-200 block font-semibold text-xs">
-              Фотография / Аватар мастера
-            </label>
-
-            <div className="flex items-center gap-3">
-              <div className="w-16 h-16 rounded-2xl overflow-hidden bg-black border border-white/15 flex-shrink-0">
-                {masterFormAvatar ? (
-                  <img
-                    src={getAssetUrl(masterFormAvatar)}
-                    alt="Предпросмотр"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/master-ayza.jpg');
-                    }}
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-neutral-600 text-[10px]">
-                    Нет фото
-                  </div>
-                )}
-              </div>
-
-              <div className="flex-1 space-y-2">
-                <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs cursor-pointer transition-all border border-white/15">
-                  <UploadSimple size={14} />
-                  <span>Загрузить фото мастера</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => handlePhotoUpload(e, setMasterFormAvatar)}
-                  />
-                </label>
-
-                <div className="text-[10px] text-neutral-400">
-                  или выберите фото из библиотеки студии:
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-1">
-              <select
-                value={masterFormAvatar}
-                onChange={(e) => setMasterFormAvatar(e.target.value)}
-                className="w-full h-9 px-2.5 bg-neutral-900 border border-white/15 rounded-xl text-white text-xs focus:outline-none"
-              >
-                <option value="">-- Выберите фото из библиотеки --</option>
-                {STUDIO_PHOTO_PRESETS.map((p, idx) => (
-                  <option key={idx} value={p.url}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <Input
-                type="text"
-                value={masterFormAvatar}
-                onChange={(e) => setMasterFormAvatar(e.target.value)}
-                placeholder="Или прямая ссылка на фото мастера"
-                className="text-[11px] font-mono h-8"
-              />
-            </div>
-          </div>
-
-          {/* Assigned Services checkboxes */}
-          <div className="space-y-2 p-3 rounded-2xl bg-white/5 border border-white/10">
-            <div className="flex items-center justify-between">
-              <label className="text-neutral-200 block font-semibold text-xs">
-                Оказываемые услуги ({masterFormServices.length} из {tenant.services.length})
-              </label>
-              <div className="flex gap-2 text-[10px]">
-                <button
-                  type="button"
-                  onClick={() => setMasterFormServices(tenant.services.map((s) => s.id))}
-                  className="text-blue-400 hover:underline cursor-pointer"
-                >
-                  Выбрать все
-                </button>
-                <span>·</span>
-                <button
-                  type="button"
-                  onClick={() => setMasterFormServices([])}
-                  className="text-neutral-400 hover:underline cursor-pointer"
-                >
-                  Снять все
-                </button>
-              </div>
-            </div>
-
-            <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1 no-scrollbar">
-              {tenant.services.map((s) => {
-                const checked = masterFormServices.includes(s.id);
-                return (
-                  <label
-                    key={s.id}
-                    className={`flex items-center gap-2 p-2 rounded-xl text-xs cursor-pointer transition-colors border ${
-                      checked
-                        ? 'bg-white/10 border-white/20 text-white'
-                        : 'bg-black/40 border-white/5 text-neutral-400 hover:text-neutral-200'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setMasterFormServices((prev) => [...prev, s.id]);
-                        } else {
-                          setMasterFormServices((prev) => prev.filter((id) => id !== s.id));
-                        }
-                      }}
-                      className="rounded accent-white"
-                    />
-                    <span className="flex-1 truncate">{s.name}</span>
-                    <span className="font-mono text-[10px] text-neutral-500 shrink-0">
-                      {formatPrice(s.price, tenant.currency)}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="flex gap-2 pt-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="md"
-              className="flex-1 cursor-pointer"
-              onClick={() => setIsMasterModalOpen(false)}
-            >
-              Отмена
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              className="flex-1 cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold"
-            >
-              {editingMasterId ? 'Сохранить мастера' : 'Добавить мастера'}
             </Button>
           </div>
         </form>
