@@ -72,6 +72,18 @@ export function ClientBookingPage() {
     ? tenant.services.filter((s) => s.categoryId === selectedCategoryId && s.isActive)
     : tenant.services.filter((s) => s.isActive);
 
+  // Group services by category in displayOrder
+  const categoriesToDisplay = [...tenant.categories]
+    .filter((cat) => cat.isActive && (!selectedCategoryId || cat.id === selectedCategoryId))
+    .sort((a, b) => a.displayOrder - b.displayOrder);
+
+  const groupedServices = categoriesToDisplay
+    .map((cat) => ({
+      category: cat,
+      services: tenant.services.filter((s) => s.categoryId === cat.id && s.isActive),
+    }))
+    .filter((group) => group.services.length > 0);
+
   // Available options for current service
   const availableOptionsForCurrentService = tenant.options.filter(
     (opt) => opt.isActive && (!opt.serviceId || (selectedService && opt.serviceId === selectedService.id))
@@ -183,27 +195,51 @@ export function ClientBookingPage() {
             onSelectCategory={setSelectedCategoryId}
           />
 
-          {/* Services List */}
-          <div id="services-section" className="space-y-3">
-            {filteredServices.map((service) => {
-              const isSelected = selectedService?.id === service.id;
-              const hasOptions = availableOptionsForCurrentService.length > 0;
+          {/* Services List grouped by category */}
+          <div id="services-section" className="space-y-6">
+            {groupedServices.map(({ category, services }) => (
+              <div key={category.id} className="space-y-3">
+                {/* Category group badge header */}
+                <div className="flex items-center gap-2 pt-2 pb-0.5">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] border border-white/15 text-white shadow-sm backdrop-blur-md">
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: 'var(--tenant-accent, #8E283E)' }}
+                    />
+                    <span className="text-xs font-bold tracking-wider uppercase text-white">
+                      {category.name}
+                    </span>
+                    <span className="text-[10px] text-neutral-400 font-mono">
+                      ({services.length})
+                    </span>
+                  </div>
+                  <div className="flex-1 h-px bg-gradient-to-r from-white/15 to-transparent" />
+                </div>
 
-              return (
-                <ServiceCard
-                  key={service.id}
-                  service={service}
-                  isSelected={isSelected}
-                  selectedOptions={isSelected ? selectedOptions : []}
-                  onSelectService={handleSelectService}
-                  onOpenOptions={(s) => {
-                    setSelectedService(s);
-                    setIsOptionsOpen(true);
-                  }}
-                  hasOptions={hasOptions}
-                />
-              );
-            })}
+                {/* Services belonging to this group */}
+                <div className="space-y-3">
+                  {services.map((service) => {
+                    const isSelected = selectedService?.id === service.id;
+                    const hasOptions = availableOptionsForCurrentService.length > 0;
+
+                    return (
+                      <ServiceCard
+                        key={service.id}
+                        service={service}
+                        isSelected={isSelected}
+                        selectedOptions={isSelected ? selectedOptions : []}
+                        onSelectService={handleSelectService}
+                        onOpenOptions={(s) => {
+                          setSelectedService(s);
+                          setIsOptionsOpen(true);
+                        }}
+                        hasOptions={hasOptions}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 

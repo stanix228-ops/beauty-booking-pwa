@@ -1,6 +1,6 @@
 -- ========================================================
 -- PUBLISH TENANT: AURA NAIL BAR (aura-nail-bar)
--- Generated automatically at: 2026-10-11T13:36:28.021Z
+-- Generated automatically at: 2026-10-11T14:30:00.924Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 
