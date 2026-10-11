@@ -49,6 +49,10 @@ export function ServiceCard({
               alt={service.name}
               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
+              onError={(e) => {
+                // Graceful fallback to default tenant hero image if custom image fails to load
+                (e.currentTarget as HTMLImageElement).src = getAssetUrl(tenant?.assets.hero || '/tenants/ayza-beauty-space/images/hero.jpg');
+              }}
             />
             {isSelected && (
               <div className="absolute top-2 right-2 p-1 rounded-full bg-white text-black shadow-md">

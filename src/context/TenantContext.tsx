@@ -1,13 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTenantBySlug } from '../data/tenants';
-import type { BusinessConfig } from '../../scripts/schema';
+import type { BusinessConfig, Service, Master } from '../../scripts/schema';
 
 interface TenantContextValue {
   tenant: BusinessConfig | null;
   slug: string;
   isLoading: boolean;
   error: string | null;
+  updateServices: (services: Service[]) => void;
+  updateMasters: (masters: Master[]) => void;
+  resetToDefault: () => void;
 }
 
 const TenantContext = createContext<TenantContextValue>({
@@ -15,6 +18,9 @@ const TenantContext = createContext<TenantContextValue>({
   slug: '',
   isLoading: true,
   error: null,
+  updateServices: () => {},
+  updateMasters: () => {},
+  resetToDefault: () => {},
 });
 
 export function TenantProvider({
@@ -45,7 +51,22 @@ export function TenantProvider({
       return;
     }
 
-    setTenant(found);
+    // Merge custom services and masters from localStorage if present
+    let merged: BusinessConfig = { ...found };
+    try {
+      const customServices = localStorage.getItem(`beauty_custom_services_${found.slug}`);
+      if (customServices) {
+        merged.services = JSON.parse(customServices);
+      }
+      const customMasters = localStorage.getItem(`beauty_custom_masters_${found.slug}`);
+      if (customMasters) {
+        merged.masters = JSON.parse(customMasters);
+      }
+    } catch (e) {
+      console.warn('Failed to parse custom tenant data from localStorage', e);
+    }
+
+    setTenant(merged);
     setError(null);
     setIsLoading(false);
 
@@ -78,10 +99,52 @@ export function TenantProvider({
     if (themeMeta) {
       themeMeta.content = found.theme.bgColor;
     }
-  }, [slug]);
+  }, [effectiveSlug]);
+
+  const updateServices = (services: Service[]) => {
+    if (!tenant) return;
+    try {
+      localStorage.setItem(`beauty_custom_services_${tenant.slug}`, JSON.stringify(services));
+    } catch (e) {
+      console.error(e);
+    }
+    setTenant((prev) => (prev ? { ...prev, services } : null));
+  };
+
+  const updateMasters = (masters: Master[]) => {
+    if (!tenant) return;
+    try {
+      localStorage.setItem(`beauty_custom_masters_${tenant.slug}`, JSON.stringify(masters));
+    } catch (e) {
+      console.error(e);
+    }
+    setTenant((prev) => (prev ? { ...prev, masters } : null));
+  };
+
+  const resetToDefault = () => {
+    if (!tenant) return;
+    try {
+      localStorage.removeItem(`beauty_custom_services_${tenant.slug}`);
+      localStorage.removeItem(`beauty_custom_masters_${tenant.slug}`);
+    } catch (e) {
+      console.error(e);
+    }
+    const found = getTenantBySlug(tenant.slug);
+    if (found) setTenant(found);
+  };
 
   return (
-    <TenantContext.Provider value={{ tenant, slug: slug || '', isLoading, error }}>
+    <TenantContext.Provider
+      value={{
+        tenant,
+        slug: effectiveSlug || '',
+        isLoading,
+        error,
+        updateServices,
+        updateMasters,
+        resetToDefault,
+      }}
+    >
       {children}
     </TenantContext.Provider>
   );

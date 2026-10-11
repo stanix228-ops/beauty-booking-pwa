@@ -18,20 +18,54 @@ import {
   Bell,
   CheckCircle,
   WarningCircle,
+  PencilSimple,
+  Key,
+  UploadSimple,
 } from '@phosphor-icons/react';
-import type { GalleryItem } from '../../scripts/schema';
+import type { GalleryItem, Service, Master } from '../../scripts/schema';
 import { handlePhoneInput } from '../lib/phone';
 import {
   getTelegramConfig,
   saveTelegramConfig,
   testTelegramNotification,
 } from '../lib/telegram';
+import { getOwnerCredentials, saveOwnerCredentials } from '../lib/owner-auth';
+
+// Studio photo presets for 1-click photo selection
+const STUDIO_PHOTO_PRESETS = [
+  { label: 'Свадебный макияж', url: '/tenants/ayza-beauty-space/images/service-wedding-makeup.jpg' },
+  { label: 'Дневной макияж', url: '/tenants/ayza-beauty-space/images/service-makeup-day.jpg' },
+  { label: 'Вечерний макияж', url: '/tenants/ayza-beauty-space/images/service-makeup-evening.jpg' },
+  { label: 'Свадебный образ', url: '/tenants/ayza-beauty-space/images/service-makeup-bridal.jpg' },
+  { label: 'Женская стрижка', url: '/tenants/ayza-beauty-space/images/service-haircut.jpg' },
+  { label: 'Челка / коррекция', url: '/tenants/ayza-beauty-space/images/service-bangs-trim.jpg' },
+  { label: 'Укладка волос', url: '/tenants/ayza-beauty-space/images/service-hair-styling.jpg' },
+  { label: 'Прическа вечерняя', url: '/tenants/ayza-beauty-space/images/service-hair-evening.jpg' },
+  { label: 'Свадебная прическа', url: '/tenants/ayza-beauty-space/images/service-hair-bridal.jpg' },
+  { label: 'Окрашивание корней', url: '/tenants/ayza-beauty-space/images/service-hair-roots.jpg' },
+  { label: 'Окрашивание тон в тон', url: '/tenants/ayza-beauty-space/images/service-hair-tinting.jpg' },
+  { label: 'Сложное окрашивание / балаяж', url: '/tenants/ayza-beauty-space/images/service-hair-balayage.jpg' },
+  { label: 'Маникюр классический', url: '/tenants/ayza-beauty-space/images/service-manicure-classic.jpg' },
+  { label: 'Маникюр с лаком', url: '/tenants/ayza-beauty-space/images/service-manicure-polish.jpg' },
+  { label: 'Наращивание верхние формы', url: '/tenants/ayza-beauty-space/images/service-manicure-extension.jpg' },
+  { label: 'Наращивание нижние формы', url: '/tenants/ayza-beauty-space/images/service-nails-form-ext.jpg' },
+  { label: 'Японский эко-маникюр', url: '/tenants/ayza-beauty-space/images/service-japanese-manicure.jpg' },
+  { label: 'Педикюр классический', url: '/tenants/ayza-beauty-space/images/service-pedicure-classic.jpg' },
+  { label: 'Педикюр с гель-лаком', url: '/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg' },
+  { label: 'Smart педикюр', url: '/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg' },
+  { label: 'Smart педикюр с гель-лаком', url: '/tenants/ayza-beauty-space/images/service-smart-pedicure-gel.jpg' },
+  { label: 'Комби педикюр', url: '/tenants/ayza-beauty-space/images/service-combi-pedicure.jpg' },
+  { label: 'Комби педикюр с гель-лаком', url: '/tenants/ayza-beauty-space/images/service-combi-pedicure-gel.jpg' },
+  { label: 'Спа уход / парафинотерапия', url: '/tenants/ayza-beauty-space/images/service-pedicure-spa.jpg' },
+  { label: 'Наращивание ресниц', url: '/tenants/ayza-beauty-space/images/service-lashes-classic.jpg' },
+  { label: 'Брови / ламинирование', url: '/tenants/ayza-beauty-space/images/service-brows.png' },
+];
 
 type Tab = 'today' | 'bookings' | 'calendar' | 'stats' | 'telegram' | 'gallery' | 'masters' | 'services' | 'settings';
 
 export function OwnerDashboardPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { tenant } = useTenant();
+  const { tenant, updateServices, updateMasters } = useTenant();
   const navigate = useNavigate();
 
   // Strict Auth Guard
@@ -128,6 +162,215 @@ export function OwnerDashboardPage() {
     } finally {
       setIsTestingTg(false);
     }
+  };
+
+  // Credentials (Login & Password) Management state
+  const [authEmail, setAuthEmail] = useState(() => (slug ? getOwnerCredentials(slug).email : ''));
+  const [authPassword, setAuthPassword] = useState('');
+  const [authConfirmPassword, setAuthConfirmPassword] = useState('');
+  const [authMessage, setAuthMessage] = useState<{ text: string; isError?: boolean } | null>(null);
+
+  const handleSaveCredentials = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!slug) return;
+    if (!authEmail.trim().includes('@')) {
+      setAuthMessage({ text: '❌ Укажите корректный email для входа', isError: true });
+      return;
+    }
+    if (authPassword.length < 4) {
+      setAuthMessage({ text: '❌ Пароль должен быть не менее 4 символов', isError: true });
+      return;
+    }
+    if (authPassword !== authConfirmPassword) {
+      setAuthMessage({ text: '❌ Введенные пароли не совпадают', isError: true });
+      return;
+    }
+    saveOwnerCredentials(slug, authEmail.trim(), authPassword.trim());
+    setAuthMessage({ text: '✅ Логин и пароль успешно изменены и сохранены! Используйте их при следующем входе.' });
+    setAuthPassword('');
+    setAuthConfirmPassword('');
+    setTimeout(() => setAuthMessage(null), 6000);
+  };
+
+  // Services CRUD state
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
+  const [serviceFormName, setServiceFormName] = useState('');
+  const [serviceFormCategoryId, setServiceFormCategoryId] = useState('');
+  const [serviceFormPrice, setServiceFormPrice] = useState(5000);
+  const [serviceFormDuration, setServiceFormDuration] = useState(60);
+  const [serviceFormBuffer, setServiceFormBuffer] = useState(15);
+  const [serviceFormDescription, setServiceFormDescription] = useState('');
+  const [serviceFormImage, setServiceFormImage] = useState('');
+  const [serviceFilterCategory, setServiceFilterCategory] = useState<string>('ALL');
+  const [serviceSearchQuery, setServiceSearchQuery] = useState('');
+
+  const handleOpenAddService = () => {
+    setEditingServiceId(null);
+    setServiceFormName('');
+    setServiceFormCategoryId(tenant?.categories[0]?.id || '');
+    setServiceFormPrice(5000);
+    setServiceFormDuration(60);
+    setServiceFormBuffer(15);
+    setServiceFormDescription('');
+    setServiceFormImage('/tenants/ayza-beauty-space/images/service-manicure-classic.jpg');
+    setIsServiceModalOpen(true);
+  };
+
+  const handleOpenEditService = (s: Service) => {
+    setEditingServiceId(s.id);
+    setServiceFormName(s.name);
+    setServiceFormCategoryId(s.categoryId);
+    setServiceFormPrice(s.price);
+    setServiceFormDuration(s.durationMin);
+    setServiceFormBuffer(s.bufferAfterMin || 15);
+    setServiceFormDescription(s.description || '');
+    setServiceFormImage(s.imageUrl || '/tenants/ayza-beauty-space/images/service-manicure-classic.jpg');
+    setIsServiceModalOpen(true);
+  };
+
+  const handleSaveService = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tenant || !serviceFormName.trim()) return;
+
+    if (editingServiceId) {
+      const updated = tenant.services.map((s) =>
+        s.id === editingServiceId
+          ? {
+              ...s,
+              name: serviceFormName.trim(),
+              categoryId: serviceFormCategoryId || s.categoryId,
+              price: Number(serviceFormPrice),
+              durationMin: Number(serviceFormDuration),
+              bufferAfterMin: Number(serviceFormBuffer),
+              description: serviceFormDescription.trim(),
+              imageUrl: serviceFormImage.trim() || undefined,
+            }
+          : s
+      );
+      updateServices(updated);
+    } else {
+      const newService: Service = {
+        id: crypto.randomUUID ? crypto.randomUUID() : `srv-${Date.now()}`,
+        categoryId: serviceFormCategoryId || tenant.categories[0]?.id,
+        name: serviceFormName.trim(),
+        description: serviceFormDescription.trim(),
+        price: Number(serviceFormPrice),
+        durationMin: Number(serviceFormDuration),
+        bufferAfterMin: Number(serviceFormBuffer),
+        requiredWorkplaceType: 'UNIVERSAL',
+        imageUrl: serviceFormImage.trim() || '/tenants/ayza-beauty-space/images/service-manicure-classic.jpg',
+        displayOrder: tenant.services.length + 1,
+        isActive: true,
+      };
+      updateServices([newService, ...tenant.services]);
+    }
+    setIsServiceModalOpen(false);
+  };
+
+  const handleDeleteService = (id: string, name: string) => {
+    if (!tenant) return;
+    if (window.confirm(`Вы уверены, что хотите удалить услугу "${name}"?`)) {
+      const updated = tenant.services.filter((s) => s.id !== id);
+      updateServices(updated);
+    }
+  };
+
+  // Masters CRUD state
+  const [isMasterModalOpen, setIsMasterModalOpen] = useState(false);
+  const [editingMasterId, setEditingMasterId] = useState<string | null>(null);
+  const [masterFormName, setMasterFormName] = useState('');
+  const [masterFormTitle, setMasterFormTitle] = useState('');
+  const [masterFormBio, setMasterFormBio] = useState('');
+  const [masterFormAvatar, setMasterFormAvatar] = useState('');
+  const [masterFormServices, setMasterFormServices] = useState<string[]>([]);
+
+  const handleOpenAddMaster = () => {
+    setEditingMasterId(null);
+    setMasterFormName('');
+    setMasterFormTitle('Мастер студии');
+    setMasterFormBio('Профессиональный сертифицированный мастер.');
+    setMasterFormAvatar('/tenants/ayza-beauty-space/images/master-ayza.jpg');
+    setMasterFormServices(tenant?.services.map((s) => s.id) || []);
+    setIsMasterModalOpen(true);
+  };
+
+  const handleOpenEditMaster = (m: Master) => {
+    setEditingMasterId(m.id);
+    setMasterFormName(m.name);
+    setMasterFormTitle(m.title);
+    setMasterFormBio(m.bio || '');
+    setMasterFormAvatar(m.avatarUrl || '/tenants/ayza-beauty-space/images/master-ayza.jpg');
+    setMasterFormServices(m.serviceIds || []);
+    setIsMasterModalOpen(true);
+  };
+
+  const handleSaveMaster = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tenant || !masterFormName.trim()) return;
+
+    if (editingMasterId) {
+      const updated = tenant.masters.map((m) =>
+        m.id === editingMasterId
+          ? {
+              ...m,
+              name: masterFormName.trim(),
+              title: masterFormTitle.trim(),
+              bio: masterFormBio.trim(),
+              avatarUrl: masterFormAvatar.trim() || undefined,
+              serviceIds: masterFormServices.length > 0 ? masterFormServices : tenant.services.map((s) => s.id),
+            }
+          : m
+      );
+      updateMasters(updated);
+    } else {
+      const newMaster: Master = {
+        id: crypto.randomUUID ? crypto.randomUUID() : `mst-${Date.now()}`,
+        name: masterFormName.trim(),
+        title: masterFormTitle.trim() || 'Мастер студии',
+        bio: masterFormBio.trim(),
+        avatarUrl: masterFormAvatar.trim() || '/tenants/ayza-beauty-space/images/master-ayza.jpg',
+        rating: 5.0,
+        reviewsCount: 1,
+        serviceIds: masterFormServices.length > 0 ? masterFormServices : tenant.services.map((s) => s.id),
+        schedule: [0, 1, 2, 3, 4, 5, 6].map((day) => ({
+          dayOfWeek: day,
+          startTime: '09:00',
+          endTime: '20:00',
+          isDayOff: false,
+          breaks: [],
+        })),
+        breaks: [],
+        displayOrder: tenant.masters.length + 1,
+        isActive: true,
+      };
+      updateMasters([...tenant.masters, newMaster]);
+    }
+    setIsMasterModalOpen(false);
+  };
+
+  const handleDeleteMaster = (id: string, name: string) => {
+    if (!tenant) return;
+    if (tenant.masters.length <= 1) {
+      alert('В студии должен оставаться минимум один мастер!');
+      return;
+    }
+    if (window.confirm(`Вы уверены, что хотите удалить мастера "${name}"?`)) {
+      const updated = tenant.masters.filter((m) => m.id !== id);
+      updateMasters(updated);
+    }
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (url: string) => void) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (typeof event.target?.result === 'string') {
+        setter(event.target.result);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const loadData = async () => {
@@ -810,23 +1053,79 @@ export function OwnerDashboardPage() {
         {/* TAB 5: MASTERS */}
         {activeTab === 'masters' && (
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold text-neutral-200">
-              Команда мастеров ({tenant.masters.length})
-            </h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-semibold text-neutral-200">
+                  Команда мастеров ({tenant.masters.length})
+                </h2>
+                <p className="text-xs text-neutral-400">
+                  Управление специалистами, их должностями и прикрепленными услугами
+                </p>
+              </div>
+              <Button
+                onClick={handleOpenAddMaster}
+                variant="primary"
+                size="sm"
+                className="gap-1.5 cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold shadow-md"
+              >
+                <Plus size={14} weight="bold" />
+                <span>Добавить мастера</span>
+              </Button>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {tenant.masters.map((m) => (
-                <Card key={m.id} className="p-4 border border-white/10 bg-neutral-900/60 space-y-2">
-                  <div className="flex items-center gap-3">
-                    <img src={getAssetUrl(m.avatarUrl)} alt={m.name} className="w-12 h-12 rounded-xl object-cover" />
-                    <div>
-                      <h4 className="text-sm font-bold text-white">{m.name}</h4>
-                      <p className="text-xs text-neutral-400">{m.title}</p>
+                <Card key={m.id} className="p-4 border border-white/10 bg-neutral-900/60 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={getAssetUrl(m.avatarUrl || '/tenants/ayza-beauty-space/images/master-ayza.jpg')}
+                        alt={m.name}
+                        className="w-13 h-13 rounded-2xl object-cover border border-white/10 bg-neutral-950"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/master-ayza.jpg');
+                        }}
+                      />
+                      <div>
+                        <h4 className="text-sm font-bold text-white">{m.name}</h4>
+                        <p className="text-xs text-neutral-400">{m.title}</p>
+                        <div className="flex items-center gap-2 mt-0.5 text-[11px] text-amber-400">
+                          <span>{m.rating || 5.0} ★</span>
+                          <span className="text-neutral-500">·</span>
+                          <span className="text-neutral-400">{m.reviewsCount || 0} отзывов</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <p className="text-xs text-neutral-300 leading-relaxed">{m.bio}</p>
-                  <div className="text-[11px] text-neutral-400 pt-2 border-t border-white/10 flex justify-between">
-                    <span>Рейтинг: {m.rating} ★</span>
-                    <span>Отзывов: {m.reviewsCount}</span>
+
+                  {m.bio && (
+                    <p className="text-xs text-neutral-300 leading-relaxed font-light line-clamp-2">
+                      {m.bio}
+                    </p>
+                  )}
+
+                  <div className="text-[11px] text-neutral-400 pt-2 border-t border-white/10 flex items-center justify-between">
+                    <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-300">
+                      Услуг: {m.serviceIds?.length || tenant.services.length}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEditMaster(m)}
+                        className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center gap-1 cursor-pointer"
+                      >
+                        <PencilSimple size={13} />
+                        <span>Изменить</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteMaster(m.id, m.name)}
+                        className="p-1 rounded-lg text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-500/30 transition-colors cursor-pointer"
+                        title="Удалить мастера"
+                      >
+                        <Trash size={15} />
+                      </button>
+                    </div>
                   </div>
                 </Card>
               ))}
@@ -837,21 +1136,121 @@ export function OwnerDashboardPage() {
         {/* TAB 6: SERVICES */}
         {activeTab === 'services' && (
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold text-neutral-200">
-              Услуги и прайс-лист ({tenant.services.length})
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 className="text-sm font-semibold text-neutral-200">
+                  Услуги и прайс-лист ({tenant.services.length})
+                </h2>
+                <p className="text-xs text-neutral-400">
+                  Редактируйте цены, длительность и фото, добавляйте новые или удаляйте старые
+                </p>
+              </div>
+              <Button
+                onClick={handleOpenAddService}
+                variant="primary"
+                size="sm"
+                className="gap-1.5 cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold shadow-md shrink-0 self-start sm:self-auto"
+              >
+                <Plus size={14} weight="bold" />
+                <span>Добавить услугу</span>
+              </Button>
+            </div>
+
+            {/* Filter and Search */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
+              <input
+                type="text"
+                value={serviceSearchQuery}
+                onChange={(e) => setServiceSearchQuery(e.target.value)}
+                placeholder="Поиск услуги по названию..."
+                className="flex-1 h-9 px-3 rounded-xl bg-black border border-white/15 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-white transition-colors"
+              />
+              <select
+                value={serviceFilterCategory}
+                onChange={(e) => setServiceFilterCategory(e.target.value)}
+                className="h-9 px-3 bg-neutral-900 border border-white/15 rounded-xl text-xs text-white focus:outline-none"
+              >
+                <option value="ALL">Все категории</option>
+                {tenant.categories.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Services List */}
             <div className="space-y-2.5">
-              {tenant.services.map((s) => (
-                <Card key={s.id} className="p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between">
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-white">{s.name}</h4>
-                    <p className="text-[11px] text-neutral-400">{s.durationMin} мин · Буфер {s.bufferAfterMin} мин</p>
-                  </div>
-                  <div className="text-sm font-bold text-white" style={{ color: 'var(--tenant-accent, #4690FF)' }}>
-                    {formatPrice(s.price, tenant?.currency)}
-                  </div>
-                </Card>
-              ))}
+              {tenant.services
+                .filter((s) => {
+                  if (serviceFilterCategory !== 'ALL' && s.categoryId !== serviceFilterCategory) return false;
+                  if (serviceSearchQuery.trim() && !s.name.toLowerCase().includes(serviceSearchQuery.toLowerCase())) return false;
+                  return true;
+                })
+                .map((s) => {
+                  const categoryName = tenant.categories.find((c) => c.id === s.categoryId)?.name || 'Услуга';
+                  return (
+                    <Card
+                      key={s.id}
+                      className="p-3 sm:p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between gap-3 hover:border-white/20 transition-all"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-neutral-950 flex-shrink-0 border border-white/10">
+                          <img
+                            src={getAssetUrl(s.imageUrl || '/tenants/ayza-beauty-space/images/service-manicure-classic.jpg')}
+                            alt={s.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/hero.jpg');
+                            }}
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-xs sm:text-sm font-bold text-white truncate">{s.name}</h4>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 hidden sm:inline-block">
+                              {categoryName}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-neutral-400 mt-0.5">
+                            {s.durationMin} мин · Буфер {s.bufferAfterMin || 15} мин
+                          </p>
+                          {s.description && (
+                            <p className="text-[11px] text-neutral-500 line-clamp-1 mt-0.5 font-light">
+                              {s.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="text-right">
+                          <span
+                            className="text-xs sm:text-sm font-bold font-mono tracking-tight"
+                            style={{ color: 'var(--tenant-accent, #4690FF)' }}
+                          >
+                            {formatPrice(s.price, tenant?.currency)}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditService(s)}
+                          className="p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center gap-1 cursor-pointer"
+                          title="Редактировать услугу"
+                        >
+                          <PencilSimple size={14} />
+                          <span className="hidden sm:inline">Изменить</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteService(s.id, s.name)}
+                          className="p-1.5 rounded-lg text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-500/30 transition-colors cursor-pointer"
+                          title="Удалить услугу"
+                        >
+                          <Trash size={15} />
+                        </button>
+                      </div>
+                    </Card>
+                  );
+                })}
             </div>
           </div>
         )}
@@ -860,9 +1259,84 @@ export function OwnerDashboardPage() {
         {activeTab === 'settings' && (
           <div className="space-y-5">
             <h2 className="text-sm font-semibold text-neutral-200">
-              Параметры и брендинг студии
+              Параметры и безопасность студии
             </h2>
 
+            {/* Credentials / Password change card */}
+            <Card className="p-5 space-y-4 border border-white/12 bg-[#0D0D11] shadow-xl">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white border border-white/15">
+                  <Key size={20} weight="duotone" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                    Безопасность и пароль входа
+                  </h3>
+                  <p className="text-[11px] text-neutral-400">
+                    Установите свой персональный логин и пароль для доступа к личному кабинету
+                  </p>
+                </div>
+              </div>
+
+              {authMessage && (
+                <div
+                  className={`p-3 rounded-xl text-xs ${
+                    authMessage.isError
+                      ? 'bg-red-950/60 border border-red-800 text-red-300'
+                      : 'bg-emerald-950/60 border border-emerald-800 text-emerald-300'
+                  }`}
+                >
+                  {authMessage.text}
+                </div>
+              )}
+
+              <form onSubmit={handleSaveCredentials} className="space-y-3.5 text-xs">
+                <div>
+                  <label className="text-neutral-300 mb-1 block font-medium">Email / Логин владельца</label>
+                  <Input
+                    type="email"
+                    value={authEmail}
+                    onChange={(e) => setAuthEmail(e.target.value)}
+                    placeholder="admin@ayza.kz"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-neutral-300 mb-1 block font-medium">Новый пароль</label>
+                    <Input
+                      type="password"
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-neutral-300 mb-1 block font-medium">Подтверждение пароля</label>
+                    <Input
+                      type="password"
+                      value={authConfirmPassword}
+                      onChange={(e) => setAuthConfirmPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="md"
+                  className="w-full sm:w-auto font-bold bg-white text-black hover:bg-neutral-200 cursor-pointer shadow-md"
+                >
+                  Сохранить новые данные входа
+                </Button>
+              </form>
+            </Card>
+
+            {/* Studio parameters */}
             <Card className="p-4 space-y-3 text-xs text-neutral-300 border border-white/10 bg-neutral-900/60">
               <div>
                 <div className="text-neutral-500">Название студии:</div>
@@ -1025,6 +1499,362 @@ export function OwnerDashboardPage() {
           <Button type="submit" variant="primary" size="lg" className="w-full cursor-pointer">
             Создать блокировку
           </Button>
+        </form>
+      </BottomSheet>
+
+      {/* Service Add/Edit Modal */}
+      <BottomSheet
+        open={isServiceModalOpen}
+        onOpenChange={setIsServiceModalOpen}
+        title={editingServiceId ? 'Редактировать услугу' : 'Добавить новую услугу'}
+        description="Заполните параметры услуги, стоимость, длительность и выберите фото"
+      >
+        <form onSubmit={handleSaveService} className="space-y-4 text-xs pb-4">
+          <div>
+            <label className="text-neutral-300 mb-1 block font-medium">Название услуги</label>
+            <Input
+              value={serviceFormName}
+              onChange={(e) => setServiceFormName(e.target.value)}
+              placeholder="Например: Аппаратный маникюр с дизайном"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-neutral-300 mb-1 block font-medium">Категория</label>
+            <select
+              value={serviceFormCategoryId}
+              onChange={(e) => setServiceFormCategoryId(e.target.value)}
+              className="w-full h-11 px-3 bg-neutral-900 border border-white/15 rounded-xl text-white text-xs focus:outline-none"
+              required
+            >
+              {tenant.categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <div>
+              <label className="text-neutral-300 mb-1 block font-medium">Цена ({tenant.currency})</label>
+              <Input
+                type="number"
+                min="0"
+                step="500"
+                value={serviceFormPrice}
+                onChange={(e) => setServiceFormPrice(Number(e.target.value))}
+                required
+              />
+            </div>
+            <div>
+              <label className="text-neutral-300 mb-1 block font-medium">Время (мин)</label>
+              <Input
+                type="number"
+                min="5"
+                step="5"
+                value={serviceFormDuration}
+                onChange={(e) => setServiceFormDuration(Number(e.target.value))}
+                required
+              />
+            </div>
+            <div>
+              <label className="text-neutral-300 mb-1 block font-medium">Буфер (мин)</label>
+              <Input
+                type="number"
+                min="0"
+                step="5"
+                value={serviceFormBuffer}
+                onChange={(e) => setServiceFormBuffer(Number(e.target.value))}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-neutral-300 mb-1 block font-medium">Описание услуги</label>
+            <textarea
+              rows={2}
+              value={serviceFormDescription}
+              onChange={(e) => setServiceFormDescription(e.target.value)}
+              placeholder="Краткое описание процедуры, материалов или этапов..."
+              className="w-full p-2.5 rounded-xl bg-black border border-white/15 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-white transition-colors"
+            />
+          </div>
+
+          {/* Service Photo Selection & Upload */}
+          <div className="space-y-2 p-3 rounded-2xl bg-white/5 border border-white/10">
+            <label className="text-neutral-200 block font-semibold text-xs">
+              Фотография карточки услуги
+            </label>
+
+            <div className="flex items-center gap-3">
+              <div className="w-16 h-16 rounded-xl overflow-hidden bg-black border border-white/15 flex-shrink-0">
+                {serviceFormImage ? (
+                  <img
+                    src={getAssetUrl(serviceFormImage)}
+                    alt="Предпросмотр"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/hero.jpg');
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-neutral-600 text-[10px]">
+                    Нет фото
+                  </div>
+                )}
+              </div>
+
+              <div className="flex-1 space-y-2">
+                <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs cursor-pointer transition-all border border-white/15">
+                  <UploadSimple size={14} />
+                  <span>Загрузить фото с устройства</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handlePhotoUpload(e, setServiceFormImage)}
+                  />
+                </label>
+
+                <div className="text-[10px] text-neutral-400">
+                  или выберите фото из библиотеки студии:
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-1">
+              <select
+                value={serviceFormImage}
+                onChange={(e) => setServiceFormImage(e.target.value)}
+                className="w-full h-9 px-2.5 bg-neutral-900 border border-white/15 rounded-xl text-white text-xs focus:outline-none"
+              >
+                <option value="">-- Выберите фото из библиотеки --</option>
+                {STUDIO_PHOTO_PRESETS.map((p, idx) => (
+                  <option key={idx} value={p.url}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <Input
+                type="text"
+                value={serviceFormImage}
+                onChange={(e) => setServiceFormImage(e.target.value)}
+                placeholder="Или прямая ссылка на фото (URL)"
+                className="text-[11px] font-mono h-8"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              className="flex-1 cursor-pointer"
+              onClick={() => setIsServiceModalOpen(false)}
+            >
+              Отмена
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              className="flex-1 cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold"
+            >
+              {editingServiceId ? 'Сохранить изменения' : 'Добавить услугу'}
+            </Button>
+          </div>
+        </form>
+      </BottomSheet>
+
+      {/* Master Add/Edit Modal */}
+      <BottomSheet
+        open={isMasterModalOpen}
+        onOpenChange={setIsMasterModalOpen}
+        title={editingMasterId ? 'Редактировать мастера' : 'Добавить нового мастера'}
+        description="Укажите имя, должность, прикрепите фото и выберите оказываемые услуги"
+      >
+        <form onSubmit={handleSaveMaster} className="space-y-4 text-xs pb-4">
+          <div>
+            <label className="text-neutral-300 mb-1 block font-medium">Имя мастера</label>
+            <Input
+              value={masterFormName}
+              onChange={(e) => setMasterFormName(e.target.value)}
+              placeholder="Например: Камила"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-neutral-300 mb-1 block font-medium">Должность / Специализация</label>
+            <Input
+              value={masterFormTitle}
+              onChange={(e) => setMasterFormTitle(e.target.value)}
+              placeholder="Например: Top Master / Подолог"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-neutral-300 mb-1 block font-medium">О мастере (опыт, квалификация)</label>
+            <textarea
+              rows={2}
+              value={masterFormBio}
+              onChange={(e) => setMasterFormBio(e.target.value)}
+              placeholder="Опыт более 4 лет. Эксперт по сложному моделированию..."
+              className="w-full p-2.5 rounded-xl bg-black border border-white/15 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-white transition-colors"
+            />
+          </div>
+
+          {/* Master Photo / Avatar */}
+          <div className="space-y-2 p-3 rounded-2xl bg-white/5 border border-white/10">
+            <label className="text-neutral-200 block font-semibold text-xs">
+              Фотография / Аватар мастера
+            </label>
+
+            <div className="flex items-center gap-3">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden bg-black border border-white/15 flex-shrink-0">
+                {masterFormAvatar ? (
+                  <img
+                    src={getAssetUrl(masterFormAvatar)}
+                    alt="Предпросмотр"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/master-ayza.jpg');
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-neutral-600 text-[10px]">
+                    Нет фото
+                  </div>
+                )}
+              </div>
+
+              <div className="flex-1 space-y-2">
+                <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs cursor-pointer transition-all border border-white/15">
+                  <UploadSimple size={14} />
+                  <span>Загрузить фото мастера</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handlePhotoUpload(e, setMasterFormAvatar)}
+                  />
+                </label>
+
+                <div className="text-[10px] text-neutral-400">
+                  или выберите фото из библиотеки студии:
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-1">
+              <select
+                value={masterFormAvatar}
+                onChange={(e) => setMasterFormAvatar(e.target.value)}
+                className="w-full h-9 px-2.5 bg-neutral-900 border border-white/15 rounded-xl text-white text-xs focus:outline-none"
+              >
+                <option value="">-- Выберите фото из библиотеки --</option>
+                {STUDIO_PHOTO_PRESETS.map((p, idx) => (
+                  <option key={idx} value={p.url}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <Input
+                type="text"
+                value={masterFormAvatar}
+                onChange={(e) => setMasterFormAvatar(e.target.value)}
+                placeholder="Или прямая ссылка на фото мастера"
+                className="text-[11px] font-mono h-8"
+              />
+            </div>
+          </div>
+
+          {/* Assigned Services checkboxes */}
+          <div className="space-y-2 p-3 rounded-2xl bg-white/5 border border-white/10">
+            <div className="flex items-center justify-between">
+              <label className="text-neutral-200 block font-semibold text-xs">
+                Оказываемые услуги ({masterFormServices.length} из {tenant.services.length})
+              </label>
+              <div className="flex gap-2 text-[10px]">
+                <button
+                  type="button"
+                  onClick={() => setMasterFormServices(tenant.services.map((s) => s.id))}
+                  className="text-blue-400 hover:underline cursor-pointer"
+                >
+                  Выбрать все
+                </button>
+                <span>·</span>
+                <button
+                  type="button"
+                  onClick={() => setMasterFormServices([])}
+                  className="text-neutral-400 hover:underline cursor-pointer"
+                >
+                  Снять все
+                </button>
+              </div>
+            </div>
+
+            <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1 no-scrollbar">
+              {tenant.services.map((s) => {
+                const checked = masterFormServices.includes(s.id);
+                return (
+                  <label
+                    key={s.id}
+                    className={`flex items-center gap-2 p-2 rounded-xl text-xs cursor-pointer transition-colors border ${
+                      checked
+                        ? 'bg-white/10 border-white/20 text-white'
+                        : 'bg-black/40 border-white/5 text-neutral-400 hover:text-neutral-200'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setMasterFormServices((prev) => [...prev, s.id]);
+                        } else {
+                          setMasterFormServices((prev) => prev.filter((id) => id !== s.id));
+                        }
+                      }}
+                      className="rounded accent-white"
+                    />
+                    <span className="flex-1 truncate">{s.name}</span>
+                    <span className="font-mono text-[10px] text-neutral-500 shrink-0">
+                      {formatPrice(s.price, tenant.currency)}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              className="flex-1 cursor-pointer"
+              onClick={() => setIsMasterModalOpen(false)}
+            >
+              Отмена
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              className="flex-1 cursor-pointer bg-white text-black hover:bg-neutral-200 font-bold"
+            >
+              {editingMasterId ? 'Сохранить мастера' : 'Добавить мастера'}
+            </Button>
+          </div>
         </form>
       </BottomSheet>
     </div>

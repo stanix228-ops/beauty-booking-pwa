@@ -12,8 +12,8 @@ import { BookingFormModal } from '../components/BookingFormModal';
 import { StickyBookingBar } from '../components/StickyBookingBar';
 import { BottomNavigation } from '../components/BottomNavigation';
 import { useScrollReveal } from '../hooks/useScrollReveal';
-import { CalendarPlus, ShieldCheck, Heart, Coffee, WifiHigh } from '@phosphor-icons/react';
-import { useNavigate } from 'react-router-dom';
+import { CalendarPlus, ShieldCheck, Heart, Coffee, WifiHigh, LockKey } from '@phosphor-icons/react';
+import { useNavigate, Link } from 'react-router-dom';
 import type { Service, ServiceOption } from '../../scripts/schema';
 import { BookingEngine, type AvailableSlot } from '../lib/booking-store';
 import { handlePhoneInput } from '../lib/phone';
@@ -242,6 +242,26 @@ export function ClientBookingPage() {
             </div>
           </div>
         </section>
+
+        {/* Studio Footer */}
+        <footer className="mt-14 mb-24 px-4 py-8 border-t border-white/10 text-center space-y-2.5">
+          <p className="text-xs text-neutral-400 font-medium">
+            © {new Date().getFullYear()} {tenant.name}. Все права защищены.
+          </p>
+          <p className="text-[11px] text-neutral-500">
+            {tenant.address} · {tenant.phone}
+          </p>
+          <div className="pt-2">
+            <Link
+              to={`/s/${tenant.slug}/owner/login`}
+              className="inline-flex items-center gap-1.5 text-[11px] text-neutral-500 hover:text-neutral-300 transition-colors py-1.5 px-3 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10"
+              title="Панель администратора студии"
+            >
+              <LockKey size={13} />
+              <span>Вход для сотрудников</span>
+            </Link>
+          </div>
+        </footer>
       </main>
 
       {/* Sticky Bottom Booking Bar (when a service is selected) */}

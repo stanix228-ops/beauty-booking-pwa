@@ -7,20 +7,18 @@ import { Input } from '../components/ui/Input';
 import { Card } from '../components/ui/Card';
 import { LockKey, ArrowLeft, ShieldCheck } from '@phosphor-icons/react';
 
+import { getOwnerCredentials, verifyOwnerLogin } from '../lib/owner-auth';
+
 export function OwnerLoginPage() {
   const { slug } = useParams<{ slug: string }>();
   const { tenant } = useTenant();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('admin@beauty-studio.ru');
-  const [password, setPassword] = useState('admin');
+  const creds = getOwnerCredentials(slug || 'ayza-beauty-space');
+  const [email, setEmail] = useState(() => creds.email);
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const handleQuickDemoLogin = () => {
-    localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email: 'admin@beauty-studio.ru', role: 'owner' }));
-    navigate(`/s/${slug}/owner/`);
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,16 +56,17 @@ export function OwnerLoginPage() {
       return;
     }
 
-    // Demo / Local development mode fallback:
+    // Owner credentials verification (local / demo / offline / GitHub Pages mode)
     setTimeout(() => {
-      if (email.includes('@') && password.length >= 4) {
-        localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email, role: 'owner' }));
+      const isValid = verifyOwnerLogin(slug || 'ayza-beauty-space', email, password);
+      if (isValid) {
+        localStorage.setItem(`owner_session_${slug}`, JSON.stringify({ email: email.trim(), role: 'owner' }));
         navigate(`/s/${slug}/owner/`);
       } else {
-        setError('Введите корректный email и пароль (минимум 4 символа).');
+        setError('Неверный логин или пароль. Проверьте правильность введенных данных.');
         setIsLoading(false);
       }
-    }, 300);
+    }, 250);
   };
 
   return (
@@ -92,30 +91,6 @@ export function OwnerLoginPage() {
           <p className="text-xs text-[#8E8E93]">
             {tenant?.name || 'Управление записями и расписанием'}
           </p>
-        </div>
-
-        {/* 1-Click Demo Login Banner */}
-        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2.5 shadow-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-white">Быстрый демо-доступ</span>
-            <span className="text-[10px] text-emerald-400 uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-800">
-              Активен
-            </span>
-          </div>
-          <p className="text-[11px] text-[#8E8E93] leading-relaxed">
-            В демо-режиме можно использовать готовые данные администратора:
-          </p>
-          <div className="text-[11px] text-neutral-300 font-mono bg-black/60 px-3 py-2 rounded-xl border border-white/10 space-y-0.5">
-            <div>Email: <strong className="text-white">admin@beauty-studio.ru</strong></div>
-            <div>Пароль: <strong className="text-white">admin</strong> <span className="text-neutral-500 font-sans text-[10px]">(или любой от 4 символов)</span></div>
-          </div>
-          <button
-            type="button"
-            onClick={handleQuickDemoLogin}
-            className="w-full h-10 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-all cursor-pointer shadow-[0_2px_15px_rgba(255,255,255,0.2)] flex items-center justify-center gap-1.5"
-          >
-            <span>Войти в 1 клик (как владелец) →</span>
-          </button>
         </div>
 
         <Card className="space-y-4 p-6 border border-white/12 bg-[#0D0D11] backdrop-blur-md shadow-2xl rounded-3xl">
