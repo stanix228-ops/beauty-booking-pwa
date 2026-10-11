@@ -1,6 +1,6 @@
 -- ========================================================
 -- PUBLISH TENANT: AYZA BEAUTY SPACE (ayza-beauty-space)
--- Generated automatically at: 2026-10-10T13:51:28.625Z
+-- Generated automatically at: 2026-10-11T12:37:24.445Z
 -- Preserves existing bookings, clients, and history!
 -- ========================================================
 
@@ -167,7 +167,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000104', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Свадебный макияж', 
         'Безупречный стойкий свадебный макияж, водостойкие премиальные текстуры.', 
         12000, 90, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80', 4, true, now()
+        '/tenants/ayza-beauty-space/images/service-wedding-makeup.jpg', 4, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -183,7 +183,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000105', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Женская стрижка', 
         'Стрижка по форме лица с мытьем головы и легкой укладкой.', 
         6000, 45, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80', 5, true, now()
+        '/tenants/ayza-beauty-space/images/service-haircut.jpg', 5, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -199,7 +199,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000106', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Коррекция челки', 
         'Быстрое обновление и придание формы челке.', 
         3000, 20, 10, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80', 6, true, now()
+        '/tenants/ayza-beauty-space/images/service-bangs-trim.jpg', 6, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -263,7 +263,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000110', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Окрашивание корней волос', 
         'Качественное обновление цвета и закрашивание седины.', 
         10000, 90, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=600&q=80', 10, true, now()
+        '/tenants/ayza-beauty-space/images/service-hair-roots.jpg', 10, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -279,7 +279,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000111', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Окрашивание тон в тон', 
         'Глубокий сияющий цвет по всей длине с сохранением шелковистости волос.', 
         15000, 120, 15, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1522337094346-297c5553e4c4?auto=format&fit=crop&w=600&q=80', 11, true, now()
+        '/tenants/ayza-beauty-space/images/service-hair-tinting.jpg', 11, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -295,7 +295,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000112', v_tenant_id, '30000000-0000-4000-8000-000000000010', 'Сложное окрашивание', 
         'Airtouch, Balayage, Шатуш — плавные переливы и премиальный блонд.', 
         30000, 180, 20, 'UNIVERSAL', 
-        'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=600&q=80', 12, true, now()
+        '/tenants/ayza-beauty-space/images/service-hair-balayage.jpg', 12, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -359,7 +359,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000204', v_tenant_id, '30000000-0000-4000-8000-000000000020', 'Наращивание ногтей на нижних формах', 
         'Классическое наращивание любой длины под кутикулу.', 
         11000, 120, 15, 'MANICURE_DESK', 
-        'https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?auto=format&fit=crop&w=600&q=80', 4, true, now()
+        '/tenants/ayza-beauty-space/images/service-nails-form-ext.jpg', 4, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -375,7 +375,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000205', v_tenant_id, '30000000-0000-4000-8000-000000000020', 'Японский маникюр', 
         'Эко-глянцевание минеральной пастой и жемчужной пудрой Masura.', 
         10000, 60, 15, 'MANICURE_DESK', 
-        'https://images.unsplash.com/photo-1566113519662-7807a42cc50d?auto=format&fit=crop&w=600&q=80', 5, true, now()
+        '/tenants/ayza-beauty-space/images/service-japanese-manicure.jpg', 5, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -423,7 +423,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000303', v_tenant_id, '30000000-0000-4000-8000-000000000030', 'Smart педикюр без покрытия', 
         'Аппаратная шлифовка стоп smart-дисками до зеркальной мягкости.', 
         9000, 60, 15, 'PEDICURE_CHAIR', 
-        'https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80', 3, true, now()
+        '/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg', 3, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -439,7 +439,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000304', v_tenant_id, '30000000-0000-4000-8000-000000000030', 'Smart педикюр с гель лак покрытием', 
         'Smart-обработка стоп молекулярным маслом + покрытие гель-лаком.', 
         10000, 75, 15, 'PEDICURE_CHAIR', 
-        'https://images.unsplash.com/photo-1508746829417-e6f548d8d6ed?auto=format&fit=crop&w=600&q=80', 4, true, now()
+        '/tenants/ayza-beauty-space/images/service-smart-pedicure-gel.jpg', 4, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -455,7 +455,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000305', v_tenant_id, '30000000-0000-4000-8000-000000000030', 'Комбинированный педикюр', 
         'Аппаратный и препаратный уход для нежной кожи стоп.', 
         9000, 60, 15, 'PEDICURE_CHAIR', 
-        'https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=600&q=80', 5, true, now()
+        '/tenants/ayza-beauty-space/images/service-combi-pedicure.jpg', 5, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,
@@ -471,7 +471,7 @@ BEGIN
         '30000000-0000-4000-8000-000000000306', v_tenant_id, '30000000-0000-4000-8000-000000000030', 'Комбинированный педикюр с гель лак покрытием', 
         'Комбинированная эстетика стоп и стойкое стойкое покрытие.', 
         10000, 75, 15, 'PEDICURE_CHAIR', 
-        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', 6, true, now()
+        '/tenants/ayza-beauty-space/images/service-combi-pedicure-gel.jpg', 6, true, now()
     )
     ON CONFLICT (tenant_id, id) DO UPDATE SET
         category_id = EXCLUDED.category_id, name = EXCLUDED.name, description = EXCLUDED.description,

@@ -4,6 +4,7 @@
  */
 
 import { formatPrice } from './currency';
+import { getTenantBySlug } from '../data/tenants';
 
 export interface TelegramConfig {
   botToken: string;
@@ -14,24 +15,58 @@ export interface TelegramConfig {
 const memoryTelegramConfig = new Map<string, string>();
 
 export function getTelegramConfig(tenantSlug: string): TelegramConfig {
+  // 1. Check browser localStorage
   if (typeof localStorage !== 'undefined') {
     try {
       const raw = localStorage.getItem(`beauty_tg_config_${tenantSlug}`);
       if (raw) {
-        return JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (parsed.botToken && parsed.chatId) {
+          return {
+            botToken: parsed.botToken.trim(),
+            chatId: parsed.chatId.trim(),
+            enabled: parsed.enabled !== false,
+          };
+        }
       }
     } catch {}
   } else {
     const raw = memoryTelegramConfig.get(`beauty_tg_config_${tenantSlug}`);
     if (raw) {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (parsed.botToken && parsed.chatId) {
+        return {
+          botToken: parsed.botToken.trim(),
+          chatId: parsed.chatId.trim(),
+          enabled: parsed.enabled !== false,
+        };
+      }
     }
   }
+
+  // 2. Check tenant business configuration
+  const tenant = getTenantBySlug(tenantSlug);
+  if (tenant && (tenant as any).telegram) {
+    const tg = (tenant as any).telegram;
+    if (tg.botToken && tg.chatId) {
+      return {
+        botToken: String(tg.botToken).trim(),
+        chatId: String(tg.chatId).trim(),
+        enabled: tg.enabled !== false,
+      };
+    }
+  }
+
   return { botToken: '', chatId: '', enabled: false };
 }
 
 export function saveTelegramConfig(tenantSlug: string, config: TelegramConfig): void {
-  const serialized = JSON.stringify(config);
+  const cleanConfig: TelegramConfig = {
+    botToken: config.botToken.trim().replace(/^bot(?=\d)/i, ''),
+    chatId: config.chatId.trim(),
+    enabled: config.enabled,
+  };
+  const serialized = JSON.stringify(cleanConfig);
   if (typeof localStorage !== 'undefined') {
     try {
       localStorage.setItem(`beauty_tg_config_${tenantSlug}`, serialized);
@@ -46,18 +81,21 @@ export async function sendTelegramMessage(
   chatId: string,
   text: string
 ): Promise<{ success: boolean; error?: string }> {
-  if (!botToken.trim() || !chatId.trim()) {
+  const cleanToken = botToken.trim().replace(/^bot(?=\d)/i, '');
+  const cleanChatId = chatId.trim();
+
+  if (!cleanToken || !cleanChatId) {
     return { success: false, error: 'Укажите токен бота и Chat ID' };
   }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${botToken.trim()}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${cleanToken}/sendMessage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        chat_id: chatId.trim(),
+        chat_id: cleanChatId,
         text,
         parse_mode: 'HTML',
       }),
@@ -65,7 +103,26 @@ export async function sendTelegramMessage(
 
     const data = await response.json();
     if (!response.ok || !data.ok) {
-      return { success: false, error: data.description || 'Не удалось отправить сообщение' };
+      const desc = data.description || '';
+      if (desc.includes("can't initiate conversation") || desc.includes('blocked by the user')) {
+        return {
+          success: false,
+          error: 'Бот не может написать вам первым. Откройте диалог с вашим ботом в Telegram и отправьте команду /start.',
+        };
+      }
+      if (desc.includes('chat not found')) {
+        return {
+          success: false,
+          error: 'Чат не найден. Проверьте ваш числовой Chat ID (узнать его можно у @userinfobot) и убедитесь, что нажали /start в боте.',
+        };
+      }
+      if (desc.includes('Unauthorized')) {
+        return {
+          success: false,
+          error: 'Неверный токен бота. Проверьте токен, полученный от @BotFather.',
+        };
+      }
+      return { success: false, error: desc || 'Не удалось отправить сообщение в Telegram' };
     }
     return { success: true };
   } catch (err) {
@@ -104,7 +161,10 @@ export async function notifyNewBookingTelegram(
   }
 ): Promise<void> {
   const config = getTelegramConfig(tenantSlug);
-  if (!config.enabled || !config.botToken || !config.chatId) return;
+  if (!config.enabled || !config.botToken || !config.chatId) {
+    console.log('[Telegram Notification] Not configured or disabled for', tenantSlug);
+    return;
+  }
 
   const startDate = new Date(booking.startAt);
   const formattedDate = startDate.toLocaleDateString('ru-RU', {
@@ -129,9 +189,15 @@ export async function notifyNewBookingTelegram(
     (booking.notes ? `💬 <b>Пожелания:</b> <i>${booking.notes}</i>\n` : '');
 
   try {
-    await sendTelegramMessage(config.botToken, config.chatId, text);
+    console.log(`[Telegram] Sending new booking notification #${booking.bookingNumber} to chat ${config.chatId}...`);
+    const result = await sendTelegramMessage(config.botToken, config.chatId, text);
+    if (result.success) {
+      console.log('[Telegram] Notification successfully delivered!');
+    } else {
+      console.warn('[Telegram] Could not deliver notification:', result.error);
+    }
   } catch (err) {
-    console.warn('Telegram notification note:', err);
+    console.warn('[Telegram] Notification error:', err);
   }
 }
 

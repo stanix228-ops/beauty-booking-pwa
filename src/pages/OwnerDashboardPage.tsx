@@ -97,13 +97,16 @@ export function OwnerDashboardPage() {
   const handleSaveTelegram = (e: React.FormEvent) => {
     e.preventDefault();
     if (!slug) return;
+    const hasCreds = tgBotToken.trim().length > 0 && tgChatId.trim().length > 0;
+    const isNowEnabled = hasCreds ? (tgEnabled || true) : tgEnabled;
+    setTgEnabled(isNowEnabled);
     saveTelegramConfig(slug, {
       botToken: tgBotToken.trim(),
       chatId: tgChatId.trim(),
-      enabled: tgEnabled,
+      enabled: isNowEnabled,
     });
-    setTgStatusMessage({ text: 'Настройки Telegram бота успешно сохранены!' });
-    setTimeout(() => setTgStatusMessage(null), 4000);
+    setTgStatusMessage({ text: '✅ Настройки Telegram бота сохранены и активированы! Нажмите кнопку ниже для отправки теста.' });
+    setTimeout(() => setTgStatusMessage(null), 5000);
   };
 
   const handleTestTelegram = async () => {

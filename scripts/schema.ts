@@ -134,6 +134,11 @@ export const BusinessConfigSchema = z.object({
   services: z.array(ServiceSchema).min(1),
   options: z.array(ServiceOptionSchema).default([]),
   masters: z.array(MasterSchema).min(1),
+  telegram: z.object({
+    botToken: z.string().optional(),
+    chatId: z.string().optional(),
+    enabled: z.boolean().default(true),
+  }).optional(),
   assets: z.object({
     logo: z.string().optional(),
     hero: z.string().optional(),

@@ -549,7 +549,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wedding-makeup.jpg",
         "displayOrder": 4,
         "isActive": true
       },
@@ -562,7 +562,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 45,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-haircut.jpg",
         "displayOrder": 5,
         "isActive": true
       },
@@ -575,7 +575,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 20,
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-bangs-trim.jpg",
         "displayOrder": 6,
         "isActive": true
       },
@@ -627,7 +627,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 90,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-roots.jpg",
         "displayOrder": 10,
         "isActive": true
       },
@@ -640,7 +640,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1522337094346-297c5553e4c4?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-tinting.jpg",
         "displayOrder": 11,
         "isActive": true
       },
@@ -653,7 +653,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 180,
         "bufferAfterMin": 20,
         "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-balayage.jpg",
         "displayOrder": 12,
         "isActive": true
       },
@@ -705,7 +705,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 120,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-nails-form-ext.jpg",
         "displayOrder": 4,
         "isActive": true
       },
@@ -718,7 +718,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "MANICURE_DESK",
-        "imageUrl": "https://images.unsplash.com/photo-1566113519662-7807a42cc50d?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-japanese-manicure.jpg",
         "displayOrder": 5,
         "isActive": true
       },
@@ -757,7 +757,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-smart-pedicure.jpg",
         "displayOrder": 3,
         "isActive": true
       },
@@ -770,7 +770,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1508746829417-e6f548d8d6ed?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-smart-pedicure-gel.jpg",
         "displayOrder": 4,
         "isActive": true
       },
@@ -783,7 +783,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 60,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-combi-pedicure.jpg",
         "displayOrder": 5,
         "isActive": true
       },
@@ -796,7 +796,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "durationMin": 75,
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "PEDICURE_CHAIR",
-        "imageUrl": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-combi-pedicure-gel.jpg",
         "displayOrder": 6,
         "isActive": true
       },

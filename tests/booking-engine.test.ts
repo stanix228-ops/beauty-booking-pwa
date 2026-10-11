@@ -292,6 +292,9 @@ describe('Beauty Booking Engine & Multi-Tenant Core Tests', () => {
     expect(handlePhoneInput('+', '+7')).toBe('');
 
     // Typing numbers
+    expect(handlePhoneInput('7', '')).toBe('+7 (');
+    expect(handlePhoneInput('8', '')).toBe('+7 (');
+    expect(handlePhoneInput('+', '')).toBe('+7 (');
     expect(handlePhoneInput('9', '')).toBe('+7 (9');
     expect(handlePhoneInput('+7 (999', '+7 (99')).toBe('+7 (999');
     expect(handlePhoneInput('+7 (999) 123-45-67', '')).toBe('+7 (999) 123-45-67');
