@@ -17,12 +17,36 @@ function TenantLayout() {
 export function App() {
   return (
     <Routes>
-      {/* Root points directly to flagship studio */}
+      {/* Root points directly to flagship studio AYZA BEAUTY SPACE */}
       <Route
         path="/"
         element={
           <TenantProvider defaultSlug="ayza-beauty-space">
             <ClientBookingPage />
+          </TenantProvider>
+        }
+      />
+      <Route
+        path="/b/:token"
+        element={
+          <TenantProvider defaultSlug="ayza-beauty-space">
+            <BookingStatusPage />
+          </TenantProvider>
+        }
+      />
+      <Route
+        path="/owner/login"
+        element={
+          <TenantProvider defaultSlug="ayza-beauty-space">
+            <OwnerLoginPage />
+          </TenantProvider>
+        }
+      />
+      <Route
+        path="/owner"
+        element={
+          <TenantProvider defaultSlug="ayza-beauty-space">
+            <OwnerDashboardPage />
           </TenantProvider>
         }
       />
