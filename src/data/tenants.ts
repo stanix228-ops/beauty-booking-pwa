@@ -1506,15 +1506,15 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       "logo": "/tenants/ayza-beauty-space/images/logo.jpg",
       "hero": "/tenants/ayza-beauty-space/images/hero.jpg",
       "gallery": [
-        "/tenants/ayza-beauty-space/images/service-makeup-bridal.jpg",
+        "/tenants/ayza-beauty-space/images/gallery-work-1.jpg",
         "/tenants/ayza-beauty-space/images/service-hair-bridal.jpg",
-        "/tenants/ayza-beauty-space/images/service-manicure-extension.jpg",
-        "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg"
+        "/tenants/ayza-beauty-space/images/gallery-work-3.jpg",
+        "/tenants/ayza-beauty-space/images/gallery-work-4.jpg"
       ],
       "galleryItems": [
         {
           "id": "work-1",
-          "imageUrl": "/tenants/ayza-beauty-space/images/service-makeup-bridal.jpg",
+          "imageUrl": "/tenants/ayza-beauty-space/images/gallery-work-1.jpg",
           "caption": "Свадебный образ от Top Master Ayza Ertaeva",
           "displayOrder": 1
         },
@@ -1526,13 +1526,13 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         },
         {
           "id": "work-3",
-          "imageUrl": "/tenants/ayza-beauty-space/images/service-manicure-extension.jpg",
+          "imageUrl": "/tenants/ayza-beauty-space/images/gallery-work-3.jpg",
           "caption": "Наращивание ногтей на верхних формах",
           "displayOrder": 3
         },
         {
           "id": "work-4",
-          "imageUrl": "/tenants/ayza-beauty-space/images/service-pedicure-gel.jpg",
+          "imageUrl": "/tenants/ayza-beauty-space/images/gallery-work-4.jpg",
           "caption": "Педикюр с гелевым покрытием",
           "displayOrder": 4
         }
