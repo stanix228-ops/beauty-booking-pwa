@@ -1088,78 +1088,106 @@ export function OwnerDashboardPage() {
               </select>
             </div>
 
-            {/* Services List */}
-            <div className="space-y-2.5">
-              {tenant.services
-                .filter((s) => {
-                  if (serviceFilterCategory !== 'ALL' && s.categoryId !== serviceFilterCategory) return false;
-                  if (serviceSearchQuery.trim() && !s.name.toLowerCase().includes(serviceSearchQuery.toLowerCase())) return false;
-                  return true;
-                })
-                .map((s) => {
-                  const categoryName = tenant.categories.find((c) => c.id === s.categoryId)?.name || 'Услуга';
-                  return (
-                    <Card
-                      key={s.id}
-                      className="p-3 sm:p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between gap-3 hover:border-white/20 transition-all"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-neutral-950 flex-shrink-0 border border-white/10">
-                          <img
-                            src={getAssetUrl(s.imageUrl || '/tenants/ayza-beauty-space/images/service-manicure-classic.jpg')}
-                            alt={s.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/hero.jpg');
-                            }}
-                          />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-xs sm:text-sm font-bold text-white truncate">{s.name}</h4>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 hidden sm:inline-block">
-                              {categoryName}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-neutral-400 mt-0.5">
-                            {s.durationMin} мин · Буфер {s.bufferAfterMin || 15} мин
-                          </p>
-                          {s.description && (
-                            <p className="text-[11px] text-neutral-500 line-clamp-1 mt-0.5 font-light">
-                              {s.description}
-                            </p>
-                          )}
-                        </div>
-                      </div>
+            {/* Services List Grouped by Category */}
+            <div className="space-y-5">
+              {[...tenant.categories]
+                .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+                .filter((cat) => serviceFilterCategory === 'ALL' || cat.id === serviceFilterCategory)
+                .map((cat) => {
+                  const catServices = tenant.services
+                    .filter((s) => {
+                      if (s.categoryId !== cat.id) return false;
+                      if (serviceSearchQuery.trim() && !s.name.toLowerCase().includes(serviceSearchQuery.toLowerCase())) return false;
+                      return true;
+                    })
+                    .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 
-                      <div className="flex items-center gap-2 shrink-0">
-                        <div className="text-right">
+                  if (catServices.length === 0) return null;
+
+                  return (
+                    <div key={cat.id} className="space-y-2.5">
+                      <div className="flex items-center gap-2 pt-1">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] border border-white/15 text-white">
                           <span
-                            className="text-xs sm:text-sm font-bold font-mono tracking-tight"
-                            style={{ color: 'var(--tenant-accent, #4690FF)' }}
-                          >
-                            {formatPrice(s.price, tenant?.currency)}
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: 'var(--tenant-accent, #8E283E)' }}
+                          />
+                          <span className="text-xs font-bold tracking-wider uppercase text-white">
+                            {cat.name}
+                          </span>
+                          <span className="text-[10px] text-neutral-400 font-mono">
+                            ({catServices.length})
                           </span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => handleOpenEditService(s)}
-                          className="p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center gap-1 cursor-pointer"
-                          title="Редактировать услугу"
-                        >
-                          <PencilSimple size={14} />
-                          <span className="hidden sm:inline">Изменить</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteService(s.id, s.name)}
-                          className="p-1.5 rounded-lg text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-500/30 transition-colors cursor-pointer"
-                          title="Удалить услугу"
-                        >
-                          <Trash size={15} />
-                        </button>
+                        <div className="flex-1 h-px bg-gradient-to-r from-white/15 to-transparent" />
                       </div>
-                    </Card>
+
+                      <div className="space-y-2.5">
+                        {catServices.map((s) => (
+                          <Card
+                            key={s.id}
+                            className="p-3 sm:p-3.5 border border-white/10 bg-neutral-900/60 flex items-center justify-between gap-3 hover:border-white/20 transition-all"
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-neutral-950 flex-shrink-0 border border-white/10">
+                                <img
+                                  src={getAssetUrl(s.imageUrl || '/tenants/ayza-beauty-space/images/service-manicure-classic.jpg')}
+                                  alt={s.name}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    (e.currentTarget as HTMLImageElement).src = getAssetUrl('/tenants/ayza-beauty-space/images/hero.jpg');
+                                  }}
+                                />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <h4 className="text-xs sm:text-sm font-bold text-white truncate">{s.name}</h4>
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 hidden sm:inline-block">
+                                    {cat.name}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-neutral-400 mt-0.5">
+                                  {s.durationMin} мин · Буфер {s.bufferAfterMin || 15} мин
+                                </p>
+                                {s.description && (
+                                  <p className="text-[11px] text-neutral-500 line-clamp-1 mt-0.5 font-light">
+                                    {s.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0">
+                              <div className="text-right">
+                                <span
+                                  className="text-xs sm:text-sm font-bold font-mono tracking-tight"
+                                  style={{ color: 'var(--tenant-accent, #4690FF)' }}
+                                >
+                                  {formatPrice(s.price, tenant?.currency)}
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditService(s)}
+                                className="p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center gap-1 cursor-pointer"
+                                title="Редактировать услугу"
+                              >
+                                <PencilSimple size={14} />
+                                <span className="hidden sm:inline">Изменить</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteService(s.id, s.name)}
+                                className="p-1.5 rounded-lg text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-500/30 transition-colors cursor-pointer"
+                                title="Удалить услугу"
+                              >
+                                <Trash size={15} />
+                              </button>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
                   );
                 })}
             </div>

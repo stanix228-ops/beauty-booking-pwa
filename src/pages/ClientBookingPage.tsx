@@ -80,7 +80,9 @@ export function ClientBookingPage() {
   const groupedServices = categoriesToDisplay
     .map((cat) => ({
       category: cat,
-      services: tenant.services.filter((s) => s.categoryId === cat.id && s.isActive),
+      services: tenant.services
+        .filter((s) => s.categoryId === cat.id && s.isActive)
+        .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)),
     }))
     .filter((group) => group.services.length > 0);
 

@@ -465,38 +465,44 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
     "categories": [
       {
         "id": "30000000-0000-4000-8000-000000000010",
-        "name": "Make-Up & Hair",
+        "name": "Макияж (Make-Up)",
         "displayOrder": 1,
         "isActive": true
       },
       {
-        "id": "30000000-0000-4000-8000-000000000020",
-        "name": "Nail (Маникюр)",
+        "id": "30000000-0000-4000-8000-000000000015",
+        "name": "Волосы & Прически (Hair)",
         "displayOrder": 2,
         "isActive": true
       },
       {
-        "id": "30000000-0000-4000-8000-000000000030",
-        "name": "Pedicure (Педикюр)",
+        "id": "30000000-0000-4000-8000-000000000020",
+        "name": "Маникюр (Nail)",
         "displayOrder": 3,
         "isActive": true
       },
       {
-        "id": "30000000-0000-4000-8000-000000000040",
-        "name": "Lashes (Ресницы)",
+        "id": "30000000-0000-4000-8000-000000000030",
+        "name": "Педикюр (Pedicure)",
         "displayOrder": 4,
         "isActive": true
       },
       {
-        "id": "30000000-0000-4000-8000-000000000050",
-        "name": "Brows (Брови)",
+        "id": "30000000-0000-4000-8000-000000000040",
+        "name": "Ресницы (Lashes)",
         "displayOrder": 5,
         "isActive": true
       },
       {
-        "id": "30000000-0000-4000-8000-000000000060",
-        "name": "Sugaring (Шугаринг)",
+        "id": "30000000-0000-4000-8000-000000000050",
+        "name": "Брови (Brows)",
         "displayOrder": 6,
+        "isActive": true
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000060",
+        "name": "Шугаринг & Депиляция (Sugaring)",
+        "displayOrder": 7,
         "isActive": true
       }
     ],
@@ -555,7 +561,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
       },
       {
         "id": "30000000-0000-4000-8000-000000000105",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Женская стрижка",
         "description": "Стрижка по форме лица с мытьем головы и легкой укладкой.",
         "price": 6000,
@@ -563,12 +569,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-haircut.jpg",
-        "displayOrder": 5,
+        "displayOrder": 1,
         "isActive": true
       },
       {
         "id": "30000000-0000-4000-8000-000000000106",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Коррекция челки",
         "description": "Быстрое обновление и придание формы челке.",
         "price": 3000,
@@ -576,12 +582,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-bangs-trim.jpg",
-        "displayOrder": 6,
+        "displayOrder": 2,
         "isActive": true
       },
       {
         "id": "30000000-0000-4000-8000-000000000107",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Укладка волос",
         "description": "Брашинг, струящиеся локоны или гладкий глянец.",
         "price": 6000,
@@ -589,12 +595,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-styling.jpg",
-        "displayOrder": 7,
+        "displayOrder": 3,
         "isActive": true
       },
       {
         "id": "30000000-0000-4000-8000-000000000108",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Прическа",
         "description": "Торжественная собранная прическа, текстурный пучок или хвост.",
         "price": 8000,
@@ -602,12 +608,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-evening.jpg",
-        "displayOrder": 8,
+        "displayOrder": 4,
         "isActive": true
       },
       {
         "id": "30000000-0000-4000-8000-000000000109",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Свадебная прическа",
         "description": "Королевская прическа невесты с надежной фиксацией фаты и аксессуаров.",
         "price": 15000,
@@ -615,12 +621,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-bridal.jpg",
-        "displayOrder": 9,
+        "displayOrder": 5,
         "isActive": true
       },
       {
         "id": "30000000-0000-4000-8000-000000000110",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Окрашивание корней волос",
         "description": "Качественное обновление цвета и закрашивание седины.",
         "price": 10000,
@@ -628,12 +634,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-roots.jpg",
-        "displayOrder": 10,
+        "displayOrder": 6,
         "isActive": true
       },
       {
         "id": "30000000-0000-4000-8000-000000000111",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Окрашивание тон в тон",
         "description": "Глубокий сияющий цвет по всей длине с сохранением шелковистости волос.",
         "price": 15000,
@@ -641,12 +647,12 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 15,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-tinting.jpg",
-        "displayOrder": 11,
+        "displayOrder": 7,
         "isActive": true
       },
       {
         "id": "30000000-0000-4000-8000-000000000112",
-        "categoryId": "30000000-0000-4000-8000-000000000010",
+        "categoryId": "30000000-0000-4000-8000-000000000015",
         "name": "Сложное окрашивание",
         "description": "Airtouch, Balayage, Шатуш — плавные переливы и премиальный блонд.",
         "price": 30000,
@@ -654,7 +660,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 20,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-hair-balayage.jpg",
-        "displayOrder": 12,
+        "displayOrder": 8,
         "isActive": true
       },
       {
@@ -996,19 +1002,6 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "isActive": true
       },
       {
-        "id": "30000000-0000-4000-8000-000000000605",
-        "categoryId": "30000000-0000-4000-8000-000000000060",
-        "name": "Глубокое бикини",
-        "description": "Бережная процедура с использованием мягких антистресс-паст.",
-        "price": 5000,
-        "durationMin": 30,
-        "bufferAfterMin": 15,
-        "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-bikini.jpg",
-        "displayOrder": 5,
-        "isActive": true
-      },
-      {
         "id": "30000000-0000-4000-8000-000000000606",
         "categoryId": "30000000-0000-4000-8000-000000000060",
         "name": "Руки до локтя",
@@ -1018,7 +1011,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-arms-half.jpg",
-        "displayOrder": 6,
+        "displayOrder": 5,
         "isActive": true
       },
       {
@@ -1031,33 +1024,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-arms-full.jpg",
-        "displayOrder": 7,
-        "isActive": true
-      },
-      {
-        "id": "30000000-0000-4000-8000-000000000608",
-        "categoryId": "30000000-0000-4000-8000-000000000060",
-        "name": "Ноги до колен",
-        "description": "Гладкость голеней и коленей до 4 недель.",
-        "price": 3500,
-        "durationMin": 25,
-        "bufferAfterMin": 10,
-        "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-half.jpg",
-        "displayOrder": 8,
-        "isActive": true
-      },
-      {
-        "id": "30000000-0000-4000-8000-000000000609",
-        "categoryId": "30000000-0000-4000-8000-000000000060",
-        "name": "Ноги полностью",
-        "description": "Шугаринг ножек по всей длине с увлажняющим уходом.",
-        "price": 6000,
-        "durationMin": 40,
-        "bufferAfterMin": 15,
-        "requiredWorkplaceType": "UNIVERSAL",
-        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-full.jpg",
-        "displayOrder": 9,
+        "displayOrder": 6,
         "isActive": true
       },
       {
@@ -1070,7 +1037,7 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-stomach.jpg",
-        "displayOrder": 10,
+        "displayOrder": 7,
         "isActive": true
       },
       {
@@ -1083,6 +1050,45 @@ export const TENANTS_REGISTRY: Record<string, BusinessConfig> = {
         "bufferAfterMin": 10,
         "requiredWorkplaceType": "UNIVERSAL",
         "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-back.jpg",
+        "displayOrder": 8,
+        "isActive": true
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000605",
+        "categoryId": "30000000-0000-4000-8000-000000000060",
+        "name": "Глубокое бикини",
+        "description": "Бережная процедура с использованием мягких антистресс-паст.",
+        "price": 5000,
+        "durationMin": 30,
+        "bufferAfterMin": 15,
+        "requiredWorkplaceType": "UNIVERSAL",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-bikini.jpg",
+        "displayOrder": 9,
+        "isActive": true
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000608",
+        "categoryId": "30000000-0000-4000-8000-000000000060",
+        "name": "Ноги до колен",
+        "description": "Гладкость голеней и коленей до 4 недель.",
+        "price": 3500,
+        "durationMin": 25,
+        "bufferAfterMin": 10,
+        "requiredWorkplaceType": "UNIVERSAL",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-half.jpg",
+        "displayOrder": 10,
+        "isActive": true
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000609",
+        "categoryId": "30000000-0000-4000-8000-000000000060",
+        "name": "Ноги полностью",
+        "description": "Шугаринг ножек по всей длине с увлажняющим уходом.",
+        "price": 6000,
+        "durationMin": 40,
+        "bufferAfterMin": 15,
+        "requiredWorkplaceType": "UNIVERSAL",
+        "imageUrl": "/tenants/ayza-beauty-space/images/service-wax-legs-full.jpg",
         "displayOrder": 11,
         "isActive": true
       }

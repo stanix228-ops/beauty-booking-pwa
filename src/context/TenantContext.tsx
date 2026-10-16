@@ -54,7 +54,7 @@ export function TenantProvider({
     // Merge custom services and masters from localStorage if present
     let merged: BusinessConfig = { ...found };
     try {
-      const customServices = localStorage.getItem(`beauty_custom_services_${found.slug}`);
+      const customServices = localStorage.getItem(`beauty_custom_services_v2_${found.slug}`);
       if (customServices) {
         merged.services = JSON.parse(customServices);
       }
@@ -104,7 +104,7 @@ export function TenantProvider({
   const updateServices = (services: Service[]) => {
     if (!tenant) return;
     try {
-      localStorage.setItem(`beauty_custom_services_${tenant.slug}`, JSON.stringify(services));
+      localStorage.setItem(`beauty_custom_services_v2_${tenant.slug}`, JSON.stringify(services));
     } catch (e) {
       console.error(e);
     }
@@ -124,7 +124,7 @@ export function TenantProvider({
   const resetToDefault = () => {
     if (!tenant) return;
     try {
-      localStorage.removeItem(`beauty_custom_services_${tenant.slug}`);
+      localStorage.removeItem(`beauty_custom_services_v2_${tenant.slug}`);
       localStorage.removeItem(`beauty_custom_masters_${tenant.slug}`);
     } catch (e) {
       console.error(e);
